@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 
 /**
- * Хук для плавной анимации фирменной звезды SFTG AI в фавиконе вкладки браузера через Canvas.
+ * Хук для непрерывной анимации фирменной звезды SFTG AI в фавиконе вкладки браузера через Canvas.
  * 
- * Оптимизация под Chrome:
- * - Цикл 6000 мс (как в первой версии).
- * - Ограничение частоты обновления фавикона до 15-20 FPS (интервал 50 мс) только во время фазы движения.
- * - В фазе покоя не спамит браузер обновлениями link.href, благодаря чему Chrome не троттлит и плавно отрисовывает все промежуточные кадры поворота.
+ * Особенности:
+ * - Крутится непрерывно, даже когда вкладка неактивна (переключение на setInterval, так как requestAnimationFrame глушится браузером в фоновых вкладках).
+ * - Цикл 6000 мс, частота кадров ~20 FPS (50 мс) во время движения.
  */
 export function useAnimatedFavicon() {
   useEffect(() => {
@@ -24,12 +23,10 @@ export function useAnimatedFavicon() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animId = null;
     let startTime = performance.now();
-    let lastUpdateMs = 0;
     let isResting = true;
     const CYCLE_MS = 6000;
-    const FRAME_INTERVAL_MS = 50; // ~20 FPS — идеальная частота для Chrome favicon
+    const TICK_INTERVAL_MS = 50; // 50 мс = стабильный таймер и в активной, и в фоновой вкладке
 
     function roundRect(ctx, x, y, width, height, radius, fillStyle) {
       ctx.beginPath();
@@ -93,12 +90,8 @@ export function useAnimatedFavicon() {
       link.href = canvas.toDataURL('image/png');
     }
 
-    function render(now) {
-      if (document.hidden) {
-        animId = requestAnimationFrame(render);
-        return;
-      }
-
+    function tick() {
+      const now = performance.now();
       const elapsed = (now - startTime) % CYCLE_MS;
       const progress = elapsed / CYCLE_MS;
 
@@ -106,58 +99,46 @@ export function useAnimatedFavicon() {
       if (progress < 0.70) {
         if (!isResting) {
           isResting = true;
-          drawFavicon(1, 0); // фиксируем статичный четкий кадр
+          drawFavicon(1, 0);
         }
-        animId = requestAnimationFrame(render);
         return;
       }
 
-      // Начинается фаза движения (1.8 секунды)
+      // Фаза движения (1.8 секунды) — крутится всегда, в том числе в фоновой вкладке
       isResting = false;
-
-      // Ограничиваем частоту смены link.href, чтобы Chrome успевал выводить каждый кадр без пропуска
-      if (now - lastUpdateMs < FRAME_INTERVAL_MS) {
-        animId = requestAnimationFrame(render);
-        return;
-      }
-      lastUpdateMs = now;
 
       let scale = 1;
       let rot = 0;
 
       if (progress < 0.76) {
-        // Замах и сжатие
         const t = (progress - 0.70) / 0.06;
         scale = 1 - 0.38 * t;
         rot = -15 * t;
       } else if (progress < 0.88) {
-        // Энергичный перекрут и вытягивание
         const t = (progress - 0.76) / 0.12;
         scale = 0.62 + (1.18 - 0.62) * Math.sin(t * (Math.PI / 2));
         rot = -15 + (375 - (-15)) * t;
       } else if (progress < 0.94) {
-        // Отскок
         const t = (progress - 0.88) / 0.06;
         scale = 1.18 - 0.22 * t;
         rot = 375 - 17 * t;
       } else {
-        // Возврат в покой
         const t = (progress - 0.94) / 0.06;
         scale = 0.96 + 0.04 * t;
         rot = 358 + 2 * t;
       }
 
       drawFavicon(scale, rot);
-
-      animId = requestAnimationFrame(render);
     }
 
-    // Первый рендер
+    // Первый кадр
     drawFavicon(1, 0);
-    animId = requestAnimationFrame(render);
+
+    // setInterval продолжает тикать даже когда вкладка неактивна
+    const timerId = setInterval(tick, TICK_INTERVAL_MS);
 
     return () => {
-      if (animId) cancelAnimationFrame(animId);
+      clearInterval(timerId);
       link.href = originalHref;
     };
   }, []);
