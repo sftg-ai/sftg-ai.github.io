@@ -42,15 +42,15 @@ export default function SftgLogo({ className = "w-8 h-8", glow = false }) {
 
       <svg
         viewBox="0 0 100 100"
-        className="w-full h-full rounded-xl shadow-sm border border-sky-300/40 overflow-hidden"
+        className="w-full h-full rounded-[14px] shadow-sm border border-sky-300/40 overflow-hidden"
         xmlns="http://www.w3.org/2000/svg"
         aria-label="SFTG AI Logo"
       >
         <defs>
-          {/* Градиент заливки плашки */}
+          {/* Заливка фирменным синим #2997D8 */}
           <linearGradient id="sftgBg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#2BA2E6" />
-            <stop offset="100%" stopColor="#1E86C8" />
+            <stop offset="0%" stopColor="#2997D8" />
+            <stop offset="100%" stopColor="#2285C1" />
           </linearGradient>
 
           {/* Мягкое внутреннее свечение для звезды */}
@@ -61,8 +61,8 @@ export default function SftgLogo({ className = "w-8 h-8", glow = false }) {
           </radialGradient>
         </defs>
 
-        {/* Фон — синий скругленный квадрат */}
-        <rect width="100" height="100" rx="22" fill="url(#sftgBg)" />
+        {/* Фон — строгий скругленный квадрат как на оригинальной иконке */}
+        <rect width="100" height="100" rx="14" fill="url(#sftgBg)" />
 
         {/* Буквы S F T G по квадрантам (строго статичны) */}
         <g

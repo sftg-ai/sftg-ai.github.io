@@ -112,8 +112,8 @@ export function useAnimatedFavicon() {
       // Очистка холста
       ctx.clearRect(0, 0, 32, 32);
 
-      // Фон синий скругленный квадрат
-      roundRect(ctx, 0, 0, 32, 32, 7, '#2497D8');
+      // Фон синий скругленный квадрат (радиус 4.5px вместо 7px для строгого совпадения с оригинальной иконкой)
+      roundRect(ctx, 0, 0, 32, 32, 4.5, '#2997D8');
 
       // Буквы S F T G (белые, жирные)
       ctx.fillStyle = '#FFFFFF';
@@ -143,3 +143,4 @@ export function useAnimatedFavicon() {
     };
   }, []);
 }
+
