@@ -54,7 +54,7 @@ export default function ContactsSection() {
                 пн - пт: 09:00 - 18:00
               </div>
               <div className="text-slate-600 text-xs mt-0.5">
-                сб, вс - выходной (в мессенджерах отвечаем оперативно)
+                сб, вс - выходной
               </div>
             </div>
           </div>
