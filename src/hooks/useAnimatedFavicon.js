@@ -5,7 +5,7 @@ import { useEffect } from 'react';
  * 
  * Оптимизация под Chrome:
  * - Цикл 6000 мс (как в первой версии).
- * - Ограничение частоты обновления фавикона до 15-20 FPS (интервал 50-60 мс) только во время фазы движения.
+ * - Ограничение частоты обновления фавикона до 15-20 FPS (интервал 50 мс) только во время фазы движения.
  * - В фазе покоя не спамит браузер обновлениями link.href, благодаря чему Chrome не троттлит и плавно отрисовывает все промежуточные кадры поворота.
  */
 export function useAnimatedFavicon() {
@@ -33,11 +33,15 @@ export function useAnimatedFavicon() {
 
     function roundRect(ctx, x, y, width, height, radius, fillStyle) {
       ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.arcTo(x + width, y, x + width, y + height, radius);
-      ctx.arcTo(x + width, y + height, x, y + height, radius);
-      ctx.arcTo(x, y + height, x, y, radius);
-      ctx.arcTo(x, y + width, y, radius);
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, y, width, height, radius);
+      } else {
+        ctx.moveTo(x + radius, y);
+        ctx.arcTo(x + width, y, x + width, y + height, radius);
+        ctx.arcTo(x + width, y + height, x, y + height, radius);
+        ctx.arcTo(x, y + height, x, y, radius);
+        ctx.arcTo(x, y, x + width, y, radius);
+      }
       ctx.closePath();
       ctx.fillStyle = fillStyle;
       ctx.fill();
@@ -71,7 +75,7 @@ export function useAnimatedFavicon() {
     function drawFavicon(scale, rot) {
       ctx.clearRect(0, 0, 32, 32);
 
-      // Строгий квадрат с едва заметным скруглением 2.5px
+      // Строгий квадрат с аккуратным скруглением 2.5px
       roundRect(ctx, 0, 0, 32, 32, 2.5, '#2997D8');
 
       ctx.fillStyle = '#FFFFFF';
