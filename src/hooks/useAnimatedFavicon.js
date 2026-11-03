@@ -3,14 +3,13 @@ import { useEffect } from 'react';
 /**
  * Хук для плавной анимации фирменной звезды SFTG AI в фавиконе вкладки браузера через Canvas.
  * 
- * Особенности:
- * - Размер 32x32 px.
- * - Полностью синхронизирован с циклом в 6 секунд (70% покой, затем замах, спин и поп).
- * - Оптимизация: когда вкладка не активна (document.hidden), анимация спит и не тратит батарею.
+ * Параметры:
+ * - Цикл 8 секунд (длинная пауза покоя, без мелькания).
+ * - Строгий квадрат со скруглением r=2px (32x32px).
+ * - Спит в фоне при неактивной вкладке (document.hidden).
  */
 export function useAnimatedFavicon() {
   useEffect(() => {
-    // Находим или создаем <link rel="icon">
     let link = document.querySelector("link[rel*='icon']");
     if (!link) {
       link = document.createElement('link');
@@ -27,9 +26,8 @@ export function useAnimatedFavicon() {
 
     let animId = null;
     let startTime = performance.now();
-    const CYCLE_MS = 6000;
+    const CYCLE_MS = 8000;
 
-    // Вспомогательная функция рисования скругленного прямоугольника
     function roundRect(ctx, x, y, width, height, radius, fillStyle) {
       ctx.beginPath();
       ctx.moveTo(x + radius, y);
@@ -42,7 +40,6 @@ export function useAnimatedFavicon() {
       ctx.fill();
     }
 
-    // Рисование 4-лучевой звезды
     function drawStar(ctx, cx, cy, arm, scale, rotationDeg) {
       ctx.save();
       ctx.translate(cx, cy);
@@ -60,7 +57,6 @@ export function useAnimatedFavicon() {
       ctx.fillStyle = '#FFFFFF';
       ctx.fill();
 
-      // Маленькая круглая точка в центре для резкости
       ctx.beginPath();
       ctx.arc(0, 0, 1.2, 0, Math.PI * 2);
       ctx.fillStyle = '#FFFFFF';
@@ -70,52 +66,43 @@ export function useAnimatedFavicon() {
     }
 
     function render(now) {
-      // Если вкладка скрыта — не нагружаем CPU
       if (document.hidden) {
         animId = requestAnimationFrame(render);
         return;
       }
 
       const elapsed = (now - startTime) % CYCLE_MS;
-      const progress = elapsed / CYCLE_MS; // 0..1
+      const progress = elapsed / CYCLE_MS;
 
       let scale = 1;
       let rot = 0;
 
-      if (progress < 0.70) {
-        // Покой
+      if (progress < 0.75) {
         scale = 1;
         rot = 0;
-      } else if (progress < 0.76) {
-        // Замах и сжатие
-        const t = (progress - 0.70) / 0.06;
-        scale = 1 - 0.38 * t; // 1 -> 0.62
-        rot = -15 * t; // 0 -> -15 deg
-      } else if (progress < 0.88) {
-        // Энергичный перекрут и вытягивание
-        const t = (progress - 0.76) / 0.12;
-        // easeOutBack-подобное вытягивание
-        scale = 0.62 + (1.18 - 0.62) * Math.sin(t * (Math.PI / 2));
+      } else if (progress < 0.80) {
+        const t = (progress - 0.75) / 0.05;
+        scale = 1 - 0.35 * t;
+        rot = -15 * t;
+      } else if (progress < 0.90) {
+        const t = (progress - 0.80) / 0.10;
+        scale = 0.65 + (1.15 - 0.65) * Math.sin(t * (Math.PI / 2));
         rot = -15 + (375 - (-15)) * t;
-      } else if (progress < 0.94) {
-        // Отскок
-        const t = (progress - 0.88) / 0.06;
-        scale = 1.18 - 0.22 * t; // 1.18 -> 0.96
-        rot = 375 - 17 * t; // 375 -> 358
+      } else if (progress < 0.95) {
+        const t = (progress - 0.90) / 0.05;
+        scale = 1.15 - 0.18 * t;
+        rot = 375 - 17 * t;
       } else {
-        // Возврат в покой
-        const t = (progress - 0.94) / 0.06;
-        scale = 0.96 + 0.04 * t; // 0.96 -> 1.0
-        rot = 358 + 2 * t; // 358 -> 360
+        const t = (progress - 0.95) / 0.05;
+        scale = 0.97 + 0.03 * t;
+        rot = 358 + 2 * t;
       }
 
-      // Очистка холста
       ctx.clearRect(0, 0, 32, 32);
 
-      // Фон синий скругленный квадрат (радиус 4.5px вместо 7px для строгого совпадения с оригинальной иконкой)
-      roundRect(ctx, 0, 0, 32, 32, 4.5, '#2997D8');
+      // Строгий квадрат с едва заметным скруглением 2px
+      roundRect(ctx, 0, 0, 32, 32, 2.5, '#2997D8');
 
-      // Буквы S F T G (белые, жирные)
       ctx.fillStyle = '#FFFFFF';
       ctx.font = '900 6.5px system-ui, -apple-system, sans-serif';
       ctx.textAlign = 'center';
@@ -126,10 +113,8 @@ export function useAnimatedFavicon() {
       ctx.fillText('T', 8, 24);
       ctx.fillText('G', 24, 24);
 
-      // Звезда в центре (cx=16, cy=16, arm=10)
       drawStar(ctx, 16, 16, 10.5, scale, rot);
 
-      // Обновляем фавикон
       link.href = canvas.toDataURL('image/png');
 
       animId = requestAnimationFrame(render);
@@ -143,4 +128,3 @@ export function useAnimatedFavicon() {
     };
   }, []);
 }
-
