@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Send, ShieldCheck, Search, MessageSquare, PhoneCall } from 'lucide-react';
+import { ArrowRight, Send, ShieldCheck, Search, MessageSquare, PhoneCall, CheckCircle2 } from 'lucide-react';
 
 export default function LeadForm() {
   const [formData, setFormData] = useState({
@@ -68,8 +68,9 @@ export default function LeadForm() {
         {/* Слева: 6 колонок - Описание предпроектного разбора */}
         <div className="lg:col-span-6 flex flex-col justify-between">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-sky-800 w-fit mb-4">
-              Бесплатный предпроектный разбор
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-4">
+              <CheckCircle2 className="w-3.5 h-3.5 text-sky-600" />
+              <span>Бесплатный аудит и подбор решений</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
