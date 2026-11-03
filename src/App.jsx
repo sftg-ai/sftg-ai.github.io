@@ -8,8 +8,12 @@ import ClosedContour from './components/ClosedContour';
 import TeamAndExpertise from './components/TeamAndExpertise';
 import LeadForm from './components/LeadForm';
 import Footer from './components/Footer';
+import { useAnimatedFavicon } from './hooks/useAnimatedFavicon';
 
 export default function App() {
+  // Анимация фирменной звезды во вкладке браузера
+  useAnimatedFavicon();
+
   return (
     <div className="min-h-screen bg-white text-slate-900 selection:bg-sky-500/20 selection:text-sky-900">
       {/* 1. Плавающая навигационная капсула (max-w-7xl, вровень с экранами) */}
