@@ -90,8 +90,9 @@ export default function TeamAndExpertise() {
       
       {/* Заголовок выровнен по левому краю (без ёлочки) */}
       <div className="mb-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 uppercase tracking-wider mb-4">
-          О компании
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
+          <Users className="w-3.5 h-3.5 text-sky-600" />
+          <span>О компании</span>
         </div>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
           Опыт промышленной разработки и надежность решений
