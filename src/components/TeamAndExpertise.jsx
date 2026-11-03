@@ -14,7 +14,7 @@ export default function TeamAndExpertise() {
     {
       image: teamSlide1Img,
       badge: 'Архитектура и надежность',
-      title: 'Инженерная команда SFTG AI',
+      title: 'Инженерная команда SFTG',
       desc: 'Проектирование и сопровождение корпоративных систем интеграции',
     },
     {
@@ -156,7 +156,7 @@ export default function TeamAndExpertise() {
           <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between h-full bg-slate-50/70">
             <div>
               <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
-                Инженерный фокус SFTG AI:
+                Инженерный фокус SFTG:
               </div>
               <div className="space-y-3">
                 {slides.map((s, idx) => (
