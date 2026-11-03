@@ -15,18 +15,13 @@ export default function ContactsSection() {
       <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8">
         
         {/* Заголовок строгий и невысокий */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200/80">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-              Контакты и офис в Минске
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-1">
-              ООО «РоялСиАрЭм» · Разработка и внедрение AI-ассистентов для бизнеса
-            </p>
-          </div>
-          <div className="text-xs text-slate-500 font-medium">
-            Встречи в офисе и выезды на предприятия по всей Беларуси
-          </div>
+        <div className="pb-6 border-b border-slate-200/80">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+            Контакты и офис в Минске
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 mt-1">
+            ООО «РоялСиАрЭм» · Разработка и внедрение AI-ассистентов для бизнеса
+          </p>
         </div>
 
         {/* 3 строгих компактных столбца без пафоса */}

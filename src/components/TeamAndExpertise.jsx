@@ -177,7 +177,7 @@ export default function TeamAndExpertise() {
             </div>
 
             <div className="mt-6 pt-4 border-t border-slate-200/80 text-xs text-slate-500">
-              Работаем с компаниями из любых регионов, а в Минске также выезжаем на очные рабочие встречи с вашими специалистами.
+              Работаем с компаниями по всей Беларуси и СНГ.
             </div>
           </div>
 
