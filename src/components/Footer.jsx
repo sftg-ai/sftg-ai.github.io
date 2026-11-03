@@ -1,9 +1,10 @@
 import React from 'react';
-import { ShieldCheck, Send, Phone, MapPin } from 'lucide-react';
+import { ShieldCheck, Send, Phone, MapPin, Clock, MessageSquare } from 'lucide-react';
 import SftgLogo from './SftgLogo';
 
 export default function Footer() {
   const tgLink = "https://t.me/yurasvidersky?text=Здравствуйте!%20Хочу%20заказать%20бесплатный%20аудит%20процессов";
+  const waLink = "https://wa.me/375447481051";
 
   const navLinks = [
     { label: 'Возможности', href: '#processes' },
@@ -19,55 +20,86 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto">
         
         {/* Основная часть: бренд, ссылки и контакты */}
-        <div className="flex flex-col lg:flex-row items-start justify-between gap-8 pb-10 border-b border-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-10 border-b border-slate-200">
           
-          {/* Бренд и описание */}
-          <div className="flex flex-col gap-2 max-w-sm">
+          {/* Бренд и описание (5 колонок) */}
+          <div className="lg:col-span-5 flex flex-col gap-2">
             <div className="flex items-center gap-2.5">
               <SftgLogo className="w-7 h-7" glow={false} />
               <span className="text-base font-bold tracking-tight text-slate-900">
                 SFTG <span className="text-sky-600 font-semibold">AI</span>
               </span>
             </div>
-            <p className="text-xs text-slate-500 leading-relaxed mt-1">
+            <p className="text-xs text-slate-500 leading-relaxed mt-1 max-w-sm">
               Белорусский разработчик и интегратор интеллектуальных систем автоматизации документов, заказов и B2B-процессов.
             </p>
-            <div className="flex items-center gap-2 text-xs text-slate-600 mt-2 font-medium">
-              <MapPin className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-              <span>Минск, Республика Беларусь</span>
+            
+            {/* Точный юридический адрес в Минске */}
+            <div className="flex flex-col gap-1.5 text-xs text-slate-600 mt-3 font-medium">
+              <div className="flex items-start gap-2">
+                <MapPin className="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" />
+                <span>Беларусь, г. Минск, пр-т Дзержинского, 57, БЦ Omega Tower, офис 18</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-500">
+                <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span>Режим работы: пн - пт 09:00 - 18:00 (сб, вс - выходной)</span>
+              </div>
             </div>
           </div>
 
-          {/* Якорные ссылки */}
-          <div className="flex flex-wrap items-center gap-6 text-xs font-semibold text-slate-600">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="hover:text-sky-600 transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
+          {/* Якорные ссылки (4 колонки) */}
+          <div className="lg:col-span-4 flex flex-col gap-2.5 text-xs font-semibold text-slate-600">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+              Разделы
+            </span>
+            <div className="grid grid-cols-2 gap-2.5">
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="hover:text-sky-600 transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Прямые контакты */}
-          <div className="flex flex-col gap-2 text-xs">
+          {/* Прямые контакты (3 колонки) */}
+          <div className="lg:col-span-3 flex flex-col gap-3 text-xs">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
+              Связь с нами
+            </span>
+
+            {/* Телефон */}
             <a
-              href="tel:+375291200060"
-              className="inline-flex items-center gap-2 text-slate-800 font-bold hover:text-sky-600 transition-colors"
+              href="tel:+375296663734"
+              className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-sky-600 transition-colors text-sm"
             >
-              <Phone className="w-3.5 h-3.5 text-sky-600" />
-              <span>+375 (29) 120-00-60</span>
+              <Phone className="w-4 h-4 text-sky-600 shrink-0" />
+              <span>+375 (29) 666-37-34</span>
             </a>
+
+            {/* Telegram (Юрию) */}
             <a
               href={tgLink}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sky-600 hover:text-sky-700 font-bold transition-colors"
             >
-              <Send className="w-3.5 h-3.5" />
-              <span>Связаться</span>
+              <Send className="w-3.5 h-3.5 shrink-0" />
+              <span>Связаться в Telegram</span>
+            </a>
+
+            {/* WhatsApp */}
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-bold transition-colors"
+            >
+              <MessageSquare className="w-3.5 h-3.5 shrink-0" />
+              <span>Написать в WhatsApp</span>
             </a>
           </div>
 
