@@ -38,7 +38,7 @@ export default function ContactsSection() {
                 г. Минск, пр-т Дзержинского, 57
               </div>
               <div className="text-slate-600 text-xs mt-0.5">
-                БЦ Omega Tower, 15 этаж, офис 18
+                БЦ Omega Tower
               </div>
             </div>
           </div>

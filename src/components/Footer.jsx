@@ -39,7 +39,7 @@ export default function Footer() {
             <div className="flex flex-col gap-1.5 text-xs text-slate-600 mt-3 font-medium">
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" />
-                <span>Беларусь, г. Минск, пр-т Дзержинского, 57, БЦ Omega Tower, офис 18</span>
+                <span>Беларусь, г. Минск, пр-т Дзержинского, 57, БЦ Omega Tower</span>
               </div>
               <div className="flex items-center gap-2 text-slate-500">
                 <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
