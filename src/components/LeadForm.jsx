@@ -46,24 +46,26 @@ export default function LeadForm() {
 
   return (
     <section id="lead-form" className="py-20 md:py-28 px-4 sm:px-6 max-w-7xl mx-auto border-t border-slate-200/80 relative z-10 text-left">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
         
         {/* Слева: 6 колонок - Описание предпроектного разбора */}
-        <div className="lg:col-span-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-sky-800 w-fit mb-4">
-            Бесплатный предпроектный разбор
+        <div className="lg:col-span-6 flex flex-col justify-between">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-sky-800 w-fit mb-4">
+              Бесплатный предпроектный разбор
+            </div>
+
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
+              Оставьте сайт вашей компании - подготовим варианты автоматизации до звонка
+            </h2>
+
+            <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed mb-6">
+              Вам не нужно заранее писать техническое задание. Мы сами изучим ваш сайт и специфику бизнеса, подготовим 3 - 4 конкретных сценария автоматизации именно для вашей компании и пришлем короткий список перед созвоном.
+            </p>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
-            Оставьте сайт вашей компании - подготовим варианты автоматизации до звонка
-          </h2>
-
-          <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed mb-8">
-            Вам не нужно заранее писать техническое задание. Мы сами изучим ваш сайт и специфику бизнеса, подготовим 3 - 4 конкретных сценария автоматизации именно для вашей компании и пришлем короткий список перед созвоном.
-          </p>
-
           {/* 3 прозрачных шага */}
-          <div className="space-y-5">
+          <div className="space-y-4">
             {steps.map((step, idx) => {
               const Icon = step.icon;
               return (
@@ -90,9 +92,9 @@ export default function LeadForm() {
           </div>
         </div>
 
-        {/* Справа: 6 колонок - Форма */}
-        <div className="lg:col-span-6">
-          <div className="p-6 sm:p-8 md:p-10 rounded-3xl bg-white border border-slate-200 shadow-xl relative">
+        {/* Справа: 6 колонок - Форма (растягивается точно вровень с шагами слева) */}
+        <div className="lg:col-span-6 flex flex-col">
+          <div className="p-6 sm:p-8 md:p-9 rounded-3xl bg-white border border-slate-200 shadow-xl relative h-full flex flex-col justify-between">
             
             {submitted ? (
               <div className="p-8 rounded-2xl bg-emerald-50 border border-emerald-200 text-center flex flex-col items-center">
@@ -164,16 +166,16 @@ export default function LeadForm() {
                 </div>
 
                 {/* 4. Ваша задача или комментарий (необязательно) */}
-                <div>
+                <div className="flex-1 flex flex-col">
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
                     Ваша задача или комментарий (необязательно)
                   </label>
                   <textarea
-                    rows={3}
+                    rows={4}
                     placeholder="Если уже знаете, какой участок хотите автоматизировать - напишите пару слов"
                     value={formData.taskDesc}
                     onChange={(e) => setFormData({ ...formData, taskDesc: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors resize-none"
+                    className="w-full flex-1 min-h-[90px] px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors resize-none"
                   />
                 </div>
 
