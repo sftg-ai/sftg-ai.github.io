@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 /**
  * Хук для плавной анимации фирменной звезды SFTG AI в фавиконе вкладки браузера через Canvas.
  * 
- * Параметры:
- * - Цикл 8 секунд (длинная пауза покоя, без мелькания).
- * - Строгий квадрат со скруглением r=2px (32x32px).
- * - Спит в фоне при неактивной вкладке (document.hidden).
+ * Оптимизация под Chrome:
+ * - Цикл 6000 мс (как в первой версии).
+ * - Ограничение частоты обновления фавикона до 15-20 FPS (интервал 50-60 мс) только во время фазы движения.
+ * - В фазе покоя не спамит браузер обновлениями link.href, благодаря чему Chrome не троттлит и плавно отрисовывает все промежуточные кадры поворота.
  */
 export function useAnimatedFavicon() {
   useEffect(() => {
@@ -26,7 +26,10 @@ export function useAnimatedFavicon() {
 
     let animId = null;
     let startTime = performance.now();
-    const CYCLE_MS = 8000;
+    let lastUpdateMs = 0;
+    let isResting = true;
+    const CYCLE_MS = 6000;
+    const FRAME_INTERVAL_MS = 50; // ~20 FPS — идеальная частота для Chrome favicon
 
     function roundRect(ctx, x, y, width, height, radius, fillStyle) {
       ctx.beginPath();
@@ -34,7 +37,7 @@ export function useAnimatedFavicon() {
       ctx.arcTo(x + width, y, x + width, y + height, radius);
       ctx.arcTo(x + width, y + height, x, y + height, radius);
       ctx.arcTo(x, y + height, x, y, radius);
-      ctx.arcTo(x, y, x + width, y, radius);
+      ctx.arcTo(x, y + width, y, radius);
       ctx.closePath();
       ctx.fillStyle = fillStyle;
       ctx.fill();
@@ -65,42 +68,10 @@ export function useAnimatedFavicon() {
       ctx.restore();
     }
 
-    function render(now) {
-      if (document.hidden) {
-        animId = requestAnimationFrame(render);
-        return;
-      }
-
-      const elapsed = (now - startTime) % CYCLE_MS;
-      const progress = elapsed / CYCLE_MS;
-
-      let scale = 1;
-      let rot = 0;
-
-      if (progress < 0.75) {
-        scale = 1;
-        rot = 0;
-      } else if (progress < 0.80) {
-        const t = (progress - 0.75) / 0.05;
-        scale = 1 - 0.35 * t;
-        rot = -15 * t;
-      } else if (progress < 0.90) {
-        const t = (progress - 0.80) / 0.10;
-        scale = 0.65 + (1.15 - 0.65) * Math.sin(t * (Math.PI / 2));
-        rot = -15 + (375 - (-15)) * t;
-      } else if (progress < 0.95) {
-        const t = (progress - 0.90) / 0.05;
-        scale = 1.15 - 0.18 * t;
-        rot = 375 - 17 * t;
-      } else {
-        const t = (progress - 0.95) / 0.05;
-        scale = 0.97 + 0.03 * t;
-        rot = 358 + 2 * t;
-      }
-
+    function drawFavicon(scale, rot) {
       ctx.clearRect(0, 0, 32, 32);
 
-      // Строгий квадрат с едва заметным скруглением 2px
+      // Строгий квадрат с едва заметным скруглением 2.5px
       roundRect(ctx, 0, 0, 32, 32, 2.5, '#2997D8');
 
       ctx.fillStyle = '#FFFFFF';
@@ -116,10 +87,69 @@ export function useAnimatedFavicon() {
       drawStar(ctx, 16, 16, 10.5, scale, rot);
 
       link.href = canvas.toDataURL('image/png');
+    }
+
+    function render(now) {
+      if (document.hidden) {
+        animId = requestAnimationFrame(render);
+        return;
+      }
+
+      const elapsed = (now - startTime) % CYCLE_MS;
+      const progress = elapsed / CYCLE_MS;
+
+      // 0..0.70 — фаза покоя (4.2 секунды)
+      if (progress < 0.70) {
+        if (!isResting) {
+          isResting = true;
+          drawFavicon(1, 0); // фиксируем статичный четкий кадр
+        }
+        animId = requestAnimationFrame(render);
+        return;
+      }
+
+      // Начинается фаза движения (1.8 секунды)
+      isResting = false;
+
+      // Ограничиваем частоту смены link.href, чтобы Chrome успевал выводить каждый кадр без пропуска
+      if (now - lastUpdateMs < FRAME_INTERVAL_MS) {
+        animId = requestAnimationFrame(render);
+        return;
+      }
+      lastUpdateMs = now;
+
+      let scale = 1;
+      let rot = 0;
+
+      if (progress < 0.76) {
+        // Замах и сжатие
+        const t = (progress - 0.70) / 0.06;
+        scale = 1 - 0.38 * t;
+        rot = -15 * t;
+      } else if (progress < 0.88) {
+        // Энергичный перекрут и вытягивание
+        const t = (progress - 0.76) / 0.12;
+        scale = 0.62 + (1.18 - 0.62) * Math.sin(t * (Math.PI / 2));
+        rot = -15 + (375 - (-15)) * t;
+      } else if (progress < 0.94) {
+        // Отскок
+        const t = (progress - 0.88) / 0.06;
+        scale = 1.18 - 0.22 * t;
+        rot = 375 - 17 * t;
+      } else {
+        // Возврат в покой
+        const t = (progress - 0.94) / 0.06;
+        scale = 0.96 + 0.04 * t;
+        rot = 358 + 2 * t;
+      }
+
+      drawFavicon(scale, rot);
 
       animId = requestAnimationFrame(render);
     }
 
+    // Первый рендер
+    drawFavicon(1, 0);
     animId = requestAnimationFrame(render);
 
     return () => {
