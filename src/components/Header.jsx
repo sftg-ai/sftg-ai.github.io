@@ -20,6 +20,7 @@ export default function Header() {
     { label: 'Этапы работы', href: '#stages' },
     { label: 'Безопасность данных', href: '#contour' },
     { label: 'О компании', href: '#about' },
+    { label: 'Контакты', href: '#contacts' },
   ];
 
   const tgLink = "https://t.me/yurasvidersky";

@@ -6,6 +6,7 @@ import RealCases from './components/RealCases';
 import WorkStages from './components/WorkStages';
 import ClosedContour from './components/ClosedContour';
 import TeamAndExpertise from './components/TeamAndExpertise';
+import ContactsSection from './components/ContactsSection';
 import LeadForm from './components/LeadForm';
 import Footer from './components/Footer';
 import { useAnimatedFavicon } from './hooks/useAnimatedFavicon';
@@ -19,7 +20,7 @@ export default function App() {
       {/* 1. Плавающая навигационная капсула (max-w-7xl, вровень с экранами) */}
       <Header />
 
-      {/* 2. Основной контент (7 экранов по канонам SDLC и эстетике Sherpa RPA / ROBIN) */}
+      {/* 2. Основной контент (8 экранов по канонам SDLC и эстетике Sherpa RPA / ROBIN) */}
       <main>
         {/* Экран 1: Входной голубой экран с 3 карточками экономической выгоды */}
         <Hero />
@@ -39,7 +40,10 @@ export default function App() {
         {/* Экран 6: Опыт инженерной команды, надежность и Закон № 99-З РБ */}
         <TeamAndExpertise />
 
-        {/* Экран 7: Предпроектный разбор бизнеса до созвона (без 1С-селектов и процентов) */}
+        {/* Экран 7: Контакты и офис в Минске (БЦ Omega Tower) */}
+        <ContactsSection />
+
+        {/* Экран 8: Предпроектный разбор бизнеса до созвона (без 1С-селектов и процентов) */}
         <LeadForm />
       </main>
 

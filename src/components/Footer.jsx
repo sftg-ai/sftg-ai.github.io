@@ -12,6 +12,7 @@ export default function Footer() {
     { label: 'Этапы работы', href: '#stages' },
     { label: 'Безопасность данных', href: '#contour' },
     { label: 'О компании', href: '#about' },
+    { label: 'Контакты', href: '#contacts' },
     { label: 'Бесплатный аудит', href: '#lead-form' }
   ];
 
