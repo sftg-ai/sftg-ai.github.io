@@ -4,8 +4,8 @@ import React from 'react';
  * Фирменный логотип SFTG AI в шапке сайта.
  * 
  * Точные параметры оригинала:
- * - Скругленный квадрат (squircle/rounded-xl) с точным радиусом 8px при 32x32px.
- * - Частота вращения: спокойная пауза 8 секунд (анимация раз в 8s, без навязчивого мелькания).
+ * - Скругленный квадрат (строгий squircle rounded-lg с rx=8).
+ * - Цикл 6 секунд как в исходной версии.
  * - Буквы S F T G остаются статичными.
  * - Центральная звезда делает мягкий замах (anticipation), поворот и вытягивание кончиков.
  */
@@ -14,17 +14,17 @@ export default function SftgLogo({ className = "w-8 h-8", glow = false }) {
     <div className={`relative inline-flex items-center justify-center shrink-0 ${className} select-none group`}>
       <style>{`
         @keyframes sftgStarSpinPop {
-          0%, 75% {
+          0%, 70% {
             transform: rotate(0deg) scale(1);
           }
-          80% {
-            transform: rotate(-15deg) scale(0.65);
+          76% {
+            transform: rotate(-15deg) scale(0.62);
           }
-          90% {
-            transform: rotate(375deg) scale(1.15);
+          88% {
+            transform: rotate(375deg) scale(1.18);
           }
-          95% {
-            transform: rotate(358deg) scale(0.97);
+          94% {
+            transform: rotate(358deg) scale(0.96);
           }
           100% {
             transform: rotate(360deg) scale(1);
@@ -32,7 +32,7 @@ export default function SftgLogo({ className = "w-8 h-8", glow = false }) {
         }
         .sftg-star-animated {
           transform-origin: 50px 50px;
-          animation: sftgStarSpinPop 8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+          animation: sftgStarSpinPop 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
         }
       `}</style>
 
