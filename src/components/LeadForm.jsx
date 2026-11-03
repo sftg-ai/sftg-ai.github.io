@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Send, ShieldCheck, Search, MessageSquare, PhoneCall, Sparkles, MessageCircle } from 'lucide-react';
+import { ArrowRight, Send, ShieldCheck, Search, MessageSquare, PhoneCall } from 'lucide-react';
 
 export default function LeadForm() {
   const [formData, setFormData] = useState({
@@ -28,6 +28,16 @@ export default function LeadForm() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     setNoticeOpen(true);
+  };
+
+  // Русскоязычные подсказки для стандартной валидации браузера
+  const handleInvalid = (msg) => (e) => {
+    e.target.setCustomValidity(msg);
+  };
+
+  const handleInput = (setter, field) => (e) => {
+    e.target.setCustomValidity('');
+    setter({ ...formData, [field]: e.target.value });
   };
 
   const steps = [
@@ -115,7 +125,8 @@ export default function LeadForm() {
                   required
                   placeholder="Алексей"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onInvalid={handleInvalid("Пожалуйста, укажите ваше имя")}
+                  onChange={handleInput(setFormData, 'name')}
                   className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
                 />
               </div>
@@ -130,7 +141,8 @@ export default function LeadForm() {
                   required
                   placeholder="+375 (29) 000-00-00 или @username"
                   value={formData.contact}
-                  onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                  onInvalid={handleInvalid("Пожалуйста, укажите телефон или Telegram для связи")}
+                  onChange={handleInput(setFormData, 'contact')}
                   className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
                 />
               </div>
@@ -145,7 +157,8 @@ export default function LeadForm() {
                   required
                   placeholder="Например: kompaniya.by или оптовая поставка оборудования"
                   value={formData.companyOrSphere}
-                  onChange={(e) => setFormData({ ...formData, companyOrSphere: e.target.value })}
+                  onInvalid={handleInvalid("Пожалуйста, укажите сайт или сферу бизнеса")}
+                  onChange={handleInput(setFormData, 'companyOrSphere')}
                   className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
                 />
               </div>
