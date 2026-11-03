@@ -173,15 +173,15 @@ export default function LeadForm() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-bold text-sky-900">
-                          Подключение шлюза в процессе
+                        <span className="text-xs font-bold text-slate-900">
+                          Отправка через форму пока недоступна
                         </span>
-                        <span className="text-[10px] font-semibold bg-sky-200/70 text-sky-800 px-2 py-0.5 rounded-full">
-                          Быстрый контакт
+                        <span className="text-[10px] font-semibold bg-amber-100 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full">
+                          В разработке
                         </span>
                       </div>
                       <p className="text-xs text-slate-600 leading-relaxed mb-3">
-                        Для мгновенного разбора ваших задач и защиты от спама перейдите в прямой рабочий диалог с ведущим экспертом SFTG AI в Telegram.
+                        Чтобы сразу получить варианты автоматизации и не ждать, отправьте запрос напрямую в Telegram:
                       </p>
                       <a
                         href={getPersonalizedTgLink()}
