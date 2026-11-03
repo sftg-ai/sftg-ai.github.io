@@ -190,7 +190,7 @@ export default function LeadForm() {
                         className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/25 active:scale-[0.98] transition-all"
                       >
                         <Send className="w-3.5 h-3.5" />
-                        <span>Написать Юрию Свидерскому (@yurasvidersky)</span>
+                        <span>Написать в Telegram</span>
                       </a>
                     </div>
                   </div>
