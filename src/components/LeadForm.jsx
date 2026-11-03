@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, Send, ShieldCheck, Search, MessageSquare, PhoneCall } from 'lucide-react';
+import { ArrowRight, Send, ShieldCheck, Search, MessageSquare, PhoneCall, Sparkles, MessageCircle } from 'lucide-react';
 
 export default function LeadForm() {
   const [formData, setFormData] = useState({
@@ -8,19 +8,26 @@ export default function LeadForm() {
     companyOrSphere: '',
     taskDesc: ''
   });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [noticeOpen, setNoticeOpen] = useState(false);
 
-  const tgLink = "https://t.me/yurasvidersky?text=Здравствуйте!%20Хочу%20получить%20персональный%20разбор%20бизнеса";
+  // Формируем персональный текст для Telegram на основе того, что человек уже ввел в поля
+  const getPersonalizedTgLink = () => {
+    let msg = 'Здравствуйте! Хочу получить персональный разбор автоматизации для бизнеса.';
+    const details = [];
+    if (formData.name.trim()) details.push(`Имя: ${formData.name.trim()}`);
+    if (formData.companyOrSphere.trim()) details.push(`Компания/сфера: ${formData.companyOrSphere.trim()}`);
+    if (formData.contact.trim()) details.push(`Контакт: ${formData.contact.trim()}`);
+    if (formData.taskDesc.trim()) details.push(`Задача: ${formData.taskDesc.trim()}`);
+    
+    if (details.length > 0) {
+      msg += `\n\n${details.join('\n')}`;
+    }
+    return `https://t.me/yurasvidersky?text=${encodeURIComponent(msg)}`;
+  };
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    // Имитация отправки заявки
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 600);
+    setNoticeOpen(true);
   };
 
   const steps = [
@@ -96,113 +103,118 @@ export default function LeadForm() {
         <div className="lg:col-span-6 flex flex-col">
           <div className="p-6 sm:p-8 md:p-9 rounded-3xl bg-white border border-slate-200 shadow-xl relative h-full flex flex-col justify-between">
             
-            {submitted ? (
-              <div className="p-8 rounded-2xl bg-emerald-50 border border-emerald-200 text-center flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-700 mb-4">
-                  <CheckCircle2 className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">
-                  Заявка успешно принята
-                </h3>
-                <p className="text-sm text-slate-600 max-w-md mb-5 leading-relaxed">
-                  Изучим информацию и пришлем подборку сценариев перед созвоном.
-                </p>
-                <a
-                  href={tgLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-700 shadow-sm transition-all"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Связаться</span>
-                </a>
+            <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 h-full">
+              
+              {/* 1. Ваше имя */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Ваше имя *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Алексей"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
+                />
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                
-                {/* 1. Ваше имя */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Ваше имя *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Алексей"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
-                  />
-                </div>
 
-                {/* 2. Телефон или Telegram */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Телефон или Telegram *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="+375 (29) 000-00-00 или @username"
-                    value={formData.contact}
-                    onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
-                  />
-                </div>
+              {/* 2. Телефон или Telegram */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Телефон или Telegram *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="+375 (29) 000-00-00 или @username"
+                  value={formData.contact}
+                  onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
+                />
+              </div>
 
-                {/* 3. Сайт компании или сфера бизнеса */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Сайт компании или сфера бизнеса *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Например: kompaniya.by или оптовая поставка оборудования"
-                    value={formData.companyOrSphere}
-                    onChange={(e) => setFormData({ ...formData, companyOrSphere: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
-                  />
-                </div>
+              {/* 3. Сайт компании или сфера бизнеса */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Сайт компании или сфера бизнеса *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Например: kompaniya.by или оптовая поставка оборудования"
+                  value={formData.companyOrSphere}
+                  onChange={(e) => setFormData({ ...formData, companyOrSphere: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
+                />
+              </div>
 
-                {/* 4. Ваша задача или комментарий (необязательно) */}
-                <div className="flex-1 flex flex-col">
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Ваша задача или комментарий (необязательно)
-                  </label>
-                  <textarea
-                    rows={4}
-                    placeholder="Если уже знаете, какой участок хотите автоматизировать - напишите пару слов"
-                    value={formData.taskDesc}
-                    onChange={(e) => setFormData({ ...formData, taskDesc: e.target.value })}
-                    className="w-full flex-1 min-h-[90px] px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors resize-none"
-                  />
-                </div>
+              {/* 4. Ваша задача или комментарий (необязательно) */}
+              <div className="flex-1 flex flex-col">
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Ваша задача или комментарий (необязательно)
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="Если уже знаете, какой участок хотите автоматизировать - напишите пару слов"
+                  value={formData.taskDesc}
+                  onChange={(e) => setFormData({ ...formData, taskDesc: e.target.value })}
+                  className="w-full flex-1 min-h-[90px] px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors resize-none"
+                />
+              </div>
 
-                {/* Кнопка отправки */}
+              {/* Раздвигающаяся шторка с Telegram Юрия при нажатии на кнопку */}
+              {noticeOpen && (
+                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-sky-50 to-blue-50/60 border border-sky-200/90 text-left transition-all duration-300 animate-in fade-in slide-in-from-top-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-sky-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-sky-600/30">
+                      <Send className="w-4 h-4 ml-0.5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-bold text-sky-900">
+                          Подключение шлюза в процессе
+                        </span>
+                        <span className="text-[10px] font-semibold bg-sky-200/70 text-sky-800 px-2 py-0.5 rounded-full">
+                          Быстрый контакт
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed mb-3">
+                        Для мгновенного разбора ваших задач и защиты от спама перейдите в прямой рабочий диалог с ведущим экспертом SFTG AI в Telegram.
+                      </p>
+                      <a
+                        href={getPersonalizedTgLink()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/25 active:scale-[0.98] transition-all"
+                      >
+                        <Send className="w-3.5 h-3.5" />
+                        <span>Написать Юрию Свидерскому (@yurasvidersky)</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Кнопка отправки формы */}
+              {!noticeOpen ? (
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="w-full mt-2 py-3.5 px-6 rounded-xl text-sm font-bold bg-sky-600 text-white hover:bg-sky-700 shadow-md shadow-sky-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                  className="w-full mt-2 py-3.5 px-6 rounded-xl text-sm font-bold bg-sky-600 text-white hover:bg-sky-700 shadow-md shadow-sky-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  {loading ? (
-                    <span>Отправка заявки...</span>
-                  ) : (
-                    <>
-                      <span>Получить персональный разбор бизнеса -&gt;</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
+                  <span>Получить персональный разбор бизнеса -&gt;</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
+              ) : null}
 
-                {/* Подпись соответствия Закону 99-З */}
-                <div className="flex items-center justify-center gap-2 text-center text-xs text-slate-500 mt-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Обработка данных в строгом соответствии с Законом Республики Беларусь № 99-З.</span>
-                </div>
+              {/* Подпись соответствия Закону 99-З */}
+              <div className="flex items-center justify-center gap-2 text-center text-xs text-slate-500 mt-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>Обработка данных в строгом соответствии с Законом Республики Беларусь № 99-З.</span>
+              </div>
 
-              </form>
-            )}
+            </form>
 
           </div>
         </div>
