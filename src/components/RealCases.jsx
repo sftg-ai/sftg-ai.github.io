@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowDown, ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowDown, ArrowRight, ExternalLink, Briefcase } from 'lucide-react';
 
 export default function RealCases({ activeCase, setActiveCase } = {}) {
   const [activeCategory, setActiveCategory] = useState('Продажи и КП');
@@ -188,9 +188,10 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-12">
           {/* Левая колонка (7 колонок) */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
-            <span className="text-sky-800 bg-sky-50 border border-sky-200 px-3 py-1 rounded-full text-xs font-semibold inline-block mb-3">
-              Примеры задач по отделам
-            </span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
+              <Briefcase className="w-3.5 h-3.5 text-sky-600" />
+              <span>Примеры задач по отделам</span>
+            </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
               Примеры задач для автоматизации по отделам
             </h2>

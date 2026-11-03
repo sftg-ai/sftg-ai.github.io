@@ -51,9 +51,9 @@ export default function WorkStages() {
     <section id="stages" className="py-20 md:py-28 bg-slate-50 border-b border-slate-200/80 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 text-left">
         {/* Шапка секции */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
           <Layers className="w-3.5 h-3.5 text-sky-600" />
-          <span>Понятный формат сотрудничества</span>
+          <span>Этапы работы</span>
         </div>
 
         <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight my-4">

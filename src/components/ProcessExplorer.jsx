@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, CheckCircle2, AlertCircle } from 'lucide-react';
+import { FileText, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
 
 const PROCESSES = [
   {
@@ -153,8 +153,9 @@ export default function ProcessExplorer() {
           <div className="lg:col-span-5 flex flex-col gap-6 text-left">
             
             {/* Плашка направления */}
-            <div className="inline-flex items-center bg-white border border-slate-200 text-xs font-semibold px-3 py-1 rounded-full text-sky-800 w-fit shadow-xs">
-              Для продаж, закупок, финансов, сервиса и производства
+            <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200 text-xs font-semibold px-3 py-1 rounded-full text-sky-800 w-fit mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+              <span>Возможности платформы</span>
             </div>
 
             {/* Динамический H2 и подзаголовок */}
