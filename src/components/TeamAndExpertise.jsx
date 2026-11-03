@@ -94,10 +94,10 @@ export default function TeamAndExpertise() {
           О компании
         </div>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
-          Опыт команды и инженерные стандарты
+          Опыт промышленной разработки и надежность решений
         </h2>
         <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-3xl">
-          Белорусская компания с 15-летним опытом разработки и внедрения корпоративных платформ, высоконагруженных систем и B2B-интеграций.
+          Более 15 лет создаем корпоративные платформы, интеграции и высоконагруженные сервисы.
         </p>
       </div>
 
