@@ -9,7 +9,7 @@ export default function Footer() {
   const navLinks = [
     { label: 'Примеры решений', href: '#processes' },
     { label: 'Как это работает', href: '#cases' },
-    { label: 'Этапы работы', href: '#stages' },
+    { label: 'Этапы внедрения', href: '#stages' },
     { label: 'Безопасность данных', href: '#contour' },
     { label: 'О компании', href: '#about' },
     { label: 'Контакты', href: '#contacts' },

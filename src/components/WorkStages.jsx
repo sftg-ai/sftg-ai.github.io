@@ -53,11 +53,11 @@ export default function WorkStages() {
         {/* Шапка секции */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
           <Layers className="w-3.5 h-3.5 text-sky-600" />
-          <span>Этапы работы</span>
+          <span>Этапы внедрения</span>
         </div>
 
         <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight my-4">
-          Этапы работы: от заявки до запуска и поддержки
+          Этапы внедрения: от заявки до запуска и поддержки
         </h2>
 
         <p className="text-base sm:text-lg text-slate-600 max-w-3xl leading-relaxed">
