@@ -254,7 +254,7 @@ export default function TrustMarquee() {
         {/* БЛОК 1: Твердый факт о внедренных решениях */}
         <div className="pb-7 border-b border-slate-200">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
-            Более 80 внедренных решений в компаниях: производство, опт, логистика, ритейл
+            Более 80 реализованных проектов в компаниях
           </h2>
         </div>
 
