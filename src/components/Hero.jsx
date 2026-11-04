@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, TrendingDown, Zap, TrendingUp } from 'lucide-react';
+import { ArrowRight, TrendingDown, Zap, TrendingUp, Award } from 'lucide-react';
 
 export default function Hero({ onSelectCase, activeCaseIndex }) {
   return (
@@ -40,10 +40,16 @@ export default function Hero({ onSelectCase, activeCaseIndex }) {
           
           {/* Слева: Текстовый блок (7 колонок) */}
           <div className="lg:col-span-7 flex flex-col items-start">
-            {/* Плашка */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold text-white mb-6 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-sky-200" />
-              <span>AI-автоматизация для бизнеса</span>
+            {/* Плашки над заголовком */}
+            <div className="flex flex-wrap items-center gap-2.5 mb-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold text-white shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-sky-200" />
+                <span>AI-автоматизация для бизнеса</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold text-white shadow-sm">
+                <Award className="w-3.5 h-3.5 text-sky-200" />
+                <span>Резидент Парка высоких технологий</span>
+              </div>
             </div>
 
             {/* Главный заголовок H1 */}
