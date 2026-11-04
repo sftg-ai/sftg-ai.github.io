@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import ProcessExplorer from './components/ProcessExplorer';
 import RealCases from './components/RealCases';
 import WorkStages from './components/WorkStages';
+import TrustMarquee from './components/TrustMarquee';
 import ClosedContour from './components/ClosedContour';
 import TeamAndExpertise from './components/TeamAndExpertise';
 import ContactsSection from './components/ContactsSection';
@@ -33,6 +34,9 @@ export default function App() {
 
         {/* Экран 4: Понятные этапы работы и прозрачные условия */}
         <WorkStages />
+
+        {/* Поясок доверия: 80+ реализованных проектов и компании */}
+        <TrustMarquee />
 
         {/* Экран 5: Защита коммерческой тайны и работа в закрытом контуре */}
         <ClosedContour />
