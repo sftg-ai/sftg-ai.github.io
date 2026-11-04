@@ -161,15 +161,11 @@ export default function TrustMarquee() {
 
         {/* БЛОК 2: Партнеры и проекты (две свайп-строчки) */}
         <div className="pt-7">
-          <div className="flex items-center justify-between gap-4 mb-4">
+          <div className="mb-4">
             {/* Плашка направления */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800">
               <Building2 className="w-3.5 h-3.5 text-sky-600" />
               <span>Партнеры и проекты</span>
-            </div>
-            
-            <div className="text-[11px] text-slate-400 font-medium hidden sm:block">
-              Сдвигайте влево и вправо мышкой или тачпадом
             </div>
           </div>
 
