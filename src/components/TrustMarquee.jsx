@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Building2, Layers, X } from 'lucide-react';
+import { Building2, X } from 'lucide-react';
 
 const ROW_ONE = [
   {
@@ -449,7 +449,7 @@ export default function TrustMarquee() {
               className="mt-5 p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-2xs animate-smooth-fade"
             >
               {/* Заголовок карточки партнера */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-4 mb-4 border-b border-slate-100">
+              <div className="flex items-center justify-between gap-2.5 pb-4 mb-4 border-b border-slate-100">
                 <div className="flex flex-wrap items-center gap-2.5">
                   <span className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                     {activeCompany.name}
@@ -458,29 +458,20 @@ export default function TrustMarquee() {
                     {activeCompany.industry}
                   </span>
                 </div>
-                <div className="flex items-center gap-2.5 self-start sm:self-auto">
-                  <div className="text-xs font-semibold text-sky-700 bg-sky-50 px-3 py-1 rounded-lg border border-sky-100/90 w-fit">
-                    {currentProject.type}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveCompany(null)}
-                    className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-                    title="Скрыть описание"
-                    aria-label="Закрыть"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveCompany(null)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                  title="Скрыть описание"
+                  aria-label="Закрыть"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
 
               {/* Если у компании несколько проектов: аккуратные вкладки-переключатели */}
               {hasMultipleProjects && (
                 <div className="flex flex-wrap items-center gap-2 mb-4 pb-3 border-b border-slate-100">
-                  <span className="text-xs font-semibold text-slate-500 mr-1 flex items-center gap-1">
-                    <Layers className="w-3.5 h-3.5 text-sky-600" />
-                    Этапы сотрудничества:
-                  </span>
                   {activeCompany.projects.map((proj, pIdx) => {
                     const isProjActive = activeProjectIdx === pIdx;
                     return (
