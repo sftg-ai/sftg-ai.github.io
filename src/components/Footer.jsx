@@ -7,10 +7,10 @@ export default function Footer() {
   const waLink = "https://wa.me/375447481051";
 
   const navLinks = [
-    { label: 'Примеры решений', href: '#processes' },
-    { label: 'Как это работает', href: '#cases' },
+    { label: 'Примеры', href: '#processes' },
+    { label: 'Сценарии', href: '#cases' },
     { label: 'Этапы внедрения', href: '#stages' },
-    { label: 'Безопасность данных', href: '#contour' },
+    { label: 'Безопасность', href: '#contour' },
     { label: 'О компании', href: '#about' },
     { label: 'Контакты', href: '#contacts' },
     { label: 'Бесплатный аудит', href: '#lead-form' }

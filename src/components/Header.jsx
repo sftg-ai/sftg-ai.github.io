@@ -15,10 +15,10 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { label: 'Примеры решений', href: '#processes' },
-    { label: 'Как это работает', href: '#cases' },
+    { label: 'Примеры', href: '#processes' },
+    { label: 'Сценарии', href: '#cases' },
     { label: 'Этапы внедрения', href: '#stages' },
-    { label: 'Безопасность данных', href: '#contour' },
+    { label: 'Безопасность', href: '#contour' },
     { label: 'О компании', href: '#about' },
     { label: 'Контакты', href: '#contacts' },
   ];
@@ -46,12 +46,12 @@ export default function Header() {
           </a>
 
           {/* Десктоп навигация */}
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-4 xl:gap-6">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-xs font-semibold text-slate-600 hover:text-sky-600 transition-colors duration-200"
+                className="text-xs font-semibold text-slate-600 hover:text-sky-600 transition-colors duration-200 whitespace-nowrap"
               >
                 {link.label}
               </a>
@@ -59,24 +59,24 @@ export default function Header() {
           </div>
 
           {/* Контакты (Беларусь) + CTA кнопка */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
             {/* Телефон и Telegram */}
-            <div className="hidden sm:flex items-center gap-3 text-xs font-medium text-slate-700 pr-2 border-r border-slate-200">
+            <div className="hidden sm:flex items-center gap-3 text-xs font-medium text-slate-700 pr-2 border-r border-slate-200 whitespace-nowrap">
               <a 
                 href="tel:+375296663734" 
-                className="inline-flex items-center gap-1.5 hover:text-sky-600 transition-colors"
+                className="inline-flex items-center gap-1.5 hover:text-sky-600 transition-colors whitespace-nowrap"
                 title="Отдел внедрения Минск"
               >
-                <Phone className="w-3.5 h-3.5 text-sky-600" />
-                <span className="font-semibold text-slate-900">+375 (29) 666-37-34</span>
+                <Phone className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                <span className="font-semibold text-slate-900 whitespace-nowrap">+375 (29) 666-37-34</span>
               </a>
               <a 
                 href={tgLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sky-600 hover:text-sky-700 font-semibold"
+                className="inline-flex items-center gap-1 text-sky-600 hover:text-sky-700 font-semibold whitespace-nowrap"
               >
-                <Send className="w-3.5 h-3.5" />
+                <Send className="w-3.5 h-3.5 shrink-0" />
                 <span>Связаться</span>
               </a>
             </div>
@@ -84,10 +84,10 @@ export default function Header() {
             {/* Главная кнопка */}
             <a
               href="#lead-form"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-700 shadow-sm shadow-sky-600/20 active:scale-[0.98] transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-700 shadow-sm shadow-sky-600/20 active:scale-[0.98] transition-all whitespace-nowrap"
             >
               <span>Заказать аудит</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </a>
 
             {/* Мобильная кнопка меню */}
