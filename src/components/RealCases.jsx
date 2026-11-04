@@ -39,6 +39,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       flow: {
         input: 'Чат в Telegram или на сайте',
         action: 'Диалог, каталог и сборка заказа',
+        integration: 'Передача сделки в Битрикс24 и 1С',
         output: 'Готовый заказ и счет в CRM'
       }
     },
@@ -52,6 +53,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       flow: {
         input: 'Фото изделия от клиента',
         action: 'Анализ формы и размеров',
+        integration: 'Сверка с остатками 1С и каталогом',
         output: 'Точный артикул из каталога'
       },
       demoLink: 'https://podbor-kryshek.apps.aipush.dev'
@@ -66,6 +68,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       flow: {
         input: 'Запрос клиента или контакт из базы',
         action: 'Расчет цен и генерация документа',
+        integration: 'Запись в CRM и формирование PDF',
         output: 'Отправка КП на почту и задача в CRM'
       }
     },
@@ -80,7 +83,8 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       description: 'Распознает сканы и PDF счетов, накладных и актов аренды, сопоставляет заводские артикулы поставщиков с номенклатурой в 1С и проверяет цены по договору. Бухгалтер видит только расхождения.',
       flow: {
         input: 'Скан счета / ТТН / Акт',
-        action: 'Сверка цен с договором',
+        action: 'Распознавание строк и номенклатуры',
+        integration: 'Сверка цен с договором в 1С',
         output: 'Проводка в Битрикс24 и 1С'
       }
     },
@@ -93,8 +97,9 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       description: 'Поставщики присылают прайс-листы и спецификации в разных форматах (Excel, PDF, таблицы). Система сводит их в единую матрицу закупок, находит лучшие условия и сигнализирует о скрытом удорожании позиций.',
       flow: {
         input: 'Прайсы разных поставщиков',
-        action: 'Сводная матрица цен',
-        output: 'Сигнал об отклонениях'
+        action: 'Сопоставление позиций и цен',
+        integration: 'Синхронизация с базой закупок и 1С',
+        output: 'Сводная матрица и сигнал о ценах'
       }
     },
     {
@@ -106,7 +111,8 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       description: 'По фотографии или скану реквизитов клиента система за секунды извлекает УНП, расчетный счет и ФИО руководителя, проверяет контрагента по базе, заводит карточку в CRM и формирует готовый договор со счетом.',
       flow: {
         input: 'Фото / Скан реквизитов',
-        action: 'Проверка УНП и шаблона',
+        action: 'Извлечение УНП, счета и ФИО',
+        integration: 'Проверка контрагента и карточка в CRM',
         output: 'Готовый договор и счет'
       }
     },
@@ -122,6 +128,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       flow: {
         input: 'Текущая очередь в цеху',
         action: 'Расчет загрузки участков',
+        integration: 'Запрос очереди станков и сырья',
         output: 'Точная дата готовности клиенту'
       }
     },
@@ -134,7 +141,8 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       description: 'Техники, мерчандайзеры или рабочие цеха скидывают в бот фото рекламных LCD-экранов в бизнес-центрах, выкладки товара на полках или готового оборудования перед отгрузкой. Система проверяет кадры по чек-листу и сама верстает отчет.',
       flow: {
         input: 'Фото экрана / Полки / Груза',
-        action: 'Проверка качества и макета',
+        action: 'Проверка качества и чек-листа',
+        integration: 'Фиксация статуса в базе и верстка отчета',
         output: 'Готовый PDF-отчет клиенту'
       }
     },
@@ -148,6 +156,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       flow: {
         input: 'Скан QR и фото ошибки',
         action: 'Инструкция самодиагностики',
+        integration: 'Создание заявки и заказ ЗиП в 1С',
         output: 'Наряд инженеру и список ЗиП'
       }
     },
@@ -163,6 +172,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       flow: {
         input: 'Данные Б24, 1С и цеха',
         action: 'Анализ плана и отклонений',
+        integration: 'Сбор показателей из всех баз компании',
         output: 'Утренняя сводка директору'
       }
     },
@@ -176,6 +186,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       flow: {
         input: 'Отклик и резюме кандидата',
         action: 'Скрининг и переписка в боте',
+        integration: 'Перенос анкеты в базу кандидатов и CRM',
         output: 'Готовая анкета и запись в CRM'
       }
     },
@@ -189,6 +200,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       flow: {
         input: 'Вопрос сотрудника в чате',
         action: 'Поиск по техкартам и правилам',
+        integration: 'Запрос к закрытой базе документов компании',
         output: 'Точная инструкция за секунды'
       }
     }
@@ -495,6 +507,19 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                       <span className="text-[10px] uppercase font-bold tracking-wider text-sky-700 shrink-0">ИИ-агент</span>
                       <span className="text-xs font-semibold text-sky-900 text-right">{item.flow.action}</span>
                     </div>
+
+                    {item.flow.integration && (
+                      <>
+                        <div className="flex justify-center text-slate-400 py-0.5">
+                          <ArrowDown className="w-3.5 h-3.5" />
+                        </div>
+
+                        <div className="flex items-center justify-between gap-2 bg-slate-100/90 border border-slate-200/90 px-3 py-1.5 rounded-lg shadow-xs">
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-slate-600 shrink-0">Модуль интеграции</span>
+                          <span className="text-xs font-semibold text-slate-800 text-right">{item.flow.integration}</span>
+                        </div>
+                      </>
+                    )}
 
                     <div className="flex justify-center text-slate-400 py-0.5">
                       <ArrowDown className="w-3.5 h-3.5" />
