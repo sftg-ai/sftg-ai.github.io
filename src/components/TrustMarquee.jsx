@@ -264,7 +264,7 @@ export default function TrustMarquee() {
             {/* Плашка направления */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800">
               <Building2 className="w-3.5 h-3.5 text-sky-600" />
-              <span>Партнеры и проекты</span>
+              <span>Партнеры и проекты (примеры)</span>
             </div>
             
             <div className="text-[11px] text-slate-400 font-medium hidden sm:block">
