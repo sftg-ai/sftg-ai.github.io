@@ -6,6 +6,7 @@ const ROW_ONE = [
     id: 'spp',
     name: 'ООО «СанПроПласт»',
     industry: 'Производство сантехники',
+    hasAI: true,
     theme: 'border-sky-200/90 bg-sky-50/70',
     projects: [
       {
@@ -53,6 +54,7 @@ const ROW_ONE = [
     id: 'sss',
     name: 'СеверСтальСнаб',
     industry: 'Металлопрокат и снабжение',
+    hasAI: true,
     theme: 'border-indigo-200/90 bg-indigo-50/70',
     projects: [
       {
@@ -232,6 +234,7 @@ const ROW_TWO = [
     id: 'ptp',
     name: 'ПромТехПрибор',
     industry: 'Приборостроение и ОТК',
+    hasAI: true,
     theme: 'border-emerald-200/90 bg-emerald-50/70',
     projects: [
       {
@@ -377,10 +380,17 @@ function DraggableRow({ items, activeId, onSelect, initialScroll = 0 }) {
                 </span>
               )}
             </div>
-            <div className={`text-[11px] font-medium truncate mt-0.5 ${
-              isActive ? 'text-sky-700' : 'text-slate-500'
-            }`}>
-              {company.industry}
+            <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
+              <span className={`text-[11px] font-medium truncate ${
+                isActive ? 'text-sky-700' : 'text-slate-500'
+              }`}>
+                {company.industry}
+              </span>
+              {company.hasAI && (
+                <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-sky-50 text-sky-700 border border-sky-200/90 shrink-0">
+                  AI
+                </span>
+              )}
             </div>
           </div>
         );
@@ -410,7 +420,7 @@ export default function TrustMarquee() {
   const hasMultipleProjects = Boolean(activeCompany && activeCompany.projects.length > 1);
 
   return (
-    <section className="py-12 sm:py-14 bg-slate-50/70 border-b border-slate-200/80 text-left">
+    <section id="projects" className="py-12 sm:py-14 bg-slate-50/70 border-b border-slate-200/80 text-left scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* БЛОК 1: Твердый факт о внедренных решениях */}
@@ -426,7 +436,7 @@ export default function TrustMarquee() {
             {/* Плашка направления */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800">
               <Building2 className="w-3.5 h-3.5 text-sky-600" />
-              <span>Партнеры и кейсы</span>
+              <span>Проекты</span>
             </div>
           </div>
 
@@ -464,6 +474,11 @@ export default function TrustMarquee() {
                   <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 font-semibold text-slate-600">
                     {activeCompany.industry}
                   </span>
+                  {activeCompany.hasAI && (
+                    <span className="text-xs px-2 py-0.5 rounded-md bg-sky-50 font-bold text-sky-700 border border-sky-200/90">
+                      AI
+                    </span>
+                  )}
                 </div>
                 <button
                   type="button"

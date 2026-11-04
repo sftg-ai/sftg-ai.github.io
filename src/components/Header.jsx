@@ -17,6 +17,7 @@ export default function Header() {
   const navLinks = [
     { label: 'Примеры', href: '#processes' },
     { label: 'Сценарии', href: '#cases' },
+    { label: 'Проекты', href: '#projects' },
     { label: 'Этапы внедрения', href: '#stages' },
     { label: 'Безопасность', href: '#contour' },
     { label: 'О компании', href: '#about' },
