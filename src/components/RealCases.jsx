@@ -12,7 +12,8 @@ import {
   CheckCircle2,
   Workflow,
   FileCheck,
-  BellRing
+  BellRing,
+  SendHorizontal
 } from 'lucide-react';
 
 export default function RealCases({ activeCase, setActiveCase } = {}) {
@@ -397,11 +398,11 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                     </div>
                     <div>
                       <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Результат работы</div>
-                      <div className="text-sm sm:text-base font-bold text-slate-900">Действие в системах или моментальное уведомление</div>
+                      <div className="text-sm sm:text-base font-bold text-slate-900">Готовое действие, документы и аналитика</div>
                     </div>
                   </div>
                   <div className="text-xs text-emerald-800/90 font-medium">
-                    Автоматическая проводка либо алерт ответственным сотрудникам
+                    Автоматические проводки, отправка файлов клиентам или сводки руководству без рутины
                   </div>
                 </div>
 
@@ -419,9 +420,9 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                     </div>
                   </div>
                   <div className="p-3.5 rounded-xl bg-white/90 border border-emerald-200/70 shadow-xs flex items-start gap-2.5">
-                    <BellRing className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <SendHorizontal className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                     <div className="text-xs text-slate-700 leading-snug">
-                      <strong className="text-slate-900 block mb-0.5">Контроль расхождений:</strong> Мгновенный алерт или задача сотруднику только при нестыковках, браке или отклонениях от норм
+                      <strong className="text-slate-900 block mb-0.5">Документы клиентам и аналитика:</strong> Генерация и отправка PDF-файлов клиентам, рассылки, утренние сводки директору и уведомления об отклонениях
                     </div>
                   </div>
                 </div>
