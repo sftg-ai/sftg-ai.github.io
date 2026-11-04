@@ -21,139 +21,171 @@ const COMPANIES = [
   // 1-3. Крупные BY / RU
   {
     name: 'БелПромТех',
-    region: 'BY',
+    badge: 'BY',
     industry: 'Промышленное оборудование',
     icon: Factory,
-    code: 'BPT'
+    theme: 'border-sky-200/90 bg-sky-50/60 text-sky-950',
+    iconTheme: 'bg-white text-sky-600 border-sky-100',
+    badgeTheme: 'bg-sky-100/90 text-sky-800 border-sky-200'
   },
   {
     name: 'СеверСтальСнаб',
-    region: 'RU',
+    badge: null,
     industry: 'Металлопрокат и поставки',
     icon: Boxes,
-    code: 'SSS'
+    theme: 'border-slate-200 bg-white text-slate-900',
+    iconTheme: 'bg-slate-100 text-slate-700 border-slate-200',
+    badgeTheme: null
   },
   {
     name: 'АгроХолдинг Восток',
-    region: 'RU / BY',
+    badge: 'Холдинг',
     industry: 'Агропром и сельхозтехника',
     icon: Building2,
-    code: 'AHV'
+    theme: 'border-emerald-200/90 bg-emerald-50/60 text-emerald-950',
+    iconTheme: 'bg-white text-emerald-600 border-emerald-100',
+    badgeTheme: 'bg-emerald-100/90 text-emerald-800 border-emerald-200'
   },
 
   // 4-5. Международные (Европа / США)
   {
     name: 'Apex Logistics Europe',
-    region: 'EU',
+    badge: 'EU',
     industry: 'Supply Chain & Freight',
     icon: Truck,
-    code: 'ALE'
+    theme: 'border-indigo-200/90 bg-indigo-50/60 text-indigo-950',
+    iconTheme: 'bg-white text-indigo-600 border-indigo-100',
+    badgeTheme: 'bg-indigo-100/90 text-indigo-800 border-indigo-200'
   },
   {
     name: 'Nordic Industrial Tech',
-    region: 'EU / Швеция',
+    badge: null,
     industry: 'Engineering & Automation',
     icon: Cpu,
-    code: 'NIT'
+    theme: 'border-blue-200/90 bg-blue-50/60 text-blue-950',
+    iconTheme: 'bg-white text-blue-600 border-blue-100',
+    badgeTheme: null
   },
 
   // 6. ОАЭ / Абу-Даби
   {
     name: 'Al-Dhabi Global Trading',
-    region: 'UAE / Abu Dhabi',
+    badge: 'UAE / Abu Dhabi',
     industry: 'Commercial Distribution',
     icon: Globe2,
-    code: 'AGT'
+    theme: 'border-amber-200/90 bg-amber-50/70 text-amber-950',
+    iconTheme: 'bg-white text-amber-600 border-amber-200/60',
+    badgeTheme: 'bg-amber-100/90 text-amber-900 border-amber-200'
   },
 
   // 7. BY / RU
   {
     name: 'МеталлКомплект',
-    region: 'BY',
+    badge: 'BY',
     industry: 'Трубный прокат и метизы',
     icon: Layers,
-    code: 'MK'
+    theme: 'border-slate-200 bg-white text-slate-900',
+    iconTheme: 'bg-slate-100 text-slate-700 border-slate-200',
+    badgeTheme: 'bg-slate-100 text-slate-700 border-slate-200'
   },
 
   // 8. США
   {
     name: 'Vanguard Retail Systems',
-    region: 'US',
+    badge: null,
     industry: 'Enterprise Commerce',
     icon: Store,
-    code: 'VRS'
+    theme: 'border-teal-200/90 bg-teal-50/60 text-teal-950',
+    iconTheme: 'bg-white text-teal-600 border-teal-100',
+    badgeTheme: null
   },
 
   // 9. ОАЭ / Дубай
   {
     name: 'Emirates Supply Chain Ltd',
-    region: 'UAE / Dubai',
+    badge: 'UAE / Dubai',
     industry: 'Air & Sea Logistics',
     icon: Anchor,
-    code: 'ESC'
+    theme: 'border-sky-200/90 bg-sky-50/60 text-sky-950',
+    iconTheme: 'bg-white text-sky-600 border-sky-100',
+    badgeTheme: 'bg-sky-100/90 text-sky-800 border-sky-200'
   },
 
   // 10. BY
   {
     name: 'БелЛогистик Групп',
-    region: 'BY',
+    badge: null,
     industry: 'Мультимодальные перевозки',
     icon: Compass,
-    code: 'BLG'
+    theme: 'border-emerald-200/90 bg-emerald-50/60 text-emerald-950',
+    iconTheme: 'bg-white text-emerald-600 border-emerald-100',
+    badgeTheme: null
   },
 
   // 11. Европа / Германия
   {
     name: 'Kronos Machinery Corp',
-    region: 'EU / Germany',
+    badge: 'EU / Germany',
     industry: 'Heavy Machinery & CNC',
     icon: Factory,
-    code: 'KMC'
+    theme: 'border-slate-200 bg-white text-slate-900',
+    iconTheme: 'bg-slate-100 text-slate-700 border-slate-200',
+    badgeTheme: 'bg-slate-100 text-slate-700 border-slate-200'
   },
 
   // 12. ОАЭ / Абу-Даби
   {
     name: 'Gulf Petrochem Logistics',
-    region: 'UAE / Abu Dhabi',
+    badge: 'Abu Dhabi',
     industry: 'Petrochemical Terminals',
     icon: Flame,
-    code: 'GPL'
+    theme: 'border-amber-200/90 bg-amber-50/70 text-amber-950',
+    iconTheme: 'bg-white text-amber-600 border-amber-200/60',
+    badgeTheme: 'bg-amber-100/90 text-amber-900 border-amber-200'
   },
 
   // 13. RU
   {
     name: 'РусЭнергоСтрой',
-    region: 'RU',
+    badge: null,
     industry: 'Энергетический инжиниринг',
     icon: Zap,
-    code: 'RES'
+    theme: 'border-indigo-200/90 bg-indigo-50/60 text-indigo-950',
+    iconTheme: 'bg-white text-indigo-600 border-indigo-100',
+    badgeTheme: null
   },
 
   // 14. Европа / Швейцария
   {
     name: 'Horizon Pharma Solutions',
-    region: 'EU / Switzerland',
+    badge: 'EU / Swiss',
     industry: 'Pharma & Lab Supplies',
     icon: Shield,
-    code: 'HPS'
+    theme: 'border-teal-200/90 bg-teal-50/60 text-teal-950',
+    iconTheme: 'bg-white text-teal-600 border-teal-100',
+    badgeTheme: 'bg-teal-100/90 text-teal-800 border-teal-200'
   },
 
   // 15. США
   {
     name: 'SmartCommerce Group',
-    region: 'US',
+    badge: null,
     industry: 'B2B Trade Platform',
     icon: Briefcase,
-    code: 'SCG'
+    theme: 'border-slate-200 bg-white text-slate-900',
+    iconTheme: 'bg-slate-100 text-slate-700 border-slate-200',
+    badgeTheme: null
   },
 
   // 16. Европа / Нидерланды
   {
     name: 'Prime Agro International',
-    region: 'EU / Netherlands',
-    industry: 'Commodities & Agrotechnology',
+    badge: 'EU',
+    industry: 'Agrotechnology & Export',
     icon: Sparkles,
-    code: 'PAI'
+    theme: 'border-emerald-200/90 bg-emerald-50/60 text-emerald-950',
+    iconTheme: 'bg-white text-emerald-600 border-emerald-100',
+    badgeTheme: 'bg-emerald-100/90 text-emerald-800 border-emerald-200'
   }
 ];
 
@@ -162,7 +194,7 @@ export default function TrustMarquee() {
   const marqueeItems = [...COMPANIES, ...COMPANIES];
 
   return (
-    <section className="py-10 bg-slate-50/80 border-b border-slate-200/80 overflow-hidden relative select-none">
+    <section className="py-14 sm:py-16 bg-slate-50/80 border-b border-slate-200/80 overflow-hidden relative select-none text-left">
       <style>{`
         @keyframes trustMarqueeScroll {
           0% {
@@ -182,11 +214,24 @@ export default function TrustMarquee() {
         }
       `}</style>
 
-      {/* Контейнер заголовка с выравниванием по сетке (без ёлочки) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-5 text-left">
-        <div className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500">
-          Решения внедрены в 80+ компаниях: производство, опт, логистика, ритейл
+      {/* Контейнер заголовка и плашек по единой сетке max-w-7xl */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8 text-left">
+        {/* 2 связанные плашки подряд: «Наша гордость» + «Наши партнеры» */}
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-sky-800 shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+            <span>Наша гордость</span>
+          </div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-sky-900 shadow-2xs">
+            <Building2 className="w-3.5 h-3.5 text-sky-600" />
+            <span>Наши партнеры</span>
+          </div>
         </div>
+
+        {/* Заголовок */}
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
+          Более 80 внедренных решений в компаниях: производство, опт, логистика, ритейл
+        </h2>
       </div>
 
       {/* Бегущая строка с боковыми градиентными масками растворения */}
@@ -204,19 +249,26 @@ export default function TrustMarquee() {
             return (
               <div
                 key={`${item.name}-${idx}`}
-                className="group flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs hover:border-slate-300 hover:shadow-xs transition-all duration-200 shrink-0 cursor-default"
+                className={`group flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-2xs hover:shadow-xs transition-all duration-200 shrink-0 cursor-default ${item.theme}`}
               >
                 {/* Иконка / монохромный знак */}
-                <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-600 group-hover:text-sky-600 group-hover:bg-sky-50/50 transition-colors shrink-0">
+                <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs ${item.iconTheme}`}>
                   <Icon className="w-4 h-4" />
                 </div>
 
-                {/* Название и отрасль */}
+                {/* Название, бейдж и отрасль */}
                 <div className="flex flex-col text-left">
-                  <div className="text-xs sm:text-sm font-bold text-slate-900 tracking-tight leading-tight whitespace-nowrap">
-                    {item.name}
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs sm:text-sm font-bold tracking-tight leading-tight whitespace-nowrap">
+                      {item.name}
+                    </span>
+                    {item.badge && (
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md border tracking-wide whitespace-nowrap ${item.badgeTheme}`}>
+                        {item.badge}
+                      </span>
+                    )}
                   </div>
-                  <div className="text-[10px] text-slate-400 font-medium whitespace-nowrap mt-0.5">
+                  <div className="text-[11px] opacity-70 font-medium whitespace-nowrap mt-0.5">
                     {item.industry}
                   </div>
                 </div>
