@@ -29,7 +29,7 @@ export default function ClosedContour() {
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
               <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
-              <span>Безопасность данных и коммерческой тайны</span>
+              <span>Безопасность</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight my-4">

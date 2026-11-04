@@ -206,7 +206,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
               <Workflow className="w-3.5 h-3.5 text-sky-600" />
-              <span>Как это работает</span>
+              <span>Сценарии</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
               Как это работает: сценарии по отделам и процессам
