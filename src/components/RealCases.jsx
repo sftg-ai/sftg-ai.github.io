@@ -371,9 +371,9 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                       <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
                         <Database className="w-4 h-4" />
                       </div>
-                      <div className="text-xs font-bold text-slate-900">Коннекторы к БД</div>
+                      <div className="text-xs font-bold text-slate-900">Интеграция с корпоративными системами</div>
                       <div className="text-xs text-slate-600 mt-1">
-                        Штатные модули обмена с Битрикс24, 1С и корпоративными базами данных без изменения их структуры
+                        Бесшовное подключение к Битрикс24, 1С, складским программам, телефонии и учетным системам компании без изменения их структуры
                       </div>
                     </div>
                   </div>
@@ -381,45 +381,45 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
               </div>
 
               {/* Соединительная стрелка вниз */}
-              <div className="flex items-center justify-center gap-2 text-xs font-semibold text-slate-700 py-1">
-                <ArrowDown className="w-4 h-4 text-slate-600" />
+              <div className="flex items-center justify-center gap-2 text-xs font-semibold text-emerald-800 py-1">
+                <ArrowDown className="w-4 h-4 text-emerald-600" />
                 <span>Автоматическая запись проверенных результатов</span>
               </div>
 
-              {/* Уровень 3: Итог работы */}
-              <div className="bg-slate-900 text-white border border-slate-900 rounded-2xl p-5 sm:p-6 shadow-md">
+              {/* Уровень 3: Итог работы (Благородный изумрудно-зеленый стиль) */}
+              <div className="relative overflow-hidden bg-gradient-to-r from-emerald-50 via-teal-50/60 to-emerald-50 border border-emerald-200/90 rounded-2xl p-5 sm:p-6 shadow-sm text-emerald-950">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-sky-500 text-slate-950 flex items-center justify-center font-bold text-xs">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
                       3
                     </div>
                     <div>
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-sky-400">Результат работы</div>
-                      <div className="text-sm sm:text-base font-bold text-white">Прямое действие в ваших учетных базах</div>
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Результат работы</div>
+                      <div className="text-sm sm:text-base font-bold text-slate-900">Прямое действие в ваших учетных базах</div>
                     </div>
                   </div>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-xs text-emerald-800/90 font-medium">
                     Без ручного ввода операторов и без риска человеческой ошибки
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                  <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                    <div className="text-xs text-slate-200 leading-snug">
-                      <strong className="text-white block mb-0.5">Битрикс24:</strong> Создание сделок, распределение лидов, автозадачи менеджерам и прикрепление готовых КП
+                  <div className="p-3.5 rounded-xl bg-white/90 border border-emerald-200/70 shadow-xs flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div className="text-xs text-slate-700 leading-snug">
+                      <strong className="text-slate-900 block mb-0.5">Битрикс24:</strong> Создание сделок, распределение лидов, автозадачи менеджерам и прикрепление готовых КП
                     </div>
                   </div>
-                  <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                    <div className="text-xs text-slate-200 leading-snug">
-                      <strong className="text-white block mb-0.5">1С и склад:</strong> Занесение номенклатуры, формирование ТТН, счетов и актов со сверкой договоров
+                  <div className="p-3.5 rounded-xl bg-white/90 border border-emerald-200/70 shadow-xs flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div className="text-xs text-slate-700 leading-snug">
+                      <strong className="text-slate-900 block mb-0.5">1С и склад:</strong> Занесение номенклатуры, формирование ТТН, счетов и актов со сверкой договоров
                     </div>
                   </div>
-                  <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                    <div className="text-xs text-slate-200 leading-snug">
-                      <strong className="text-white block mb-0.5">Контроль расхождений:</strong> Сигнал сотруднику только при выявлении нестыковок или отклонений от норм
+                  <div className="p-3.5 rounded-xl bg-white/90 border border-emerald-200/70 shadow-xs flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div className="text-xs text-slate-700 leading-snug">
+                      <strong className="text-slate-900 block mb-0.5">Контроль расхождений:</strong> Сигнал сотруднику только при выявлении нестыковок или отклонений от норм
                     </div>
                   </div>
                 </div>
