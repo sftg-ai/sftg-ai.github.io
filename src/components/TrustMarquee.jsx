@@ -1,21 +1,16 @@
-import React, { useRef, useState } from 'react';
-import { Building2, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Building2 } from 'lucide-react';
 
-const COMPANIES = [
+const ROW_ONE = [
   {
     name: 'БелПромТех',
-    industry: 'Промышленное оборудование',
+    industry: 'Пром. оборудование',
     theme: 'border-sky-200/90 bg-sky-50/60'
   },
   {
     name: 'СеверСтальСнаб',
-    industry: 'Металлопрокат и поставки',
+    industry: 'Металлопрокат',
     theme: 'border-slate-200 bg-white'
-  },
-  {
-    name: 'АгроХолдинг Восток',
-    industry: 'Агропром и сельхозтехника',
-    theme: 'border-emerald-200/90 bg-emerald-50/60'
   },
   {
     name: 'Apex Logistics',
@@ -23,48 +18,56 @@ const COMPANIES = [
     theme: 'border-indigo-200/90 bg-indigo-50/60'
   },
   {
-    name: 'Nordic Industrial Tech',
-    industry: 'Инжиниринг и автоматизация',
+    name: 'АгроХолдинг Восток',
+    industry: 'Агропром и техника',
+    theme: 'border-emerald-200/90 bg-emerald-50/60'
+  },
+  {
+    name: 'Nordic Tech',
+    industry: 'Инжиниринг',
     theme: 'border-blue-200/90 bg-blue-50/60'
   },
   {
-    name: 'Al-Dhabi Global Trading',
-    industry: 'Оптовая дистрибуция',
+    name: 'Al-Dhabi Trading',
+    industry: 'Оптовая торговля',
     theme: 'border-amber-200/90 bg-amber-50/70'
   },
   {
     name: 'МеталлКомплект',
-    industry: 'Трубный прокат и метизы',
+    industry: 'Трубный прокат',
     theme: 'border-slate-200 bg-white'
   },
   {
     name: 'Vanguard Systems',
-    industry: 'Торговые сети и ритейл',
+    industry: 'Ритейл-системы',
     theme: 'border-teal-200/90 bg-teal-50/60'
-  },
+  }
+];
+
+const ROW_TWO = [
   {
-    name: 'Emirates Supply Chain',
-    industry: 'Международная логистика',
+    name: 'Emirates Supply',
+    industry: 'Авиа & морская логистика',
     theme: 'border-sky-200/90 bg-sky-50/60'
   },
   {
     name: 'БелЛогистик Групп',
-    industry: 'Мультимодальные перевозки',
+    industry: 'Мультимодальный транспорт',
     theme: 'border-emerald-200/90 bg-emerald-50/60'
   },
   {
     name: 'Kronos Machinery',
-    industry: 'Машиностроение и станки',
+    industry: 'Машиностроение и ЧПУ',
     theme: 'border-slate-200 bg-white'
   },
   {
     name: 'Gulf Petrochem',
-    industry: 'Нефтехимия и терминалы',
+    industry: 'Нефтехимия & терминалы',
     theme: 'border-amber-200/90 bg-amber-50/70'
   },
   {
     name: 'РусЭнергоСтрой',
-    industry: 'Энергетический инжиниринг',
+    industry: 'Энергостроительство',
     theme: 'border-indigo-200/90 bg-indigo-50/60'
   },
   {
@@ -73,121 +76,110 @@ const COMPANIES = [
     theme: 'border-teal-200/90 bg-teal-50/60'
   },
   {
-    name: 'SmartCommerce Group',
+    name: 'SmartCommerce',
     industry: 'Оптовая B2B-торговля',
     theme: 'border-slate-200 bg-white'
   },
   {
-    name: 'Prime Agro International',
-    industry: 'Агротехнологии и экспорт',
+    name: 'Prime Agro',
+    industry: 'Агроэкспорт и сырье',
     theme: 'border-emerald-200/90 bg-emerald-50/60'
   }
 ];
 
-export default function TrustMarquee() {
-  const scrollRef = useRef(null);
+function DraggableRow({ items, initialScroll = 0 }) {
+  const rowRef = useRef(null);
   const [isDown, setIsDown] = useState(false);
   const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
-  // Ручной Drag-to-scroll зажатием мыши
-  const handleMouseDown = (e) => {
+  useEffect(() => {
+    if (rowRef.current && initialScroll > 0) {
+      rowRef.current.scrollLeft = initialScroll;
+    }
+  }, [initialScroll]);
+
+  const onMouseDown = (e) => {
     setIsDown(true);
-    setStartX(e.pageX - scrollRef.current.offsetLeft);
-    setScrollLeftState(scrollRef.current.scrollLeft);
+    setStartX(e.pageX - rowRef.current.offsetLeft);
+    setScrollLeft(rowRef.current.scrollLeft);
   };
 
-  const handleMouseLeave = () => {
-    setIsDown(false);
-  };
-
-  const handleMouseUp = () => {
-    setIsDown(false);
-  };
-
-  const handleMouseMove = (e) => {
+  const onMouseLeave = () => setIsDown(false);
+  const onMouseUp = () => setIsDown(false);
+  const onMouseMove = (e) => {
     if (!isDown) return;
     e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
+    const x = e.pageX - rowRef.current.offsetLeft;
     const walk = (x - startX) * 1.5;
-    scrollRef.current.scrollLeft = scrollLeftState - walk;
-  };
-
-  const scrollByAmount = (offset) => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: offset, behavior: 'smooth' });
-    }
+    rowRef.current.scrollLeft = scrollLeft - walk;
   };
 
   return (
-    <section className="py-14 sm:py-16 bg-slate-50/70 border-b border-slate-200/80 text-left">
+    <div
+      ref={rowRef}
+      onMouseDown={onMouseDown}
+      onMouseLeave={onMouseLeave}
+      onMouseUp={onMouseUp}
+      onMouseMove={onMouseMove}
+      className={`flex items-stretch gap-2.5 sm:gap-3 overflow-x-auto pb-1 scrollbar-none select-none transition-colors ${
+        isDown ? 'cursor-grabbing' : 'cursor-grab'
+      }`}
+      style={{
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none'
+      }}
+    >
+      {items.map((company, idx) => (
+        <div
+          key={`${company.name}-${idx}`}
+          className={`min-w-[150px] sm:min-w-[170px] max-w-[185px] px-3.5 py-2.5 rounded-xl border shadow-2xs hover:shadow-xs transition-all duration-150 flex flex-col justify-center text-left shrink-0 ${company.theme}`}
+        >
+          <div className="text-xs sm:text-sm font-bold text-slate-900 tracking-tight leading-tight truncate">
+            {company.name}
+          </div>
+          <div className="text-[11px] text-slate-500 font-medium truncate mt-0.5">
+            {company.industry}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function TrustMarquee() {
+  return (
+    <section className="py-12 sm:py-14 bg-slate-50/70 border-b border-slate-200/80 text-left">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* БЛОК 1: Твердый факт о внедренных решениях */}
-        <div className="pb-8 border-b border-slate-200">
+        <div className="pb-7 border-b border-slate-200">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
             Более 80 внедренных решений в компаниях: производство, опт, логистика, ритейл
           </h2>
         </div>
 
-        {/* БЛОК 2: Наши партнеры и проекты (с ручным скроллом) */}
-        <div className="pt-8">
-          <div className="flex items-center justify-between gap-4 mb-5">
+        {/* БЛОК 2: Партнеры и проекты (две свайп-строчки) */}
+        <div className="pt-7">
+          <div className="flex items-center justify-between gap-4 mb-4">
             {/* Плашка направления */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800">
               <Building2 className="w-3.5 h-3.5 text-sky-600" />
-              <span>Наши партнеры и проекты</span>
+              <span>Партнеры и проекты</span>
             </div>
-
-            {/* Навигационные стрелочки для десктопа */}
-            <div className="hidden sm:flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => scrollByAmount(-280)}
-                aria-label="Прокрутить назад"
-                className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollByAmount(280)}
-                aria-label="Прокрутить вперед"
-                className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 flex items-center justify-center transition-colors cursor-pointer shadow-2xs"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
+            
+            <div className="text-[11px] text-slate-400 font-medium hidden sm:block">
+              Сдвигайте влево и вправо мышкой или тачпадом
             </div>
           </div>
 
-          {/* Контейнер карточек: горизонтальный свайп / драг мышкой (без авто-скролла) */}
-          <div
-            ref={scrollRef}
-            onMouseDown={handleMouseDown}
-            onMouseLeave={handleMouseLeave}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
-            className={`flex items-stretch gap-3 sm:gap-3.5 overflow-x-auto pb-2 scrollbar-none select-none transition-colors ${
-              isDown ? 'cursor-grabbing' : 'cursor-grab'
-            }`}
-            style={{
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none'
-            }}
-          >
-            {COMPANIES.map((company, idx) => (
-              <div
-                key={`${company.name}-${idx}`}
-                className={`min-w-[210px] sm:min-w-[230px] p-4 sm:p-4.5 rounded-2xl border shadow-2xs hover:shadow-xs transition-all duration-150 flex flex-col justify-center text-left ${company.theme}`}
-              >
-                <div className="text-sm sm:text-base font-bold text-slate-900 tracking-tight leading-snug">
-                  {company.name}
-                </div>
-                <div className="text-xs text-slate-500 font-medium mt-1 leading-snug">
-                  {company.industry}
-                </div>
-              </div>
-            ))}
+          {/* Две аккуратные строки кубиков: верхняя и нижняя */}
+          <div className="space-y-2.5 sm:space-y-3">
+            {/* Строка 1: свайп влево (стартует с начала) */}
+            <DraggableRow items={ROW_ONE} initialScroll={0} />
+
+            {/* Строка 2: сдвинута вправо (удобно свайпать вправо) */}
+            <DraggableRow items={ROW_TWO} initialScroll={140} />
           </div>
         </div>
 
