@@ -3,7 +3,8 @@ import {
   Database,
   CheckCircle2,
   ShieldCheck,
-  Users
+  Users,
+  Award
 } from 'lucide-react';
 import teamSlide1Img from '../assets/images/team_slide_1.jpg';
 import teamSlide2Img from '../assets/images/team_slide_2.jpg';
@@ -90,15 +91,21 @@ export default function TeamAndExpertise() {
       
       {/* Заголовок выровнен по левому краю (без ёлочки) */}
       <div className="mb-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
-          <Users className="w-3.5 h-3.5 text-sky-600" />
-          <span>О компании</span>
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit">
+            <Users className="w-3.5 h-3.5 text-sky-600" />
+            <span>О компании</span>
+          </div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-sky-900 w-fit">
+            <Award className="w-3.5 h-3.5 text-sky-600" />
+            <span>Резидент Парка высоких технологий (ПВТ)</span>
+          </div>
         </div>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
           Опыт промышленной разработки и надежность решений
         </h2>
         <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-3xl">
-          Команда SFTG более 15 лет разрабатывает корпоративные платформы, надежные интеграции и высоконагруженные сервисы.
+          Команда SFTG (ООО «Инновационный Софт», резидент ПВТ) более 15 лет разрабатывает корпоративные платформы, надежные интеграции и высоконагруженные сервисы.
         </p>
       </div>
 

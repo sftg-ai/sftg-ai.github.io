@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { ArrowDown, ArrowRight, ExternalLink, Briefcase } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowRight,
+  ExternalLink,
+  Briefcase,
+  Mic,
+  Eye,
+  FileText,
+  Layers,
+  Database,
+  CheckCircle2,
+  Workflow
+} from 'lucide-react';
 
 export default function RealCases({ activeCase, setActiveCase } = {}) {
   const [activeCategory, setActiveCategory] = useState('Продажи и КП');
@@ -8,7 +20,8 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
     'Продажи и КП',
     'Бухгалтерия и закупки',
     'Сервис и производство',
-    'Руководство и HR'
+    'Руководство и HR',
+    'Индивидуальная разработка'
   ];
 
   const casesData = [
@@ -190,13 +203,16 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
               <Briefcase className="w-3.5 h-3.5 text-sky-600" />
-              <span>Примеры задач по отделам</span>
+              <span>Примеры решений по отделам</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-              Примеры задач для автоматизации по отделам
+              Примеры решений и сценарии автоматизации
             </h2>
-            <p className="text-slate-600 text-base leading-relaxed mb-6">
+            <p className="text-slate-600 text-base leading-relaxed mb-2">
               Конкретные участки работы, где рутинные действия заменяются программными ассистентами с прямой передачей данных в Битрикс24, 1С и учетные базы компании.
+            </p>
+            <p className="text-slate-600 text-sm leading-relaxed mb-6">
+              Также реализуем индивидуальную разработку ИИ-ассистентов под нестандартные процессы, закрытые регламенты и оборудование вашего бизнеса.
             </p>
             
             {/* Фильтр по отделам под текстом */}
@@ -234,78 +250,275 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
           </div>
         </div>
 
-        {/* Сетка карточек конкретных сценариев */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCases.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-sky-300 transition-all flex flex-col justify-between"
-            >
-              <div>
-                {/* Бейдж отдела */}
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200/60">
-                    {item.badge}
-                  </span>
+        {/* Условный рендеринг: либо блок «Индивидуальная разработка», либо стандартная сетка карточек */}
+        {activeCategory === 'Индивидуальная разработка' ? (
+          <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm text-left">
+            <div className="max-w-3xl mb-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
+                <Workflow className="w-3.5 h-3.5 text-sky-600" />
+                <span>Индивидуальный контур под ключ</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
+                Проектирование персональных ИИ-ассистентов под ключ
+              </h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                Создаем автономные программные контуры под уникальную специфику вашего предприятия, когда стандартных сценариев недостаточно.
+              </p>
+            </div>
+
+            {/* Архитектурная схема процесса (3 уровня) */}
+            <div className="space-y-4">
+              {/* Уровень 1: Входные потоки */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs">
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 font-bold text-xs">
+                      1
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Входной контур</div>
+                      <div className="text-sm sm:text-base font-bold text-slate-900">Входные потоки данных предприятия</div>
+                    </div>
+                  </div>
+                  <span className="text-xs text-slate-500 hidden sm:inline">Любые каналы и форматы без ручной подготовки</span>
                 </div>
 
-                {/* Заголовок действия */}
-                <h3 className="text-lg font-bold text-slate-900 mt-2 mb-2 leading-snug">
-                  {item.title}
-                </h3>
-
-                {/* Описание */}
-                <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                  {item.description}
-                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start gap-3">
+                    <Mic className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="text-xs font-bold text-slate-900">Аудиозаписи звонков и совещаний</div>
+                      <div className="text-xs text-slate-500 mt-0.5">Записи IP-телефонии, очных планерок, аудиосообщения клиентов</div>
+                    </div>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start gap-3">
+                    <Eye className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="text-xs font-bold text-slate-900">Видеопоток и фотоконтроль</div>
+                      <div className="text-xs text-slate-500 mt-0.5">Снимки со смартфонов мастеров, кадры с камер цеха, QR-паспорта</div>
+                    </div>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start gap-3">
+                    <FileText className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="text-xs font-bold text-slate-900">Документация и таблицы любого формата</div>
+                      <div className="text-xs text-slate-500 mt-0.5">Сканы, PDF, Excel-прайсы, выгрузки, чертежи и бланки</div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Статическая блок-схема процесса */}
-              <div className="mt-auto pt-4 border-t border-slate-100">
-                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2.5">
-                  Схема процесса
+              {/* Соединительная стрелка вниз */}
+              <div className="flex items-center justify-center gap-2 text-xs font-semibold text-sky-700 py-1">
+                <ArrowDown className="w-4 h-4 text-sky-600" />
+                <span>Потоковая передача в защищенное ядро обработки</span>
+              </div>
+
+              {/* Уровень 2: Ядро обработки и модули */}
+              <div className="bg-sky-50/60 border border-sky-200 rounded-2xl p-5 sm:p-6 shadow-xs">
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                      2
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-sky-700">Ядро системы</div>
+                      <div className="text-sm sm:text-base font-bold text-slate-900">Ядро обработки и специализированные модули</div>
+                    </div>
+                  </div>
+                  <span className="text-xs text-sky-800 font-medium hidden sm:inline">Локально на вашем сервере или в защищенном облаке</span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between gap-2 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-xs">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 shrink-0">Вход</span>
-                    <span className="text-xs font-semibold text-slate-800 text-right">{item.flow.input}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="p-4 rounded-xl bg-white border border-sky-200/80 shadow-xs flex flex-col justify-between">
+                    <div>
+                      <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
+                        <Eye className="w-4 h-4" />
+                      </div>
+                      <div className="text-xs font-bold text-slate-900">Компьютерное зрение</div>
+                      <div className="text-xs text-slate-600 mt-1">
+                        Распознавание дефектов, деталей, геометрии изделий и маркировки на складе и производстве
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex justify-center text-sky-500 py-0.5">
-                    <ArrowDown className="w-3.5 h-3.5" />
+                  <div className="p-4 rounded-xl bg-white border border-sky-200/80 shadow-xs flex flex-col justify-between">
+                    <div>
+                      <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
+                        <Mic className="w-4 h-4" />
+                      </div>
+                      <div className="text-xs font-bold text-slate-900">Транскрибация речи</div>
+                      <div className="text-xs text-slate-600 mt-1">
+                        Перевод разговоров в текст, семантический анализ договоренностей и составление протокола
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex items-center justify-between gap-2 bg-sky-50 border border-sky-200 px-3 py-1.5 rounded-lg shadow-xs">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-sky-700 shrink-0">ИИ-агент</span>
-                    <span className="text-xs font-semibold text-sky-900 text-right">{item.flow.action}</span>
+                  <div className="p-4 rounded-xl bg-white border border-sky-200/80 shadow-xs flex flex-col justify-between">
+                    <div>
+                      <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
+                        <Layers className="w-4 h-4" />
+                      </div>
+                      <div className="text-xs font-bold text-slate-900">Пул ассистентов</div>
+                      <div className="text-xs text-slate-600 mt-1">
+                        Набор специализированных программных агентов под ваши регламенты, инструкции и формулы
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex justify-center text-slate-400 py-0.5">
-                    <ArrowDown className="w-3.5 h-3.5" />
+                  <div className="p-4 rounded-xl bg-white border border-sky-200/80 shadow-xs flex flex-col justify-between">
+                    <div>
+                      <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
+                        <Database className="w-4 h-4" />
+                      </div>
+                      <div className="text-xs font-bold text-slate-900">Коннекторы к БД</div>
+                      <div className="text-xs text-slate-600 mt-1">
+                        Штатные модули обмена с Битрикс24, 1С и корпоративными базами данных без изменения их структуры
+                      </div>
+                    </div>
                   </div>
+                </div>
+              </div>
 
-                  <div className="flex items-center justify-between gap-2 bg-slate-900 border border-slate-900 px-3 py-1.5 rounded-lg shadow-xs text-white">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300 shrink-0">Итог</span>
-                    <span className="text-xs font-semibold text-white text-right">{item.flow.output}</span>
+              {/* Соединительная стрелка вниз */}
+              <div className="flex items-center justify-center gap-2 text-xs font-semibold text-slate-700 py-1">
+                <ArrowDown className="w-4 h-4 text-slate-600" />
+                <span>Автоматическая запись проверенных результатов</span>
+              </div>
+
+              {/* Уровень 3: Итог работы */}
+              <div className="bg-slate-900 text-white border border-slate-900 rounded-2xl p-5 sm:p-6 shadow-md">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-sky-500 text-slate-950 flex items-center justify-center font-bold text-xs">
+                      3
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-sky-400">Результат работы</div>
+                      <div className="text-sm sm:text-base font-bold text-white">Прямое действие в ваших учетных базах</div>
+                    </div>
+                  </div>
+                  <div className="text-xs text-slate-400">
+                    Без ручного ввода операторов и без риска человеческой ошибки
                   </div>
                 </div>
 
-                {item.demoLink && (
-                  <a
-                    href={item.demoLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center justify-center gap-1.5 w-full px-3 py-2 rounded-xl bg-sky-50 border border-sky-200 text-xs font-bold text-sky-700 hover:bg-sky-100 hover:text-sky-800 transition-colors"
-                  >
-                    <span>Открыть живое демо подбора по фото</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
-                )}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                  <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="text-xs text-slate-200 leading-snug">
+                      <strong className="text-white block mb-0.5">Битрикс24:</strong> Создание сделок, распределение лидов, автозадачи менеджерам и прикрепление готовых КП
+                    </div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="text-xs text-slate-200 leading-snug">
+                      <strong className="text-white block mb-0.5">1С и склад:</strong> Занесение номенклатуры, формирование ТТН, счетов и актов со сверкой договоров
+                    </div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="text-xs text-slate-200 leading-snug">
+                      <strong className="text-white block mb-0.5">Контроль расхождений:</strong> Сигнал сотруднику только при выявлении нестыковок или отклонений от норм
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
+
+            {/* Подвал карточки с CTA */}
+            <div className="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="text-sm font-bold text-slate-900">
+                  Нужен расчет сценария под ваши требования?
+                </div>
+                <div className="text-xs text-slate-600 mt-0.5">
+                  Изучим регламенты вашей компании, предложим архитектуру и проведем пилот на ваших данных.
+                </div>
+              </div>
+              <a
+                href="#lead-form"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-600 text-white text-xs sm:text-sm font-bold hover:bg-sky-700 shadow-sm shadow-sky-600/20 active:scale-[0.98] transition-all shrink-0"
+              >
+                <span>Обсудить индивидуальный проект</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        ) : (
+          /* Сетка карточек конкретных сценариев */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCases.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-sky-300 transition-all flex flex-col justify-between"
+              >
+                <div>
+                  {/* Бейдж отдела */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200/60">
+                      {item.badge}
+                    </span>
+                  </div>
+
+                  {/* Заголовок действия */}
+                  <h3 className="text-lg font-bold text-slate-900 mt-2 mb-2 leading-snug">
+                    {item.title}
+                  </h3>
+
+                  {/* Описание */}
+                  <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                    {item.description}
+                  </p>
+                </div>
+
+                {/* Статическая блок-схема процесса */}
+                <div className="mt-auto pt-4 border-t border-slate-100">
+                  <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2.5">
+                    Схема процесса
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col gap-1.5">
+                    <div className="flex items-center justify-between gap-2 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-xs">
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 shrink-0">Вход</span>
+                      <span className="text-xs font-semibold text-slate-800 text-right">{item.flow.input}</span>
+                    </div>
+
+                    <div className="flex justify-center text-sky-500 py-0.5">
+                      <ArrowDown className="w-3.5 h-3.5" />
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 bg-sky-50 border border-sky-200 px-3 py-1.5 rounded-lg shadow-xs">
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-sky-700 shrink-0">ИИ-агент</span>
+                      <span className="text-xs font-semibold text-sky-900 text-right">{item.flow.action}</span>
+                    </div>
+
+                    <div className="flex justify-center text-slate-400 py-0.5">
+                      <ArrowDown className="w-3.5 h-3.5" />
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 bg-slate-900 border border-slate-900 px-3 py-1.5 rounded-lg shadow-xs text-white">
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300 shrink-0">Итог</span>
+                      <span className="text-xs font-semibold text-white text-right">{item.flow.output}</span>
+                    </div>
+                  </div>
+
+                  {item.demoLink && (
+                    <a
+                      href={item.demoLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex items-center justify-center gap-1.5 w-full px-3 py-2 rounded-xl bg-sky-50 border border-sky-200 text-xs font-bold text-sky-700 hover:bg-sky-100 hover:text-sky-800 transition-colors"
+                    >
+                      <span>Открыть живое демо подбора по фото</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
       </div>
     </section>

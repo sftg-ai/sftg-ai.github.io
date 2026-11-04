@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Send, Phone, MapPin, Clock, MessageSquare } from 'lucide-react';
+import { ShieldCheck, Send, Phone, MapPin, Clock, MessageSquare, Award } from 'lucide-react';
 import SftgLogo from './SftgLogo';
 
 export default function Footer() {
@@ -7,8 +7,8 @@ export default function Footer() {
   const waLink = "https://wa.me/375447481051";
 
   const navLinks = [
-    { label: 'Возможности', href: '#processes' },
-    { label: 'Примеры задач', href: '#cases' },
+    { label: 'Как это работает', href: '#processes' },
+    { label: 'Примеры решений', href: '#cases' },
     { label: 'Этапы работы', href: '#stages' },
     { label: 'Безопасность данных', href: '#contour' },
     { label: 'О компании', href: '#about' },
@@ -106,14 +106,20 @@ export default function Footer() {
 
         </div>
 
-        {/* Нижняя часть: копирайт и Закон 99-З */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>Обработка данных в строгом соответствии с Законом Республики Беларусь № 99-З «О защите персональных данных».</span>
+        {/* Нижняя часть: статус ПВТ, копирайт и Закон 99-З */}
+        <div className="pt-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 text-xs text-slate-500">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
+            <div className="flex items-center gap-2">
+              <Award className="w-4 h-4 text-sky-600 shrink-0" />
+              <span>ООО «Инновационный Софт» - резидент Парка высоких технологий Республики Беларусь.</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>Закон РБ № 99-З «О защите персональных данных».</span>
+            </div>
           </div>
-          <div>
-            © 2026 SFTG AI (ООО «РоялСиАрЭм»). Минск, Беларусь.
+          <div className="shrink-0 text-slate-600 font-medium">
+            © 2026 SFTG AI (ООО «Инновационный Софт»). Минск, Беларусь.
           </div>
         </div>
 
