@@ -15,8 +15,8 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { label: 'Как это работает', href: '#processes' },
-    { label: 'Примеры решений', href: '#cases' },
+    { label: 'Примеры решений', href: '#processes' },
+    { label: 'Как это работает', href: '#cases' },
     { label: 'Этапы работы', href: '#stages' },
     { label: 'Безопасность данных', href: '#contour' },
     { label: 'О компании', href: '#about' },

@@ -155,7 +155,7 @@ export default function ProcessExplorer() {
             {/* Плашка направления */}
             <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200 text-xs font-semibold px-3 py-1 rounded-full text-sky-800 w-fit mb-1">
               <Sparkles className="w-3.5 h-3.5 text-sky-600" />
-              <span>Как это работает</span>
+              <span>Примеры решений</span>
             </div>
 
             {/* Динамический H2 и подзаголовок */}

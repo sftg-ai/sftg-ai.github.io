@@ -205,11 +205,11 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
           {/* Левая колонка (7 колонок) */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
-              <Briefcase className="w-3.5 h-3.5 text-sky-600" />
-              <span>Примеры решений по отделам</span>
+              <Workflow className="w-3.5 h-3.5 text-sky-600" />
+              <span>Как это работает</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-              Примеры решений и сценарии автоматизации
+              Как это работает: сценарии по отделам и процессам
             </h2>
             <p className="text-slate-600 text-base leading-relaxed mb-2">
               Конкретные участки работы, где рутинные действия заменяются программными ассистентами с прямой передачей данных в Битрикс24, 1С и учетные базы компании.
