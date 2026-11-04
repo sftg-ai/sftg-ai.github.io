@@ -380,17 +380,10 @@ function DraggableRow({ items, activeId, onSelect, initialScroll = 0 }) {
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
-              <span className={`text-[11px] font-medium truncate ${
-                isActive ? 'text-sky-700' : 'text-slate-500'
-              }`}>
-                {company.industry}
-              </span>
-              {company.hasAI && (
-                <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-sky-50 text-sky-700 border border-sky-200/90 shrink-0">
-                  AI
-                </span>
-              )}
+            <div className={`text-[11px] font-medium truncate mt-0.5 ${
+              isActive ? 'text-sky-700' : 'text-slate-500'
+            }`}>
+              {company.industry}
             </div>
           </div>
         );
