@@ -10,7 +10,9 @@ import {
   Layers,
   Database,
   CheckCircle2,
-  Workflow
+  Workflow,
+  FileCheck,
+  BellRing
 } from 'lucide-react';
 
 export default function RealCases({ activeCase, setActiveCase } = {}) {
@@ -335,9 +337,21 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                       <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
                         <Eye className="w-4 h-4" />
                       </div>
-                      <div className="text-xs font-bold text-slate-900">Компьютерное зрение</div>
-                      <div className="text-xs text-slate-600 mt-1">
-                        Распознавание дефектов, деталей, геометрии изделий и маркировки на складе и производстве
+                      <div className="text-xs font-bold text-slate-900">Компьютерное зрение и фотоконтроль</div>
+                      <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        Распознавание деталей, подбор по фото со смартфона, выявление брака и проверка фотоотчетов мастеров
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-white border border-sky-200/80 shadow-xs flex flex-col justify-between">
+                    <div>
+                      <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
+                        <FileCheck className="w-4 h-4" />
+                      </div>
+                      <div className="text-xs font-bold text-slate-900">Разбор первички и таблиц</div>
+                      <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        Чтение любых PDF, сканов, накладных ТТН, актов и нестандартных Excel-прайсов с автоматической сверкой
                       </div>
                     </div>
                   </div>
@@ -347,21 +361,9 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                       <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
                         <Mic className="w-4 h-4" />
                       </div>
-                      <div className="text-xs font-bold text-slate-900">Транскрибация речи</div>
-                      <div className="text-xs text-slate-600 mt-1">
-                        Перевод разговоров в текст, семантический анализ договоренностей и составление протокола
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-white border border-sky-200/80 shadow-xs flex flex-col justify-between">
-                    <div>
-                      <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
-                        <Layers className="w-4 h-4" />
-                      </div>
-                      <div className="text-xs font-bold text-slate-900">Пул ассистентов</div>
-                      <div className="text-xs text-slate-600 mt-1">
-                        Набор специализированных программных агентов под ваши регламенты, инструкции и формулы
+                      <div className="text-xs font-bold text-slate-900">Речевой анализ и транскрибация</div>
+                      <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        Перевод разговоров и планерок в текст, фиксация договоренностей и автоматическое заполнение сделок в CRM
                       </div>
                     </div>
                   </div>
@@ -371,9 +373,9 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                       <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 mb-2.5">
                         <Database className="w-4 h-4" />
                       </div>
-                      <div className="text-xs font-bold text-slate-900">Интеграция с корпоративными системами</div>
-                      <div className="text-xs text-slate-600 mt-1">
-                        Бесшовное подключение к Битрикс24, 1С, складским программам, телефонии и учетным системам компании без изменения их структуры
+                      <div className="text-xs font-bold text-slate-900">Интеграция с системами компании</div>
+                      <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        Бесшовное подключение к Битрикс24, 1С, складским программам, телефонии и внутренним базам без изменения их структуры
                       </div>
                     </div>
                   </div>
@@ -395,11 +397,11 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                     </div>
                     <div>
                       <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Результат работы</div>
-                      <div className="text-sm sm:text-base font-bold text-slate-900">Прямое действие в ваших учетных базах</div>
+                      <div className="text-sm sm:text-base font-bold text-slate-900">Действие в системах или моментальное уведомление</div>
                     </div>
                   </div>
                   <div className="text-xs text-emerald-800/90 font-medium">
-                    Без ручного ввода операторов и без риска человеческой ошибки
+                    Автоматическая проводка либо алерт ответственным сотрудникам
                   </div>
                 </div>
 
@@ -407,19 +409,19 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                   <div className="p-3.5 rounded-xl bg-white/90 border border-emerald-200/70 shadow-xs flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                     <div className="text-xs text-slate-700 leading-snug">
-                      <strong className="text-slate-900 block mb-0.5">Битрикс24:</strong> Создание сделок, распределение лидов, автозадачи менеджерам и прикрепление готовых КП
+                      <strong className="text-slate-900 block mb-0.5">Битрикс24 и CRM:</strong> Создание сделок, распределение лидов, автозадачи менеджерам и прикрепление готовых КП
                     </div>
                   </div>
                   <div className="p-3.5 rounded-xl bg-white/90 border border-emerald-200/70 shadow-xs flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                     <div className="text-xs text-slate-700 leading-snug">
-                      <strong className="text-slate-900 block mb-0.5">1С и склад:</strong> Занесение номенклатуры, формирование ТТН, счетов и актов со сверкой договоров
+                      <strong className="text-slate-900 block mb-0.5">1С, склад и ERP:</strong> Занесение номенклатуры, формирование ТТН, счетов и актов со сверкой цен по договору
                     </div>
                   </div>
                   <div className="p-3.5 rounded-xl bg-white/90 border border-emerald-200/70 shadow-xs flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <BellRing className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                     <div className="text-xs text-slate-700 leading-snug">
-                      <strong className="text-slate-900 block mb-0.5">Контроль расхождений:</strong> Сигнал сотруднику только при выявлении нестыковок или отклонений от норм
+                      <strong className="text-slate-900 block mb-0.5">Контроль расхождений:</strong> Мгновенный алерт или задача сотруднику только при нестыковках, браке или отклонениях от норм
                     </div>
                   </div>
                 </div>
