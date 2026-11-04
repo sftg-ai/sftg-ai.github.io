@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Building2, Layers } from 'lucide-react';
+import { Building2, Layers, X } from 'lucide-react';
 
 const ROW_ONE = [
   {
@@ -31,20 +31,20 @@ const ROW_ONE = [
   {
     id: 'sss',
     name: 'СеверСтальСнаб',
-    industry: 'Металлопрокат и поставки',
-    theme: 'border-slate-200 bg-white',
+    industry: 'Металлопрокат и снабжение',
+    theme: 'border-amber-200/90 bg-amber-50/70',
     projects: [
+      {
+        title: 'ИИ-разбор входящих счетов и первички в 1С',
+        type: 'Интеллектуальная обработка документов',
+        taskDesc: 'Сотрудники бухгалтерии и отдела снабжения тратили до 5 часов в день на ручной ввод номенклатурных позиций из разнородных сканов накладных, актов со штампами и счетов-фактур.',
+        solutionDesc: 'Внедрили нейросетевую обработку первичных документов: автоматическое выравнивание геометрии сканов, распознавание сложных номенклатурных таблиц с НДС и прямое создание проведенных поступлений в 1С с сопоставлением со справочником номенклатуры.'
+      },
       {
         title: 'Оптовый B2B-портал и каталог продукции',
         type: 'Разработка веб-сайта и B2B-портала',
         taskDesc: 'Дилеры и региональные заказчики были вынуждены запрашивать остатки металлопроката по телефону и почте, ожидая ручного составления коммерческих предложений.',
         solutionDesc: 'Спроектировали и запустили специализированный оптовый веб-портал с интерактивным каталогом металлопроката, личным кабинетом контрагента, калькулятором веса и автоматическим формированием счетов с резервированием остатков на складе.'
-      },
-      {
-        title: 'Интеграция с учетными системами и складом',
-        type: 'Интеграция систем и складской контур',
-        taskDesc: 'Необходимость оперативной синхронизации актуальных цен, партий и складских остатков металлобазы между сайтом и внутренними учетными базами компании.',
-        solutionDesc: 'Настроили надежный двусторонний шлюз обмена данными: обновление складских остатков каждые 3 минуты и автоматическая выгрузка оформленных на сайте заказов в работу менеджерам.'
       }
     ]
   },
@@ -91,7 +91,7 @@ const ROW_ONE = [
   {
     id: 'nit',
     name: 'Nordic Tech',
-    industry: 'Инжиниринг',
+    industry: 'Инжиниринг и автоматика',
     theme: 'border-blue-200/90 bg-blue-50/70',
     projects: [
       {
@@ -106,7 +106,7 @@ const ROW_ONE = [
     id: 'agt',
     name: 'Al-Dhabi Trading',
     industry: 'Оптовая торговля',
-    theme: 'border-amber-200/90 bg-amber-50/80',
+    theme: 'border-orange-200/90 bg-orange-50/70',
     projects: [
       {
         title: 'B2B-кабинет оптовых покупателей',
@@ -160,7 +160,7 @@ const ROW_ONE = [
     id: 'esc',
     name: 'Emirates Supply',
     industry: 'Авиа & морская логистика',
-    theme: 'border-sky-200/90 bg-sky-50/70',
+    theme: 'border-cyan-200/90 bg-cyan-50/70',
     projects: [
       {
         title: 'Электронный документооборот AWB',
@@ -174,7 +174,7 @@ const ROW_ONE = [
     id: 'blg',
     name: 'БелЛогистик Групп',
     industry: 'Мультимодальный транспорт',
-    theme: 'border-emerald-200/90 bg-emerald-50/70',
+    theme: 'border-violet-200/90 bg-violet-50/70',
     projects: [
       {
         title: 'Мобильное приложение для экспедиторов и водителей',
@@ -194,7 +194,7 @@ const ROW_ONE = [
     id: 'kmc',
     name: 'Kronos Machinery',
     industry: 'Машиностроение и ЧПУ',
-    theme: 'border-slate-200 bg-white',
+    theme: 'border-zinc-200/90 bg-zinc-50/70',
     projects: [
       {
         title: 'Интерактивный конфигуратор станков',
@@ -208,7 +208,7 @@ const ROW_ONE = [
     id: 'gpl',
     name: 'Gulf Petrochem',
     industry: 'Нефтехимия & терминалы',
-    theme: 'border-amber-200/90 bg-amber-50/80',
+    theme: 'border-rose-200/90 bg-rose-50/70',
     projects: [
       {
         title: 'Партионный баланс сырья',
@@ -222,10 +222,30 @@ const ROW_ONE = [
 
 const ROW_TWO = [
   {
+    id: 'ptp',
+    name: 'ПромТехПрибор',
+    industry: 'Приборостроение и ОТК',
+    theme: 'border-emerald-200/90 bg-emerald-50/70',
+    projects: [
+      {
+        title: 'Оптический фотоконтроль ОТК и считывание экранов',
+        type: 'Компьютерное зрение на производстве',
+        taskDesc: 'На участке выходного контроля контролеры ОТК вручную переписывали в журнал показания LCD-экранов цифровых датчиков, данные калибровки и сверяли визуальное отсутствие дефектов пайки.',
+        solutionDesc: 'Внедрили оптический пост инспекции: камера мгновенно считывает показания с ЖК-дисплея прибора, верифицирует калибровочные значения с допусками технологической карты, распознает QR-код платы и автоматически формирует электронный акт приемки ОТК с фотофиксацией.'
+      },
+      {
+        title: 'Автоматическая маркировка и учет шильдиков',
+        type: 'Учет партий и маркировка',
+        taskDesc: 'Трудоемкий учет номерных узлов и сверка заводских номеров на шильдиках при передаче со сборочного цеха на участок финишной упаковки.',
+        solutionDesc: 'Разработали модуль потокового считывания лазерной маркировки корпусов: автоматическая привязка электронного паспорта изделия к заводскому серийному номеру в учетной системе предприятия.'
+      }
+    ]
+  },
+  {
     id: 'res',
     name: 'РусЭнергоСтрой',
     industry: 'Энергостроительство',
-    theme: 'border-indigo-200/90 bg-indigo-50/70',
+    theme: 'border-purple-200/90 bg-purple-50/70',
     projects: [
       {
         title: 'Контроль сметных лимитов КС-2/КС-3',
@@ -236,24 +256,10 @@ const ROW_TWO = [
     ]
   },
   {
-    id: 'hps',
-    name: 'Horizon Pharma',
-    industry: 'Медицинские поставки',
-    theme: 'border-teal-200/90 bg-teal-50/70',
-    projects: [
-      {
-        title: 'Аудит холодовой цепи и GDP-журнал',
-        type: 'Фармацевтический мониторинг',
-        taskDesc: 'Необходимость строгого соблюдения требований холодовой цепи при хранении термолабильных медицинских препаратов и ведения журнала для регуляторов.',
-        solutionDesc: 'Подключили логгеры температуры и влажности складских зон к системе непрерывного аудита: автоматическое оповещение ответственных лиц при выходе параметров за коридор нормы и генерация отчетов соответствия GDP.'
-      }
-    ]
-  },
-  {
     id: 'scg',
     name: 'SmartCommerce',
     industry: 'Оптовая B2B-торговля',
-    theme: 'border-slate-200 bg-white',
+    theme: 'border-cyan-200/90 bg-cyan-50/70',
     projects: [
       {
         title: 'Разработка B2B-портала и оптовой витрины',
@@ -270,16 +276,16 @@ const ROW_TWO = [
     ]
   },
   {
-    id: 'pai',
-    name: 'Prime Agro',
-    industry: 'Агроэкспорт и сырье',
-    theme: 'border-emerald-200/90 bg-emerald-50/70',
+    id: 'hps',
+    name: 'Horizon Pharma',
+    industry: 'Медицинские поставки',
+    theme: 'border-amber-200/90 bg-amber-50/70',
     projects: [
       {
-        title: 'Сквозной учет приемки зерновых партий',
-        type: 'Контроль лаборатории и ТТН',
-        taskDesc: 'Расхождения в расчетах зачетного веса партий зерна из-за ручного пересчета показателей влажности и сорности с лабораторных карточек приемки.',
-        solutionDesc: 'Внедрили сквозную фиксацию приемки: передача данных экспресс-анализаторов в учетную систему, авторасчет зачетной массы по формулам Дюваля и мгновенная печать реестра ТТН для водителя.'
+        title: 'Аудит холодовой цепи и GDP-журнал',
+        type: 'Фармацевтический мониторинг',
+        taskDesc: 'Необходимость строгого соблюдения требований холодовой цепи при хранении термолабильных медицинских препаратов и ведения журнала для регуляторов.',
+        solutionDesc: 'Подключили логгеры температуры и влажности складских зон к системе непрерывного аудита: автоматическое оповещение ответственных лиц при выходе параметров за коридор нормы и генерация отчетов соответствия GDP.'
       }
     ]
   }
@@ -341,7 +347,6 @@ function DraggableRow({ items, activeId, onSelect, initialScroll = 0 }) {
         return (
           <div
             key={company.id}
-            onMouseEnter={() => onSelect(company)}
             onClick={() => {
               if (!hasDragged.current) {
                 onSelect(company);
@@ -350,7 +355,7 @@ function DraggableRow({ items, activeId, onSelect, initialScroll = 0 }) {
             className={`min-w-[155px] sm:min-w-[175px] max-w-[190px] px-3.5 py-2.5 rounded-xl border-2 transition-all duration-150 flex flex-col justify-center text-left shrink-0 cursor-pointer ${
               isActive 
                 ? 'border-sky-600 bg-white shadow-md shadow-sky-600/10' 
-                : `${company.theme} hover:border-slate-300`
+                : `${company.theme} hover:border-slate-300 hover:shadow-xs`
             }`}
           >
             <div className="flex items-center justify-between gap-1.5">
@@ -378,16 +383,24 @@ function DraggableRow({ items, activeId, onSelect, initialScroll = 0 }) {
 }
 
 export default function TrustMarquee() {
-  const [activeCompany, setActiveCompany] = useState(ROW_ONE[0]);
+  const [activeCompany, setActiveCompany] = useState(null);
   const [activeProjectIdx, setActiveProjectIdx] = useState(0);
 
   // Сброс индекса проекта на первый при смене компании
   useEffect(() => {
     setActiveProjectIdx(0);
-  }, [activeCompany.id]);
+  }, [activeCompany?.id]);
 
-  const currentProject = activeCompany.projects[activeProjectIdx] || activeCompany.projects[0];
-  const hasMultipleProjects = activeCompany.projects.length > 1;
+  const handleSelectCompany = (company) => {
+    if (activeCompany?.id === company.id) {
+      setActiveCompany(null);
+    } else {
+      setActiveCompany(company);
+    }
+  };
+
+  const currentProject = activeCompany?.projects[activeProjectIdx] || activeCompany?.projects[0];
+  const hasMultipleProjects = Boolean(activeCompany && activeCompany.projects.length > 1);
 
   return (
     <section className="py-12 sm:py-14 bg-slate-50/70 border-b border-slate-200/80 text-left">
@@ -400,7 +413,7 @@ export default function TrustMarquee() {
           </h2>
         </div>
 
-        {/* БЛОК 2: Партнеры и проекты (две свайп-строчки + карточка проекта) */}
+        {/* БЛОК 2: Партнеры и проекты (две свайп-строчки + открывающаяся карточка проекта) */}
         <div className="pt-7">
           <div className="mb-4">
             {/* Плашка направления */}
@@ -410,91 +423,104 @@ export default function TrustMarquee() {
             </div>
           </div>
 
-          {/* Две аккуратные строки кубиков: верхняя и нижняя */}
+          {/* Две аккуратные строки кубиков: верхняя длинная и нижняя пополняемая */}
           <div className="space-y-1 sm:space-y-1.5">
             {/* Строка 1: свайп влево (стартует с начала) */}
             <DraggableRow 
               items={ROW_ONE} 
-              activeId={activeCompany.id} 
-              onSelect={setActiveCompany} 
+              activeId={activeCompany?.id} 
+              onSelect={handleSelectCompany} 
               initialScroll={0} 
             />
 
             {/* Строка 2: 4 кейса (пополняемый ряд) */}
             <DraggableRow 
               items={ROW_TWO} 
-              activeId={activeCompany.id} 
-              onSelect={setActiveCompany} 
+              activeId={activeCompany?.id} 
+              onSelect={handleSelectCompany} 
               initialScroll={0} 
             />
           </div>
 
-          {/* Интерактивная панель описания проекта при наведении */}
-          <div className="mt-5 p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-2xs transition-all duration-200">
-            {/* Заголовок карточки партнера */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-4 mb-4 border-b border-slate-100">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
-                  {activeCompany.name}
-                </span>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 font-semibold text-slate-600">
-                  {activeCompany.industry}
-                </span>
-                {hasMultipleProjects && (
-                  <span className="text-xs px-2 py-0.5 rounded-md bg-sky-50 font-semibold text-sky-700 border border-sky-100">
-                    Реализовано {activeCompany.projects.length} проекта в рамках развития
+          {/* Интерактивная панель описания проекта (открывается по клику с плавным фейдом) */}
+          {activeCompany && currentProject && (
+            <div 
+              key={activeCompany.id}
+              className="mt-5 p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-2xs animate-smooth-fade"
+            >
+              {/* Заголовок карточки партнера */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-4 mb-4 border-b border-slate-100">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+                    {activeCompany.name}
                   </span>
-                )}
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 font-semibold text-slate-600">
+                    {activeCompany.industry}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2.5 self-start sm:self-auto">
+                  <div className="text-xs font-semibold text-sky-700 bg-sky-50 px-3 py-1 rounded-lg border border-sky-100/90 w-fit">
+                    {currentProject.type}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveCompany(null)}
+                    className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                    title="Скрыть описание"
+                    aria-label="Закрыть"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-              <div className="text-xs font-semibold text-sky-700 bg-sky-50 px-3 py-1 rounded-lg border border-sky-100/90 w-fit">
-                {currentProject.type}
-              </div>
-            </div>
 
-            {/* Если у компании несколько проектов: аккуратные вкладки-переключатели */}
-            {hasMultipleProjects && (
-              <div className="flex flex-wrap items-center gap-2 mb-4 pb-3 border-b border-slate-100">
-                <span className="text-xs font-semibold text-slate-500 mr-1 flex items-center gap-1">
-                  <Layers className="w-3.5 h-3.5 text-sky-600" />
-                  Этапы сотрудничества:
-                </span>
-                {activeCompany.projects.map((proj, pIdx) => {
-                  const isProjActive = activeProjectIdx === pIdx;
-                  return (
-                    <button
-                      key={pIdx}
-                      type="button"
-                      onMouseEnter={() => setActiveProjectIdx(pIdx)}
-                      onClick={() => setActiveProjectIdx(pIdx)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                        isProjActive
-                          ? 'bg-sky-600 text-white shadow-xs'
-                          : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                      }`}
-                    >
-                      {proj.title}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-            
-            {/* Описание активного проекта */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
-              <div>
-                <strong className="block text-slate-900 mb-1 font-semibold">
-                  Задача и специфика:
-                </strong>
-                <p>{currentProject.taskDesc}</p>
-              </div>
-              <div>
-                <strong className="block text-slate-900 mb-1 font-semibold">
-                  Реализованное решение и результат:
-                </strong>
-                <p>{currentProject.solutionDesc}</p>
+              {/* Если у компании несколько проектов: аккуратные вкладки-переключатели */}
+              {hasMultipleProjects && (
+                <div className="flex flex-wrap items-center gap-2 mb-4 pb-3 border-b border-slate-100">
+                  <span className="text-xs font-semibold text-slate-500 mr-1 flex items-center gap-1">
+                    <Layers className="w-3.5 h-3.5 text-sky-600" />
+                    Этапы сотрудничества:
+                  </span>
+                  {activeCompany.projects.map((proj, pIdx) => {
+                    const isProjActive = activeProjectIdx === pIdx;
+                    return (
+                      <button
+                        key={pIdx}
+                        type="button"
+                        onClick={() => setActiveProjectIdx(pIdx)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                          isProjActive
+                            ? 'bg-sky-600 text-white shadow-xs'
+                            : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                        }`}
+                      >
+                        {proj.title}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              
+              {/* Описание активного проекта с плавным появлением при переключении */}
+              <div 
+                key={`${activeCompany.id}-${activeProjectIdx}`}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-600 leading-relaxed animate-smooth-fade"
+              >
+                <div>
+                  <strong className="block text-slate-900 mb-1 font-semibold">
+                    Задача и специфика:
+                  </strong>
+                  <p>{currentProject.taskDesc}</p>
+                </div>
+                <div>
+                  <strong className="block text-slate-900 mb-1 font-semibold">
+                    Реализованное решение и результат:
+                  </strong>
+                  <p>{currentProject.solutionDesc}</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
         </div>
 

@@ -46,3 +46,19 @@
 .text-pretty {
   text-wrap: pretty;
 }
+
+/* Плавное премиальное появление контента (Unslop) */
+@keyframes smoothFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-smooth-fade {
+  animation: smoothFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
