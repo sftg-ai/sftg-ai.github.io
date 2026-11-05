@@ -267,11 +267,18 @@ export default function HeroScenarioAnalyzer() {
       if (response.ok) {
         const data = await response.json();
 
-        if (data.status === 'insufficient_data') {
-          setInsufficientNotice(data.message || 'Не удалось найти сайт компании. Показаны базовые сценарии.');
+        // Если сайт/компания не найдены — не показываем фейковые дефолтные сценарии
+        if (data.status === 'insufficient_data' || !data.scenarios || data.scenarios.length === 0) {
+          setErrorMessage({
+            title: 'Компания или сайт не найдены',
+            description: `Не удалось найти информацию по запросу «${companyInput.trim()}». Проверьте правильность написания сайта (например: alfasb.by) или оставьте заявку — мы подготовим персональный разбор до звонка.`,
+            type: 'not_found',
+          });
+          setStatus('error');
+          return;
         }
 
-        setScenarios(data.scenarios && data.scenarios.length > 0 ? data.scenarios : []);
+        setScenarios(data.scenarios);
         setCompanyProfile(data.company_profile || null);
         const rawComment = data.formatted_b24_comment || '';
         const cleanComment = rawComment.replace(/^УНП:.*$/gim, '').replace(/\n{3,}/g, '\n\n').trim();
