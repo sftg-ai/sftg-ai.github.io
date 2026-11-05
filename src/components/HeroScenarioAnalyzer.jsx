@@ -219,6 +219,11 @@ ${scenariosText}
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
                   {status === 'done' ? 'Рекомендованные сценарии' : 'Укажите сайт и текущие системы'}
                 </h3>
+                {status !== 'done' && (
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1 leading-relaxed">
+                    Укажите сайт, название компании и текущие системы, чтобы подобрать практические сценарии под ваш стек.
+                  </p>
+                )}
               </div>
               <button
                 onClick={() => setIsOpen(false)}
