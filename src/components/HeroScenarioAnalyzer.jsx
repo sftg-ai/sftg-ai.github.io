@@ -357,42 +357,44 @@ ${wishSection}${scenariosText}`.trim();
 
   return (
     <div id="hero-analyzer" className="w-full max-w-xl text-left relative">
-      {/* 1. Кнопка по умолчанию в Hero с мягким затуханием */}
+      {/* 1. Кнопка по умолчанию в Hero с синхронным мягким сворачиванием */}
       <div
-        className={`transition-all duration-300 ease-out ${
+        className={`grid transition-[grid-template-rows,opacity] duration-400 ease-in-out ${
           isOpen
-            ? 'opacity-0 scale-95 pointer-events-none absolute inset-x-0 top-0'
-            : 'opacity-100 scale-100 relative'
+            ? 'grid-rows-[0fr] opacity-0 pointer-events-none'
+            : 'grid-rows-[1fr] opacity-100'
         }`}
       >
-        <button
-          onClick={handleOpen}
-          className="inline-flex items-center justify-center gap-3 bg-white text-slate-900 hover:bg-sky-50 font-bold px-5 sm:px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 hover:shadow-xl hover:shadow-sky-950/30 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
-        >
-          {/* Пульсирующий индикатор в фирменном синем стиле */}
-          <span className="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
-            <span 
-              className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" 
-              style={{ animationDuration: '2.5s' }}
-            />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500" />
-          </span>
+        <div className="min-h-0 overflow-hidden pb-1">
+          <button
+            onClick={handleOpen}
+            className="inline-flex items-center justify-center gap-3 bg-white text-slate-900 hover:bg-sky-50 font-bold px-5 sm:px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 hover:shadow-xl hover:shadow-sky-950/30 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
+          >
+            {/* Пульсирующий индикатор в фирменном синем стиле */}
+            <span className="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
+              <span 
+                className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" 
+                style={{ animationDuration: '2.5s' }}
+              />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500" />
+            </span>
 
-          <span>Экспресс-подбор автоматизации онлайн</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600 shrink-0" />
-        </button>
+            <span>Экспресс-подбор автоматизации онлайн</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600 shrink-0" />
+          </button>
+        </div>
       </div>
 
       {/* 2. Раскрытая интерактивная карточка с плавной анимацией выезда */}
       <div
-        className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`grid transition-[grid-template-rows,opacity] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${
           isOpen
             ? 'grid-rows-[1fr] opacity-100'
             : 'grid-rows-[0fr] opacity-0 pointer-events-none'
         }`}
       >
-        <div className="min-h-0 overflow-hidden">
-          <div className="p-5 sm:p-6 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl text-slate-900 transition-opacity duration-400">
+        <div className="min-h-0 overflow-hidden py-1">
+          <div className="p-5 sm:p-6 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl text-slate-900 transition-opacity duration-500">
             
             {/* Шапка карточки */}
             <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
