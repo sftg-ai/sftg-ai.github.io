@@ -130,7 +130,7 @@ export default function HeroScenarioAnalyzer() {
       setAnalysisStep((prev) => (prev < ANALYSIS_STEPS.length - 1 ? prev + 1 : prev));
     }, 450);
 
-    const endpoint = import.meta.env.VITE_AI_ANALYSIS_ENDPOINT;
+    const endpoint = import.meta.env.VITE_AI_ANALYSIS_ENDPOINT || 'https://audit.apps.aipush.dev/api/v1/analyze';
     if (endpoint) {
       try {
         const response = await fetch(endpoint, {
@@ -154,6 +154,12 @@ export default function HeroScenarioAnalyzer() {
           setScenarios(data.scenarios && data.scenarios.length > 0 ? data.scenarios : generateLocalScenarios(companyInput, systems));
           setCompanyProfile(data.company_profile || null);
           setFormattedComment(data.formatted_b24_comment || '');
+          setStatus('done');
+          return;
+        } else if (response.status === 429) {
+          if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+          setInsufficientNotice('Превышен лимит запросов для вашего IP. Пожалуйста, подождите 1 минуту или перейдите к заявке.');
+          setScenarios(generateLocalScenarios(companyInput, systems));
           setStatus('done');
           return;
         }
