@@ -30,15 +30,15 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-3 md:pt-4">
         <nav 
-          className={`pointer-events-auto w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl border transition-all duration-300 ${
+          className={`pointer-events-auto w-full flex items-center justify-between gap-2 sm:gap-3 px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-2xl border transition-all duration-300 ${
             scrolled 
               ? 'bg-white/95 border-slate-200/90 shadow-md shadow-slate-900/5 backdrop-blur-xl' 
               : 'bg-white/85 border-slate-200/70 shadow-sm backdrop-blur-md'
           }`}
         >
           {/* Логотип */}
-          <a href="#" className="flex items-center gap-2 group">
-            <SoftGreatLogo className="h-7" theme="dark" />
+          <a href="#" className="flex items-center gap-2 group shrink-0">
+            <SoftGreatLogo className="h-6 sm:h-7" theme="dark" />
           </a>
 
           {/* Десктоп навигация */}
@@ -55,7 +55,7 @@ export default function Header() {
           </div>
 
           {/* Контакты (Беларусь) + CTA кнопка */}
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0 ml-auto">
             {/* Телефон и Telegram */}
             <div className="hidden sm:flex items-center gap-3 text-xs font-medium text-slate-700 pr-2 border-r border-slate-200 whitespace-nowrap">
               <a 
@@ -80,16 +80,16 @@ export default function Header() {
             {/* Главная кнопка */}
             <a
               href="#lead-form"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-700 shadow-sm shadow-sky-600/20 active:scale-[0.98] transition-all whitespace-nowrap"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold bg-sky-600 text-white hover:bg-sky-700 shadow-sm shadow-sky-600/20 active:scale-[0.98] transition-all whitespace-nowrap"
             >
               <span>Заказать аудит</span>
-              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+              <ArrowRight className="w-3 sm:w-3.5 h-3 sm:h-3.5 shrink-0" />
             </a>
 
             {/* Мобильная кнопка меню */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              className="lg:hidden p-1.5 sm:p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
               aria-label="Переключить меню"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

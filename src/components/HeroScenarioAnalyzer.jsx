@@ -363,9 +363,15 @@ ${wishSection}${scenariosText}`.trim();
       userWish: userWish.trim(),
     });
 
-    const el = document.getElementById('lead-form');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    // На мобильных устройствах скроллим прямо к блоку формы Битрикс24 (b24-form-container),
+    // чтобы пользователь сразу видел перенесенный аудит и поля ввода, не пролистывая верхние шаги
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+    const targetElement = isMobile
+      ? (document.getElementById('b24-form-container') || document.getElementById('lead-form'))
+      : document.getElementById('lead-form');
+
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
     }
   };
 

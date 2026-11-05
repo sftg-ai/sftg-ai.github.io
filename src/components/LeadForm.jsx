@@ -141,7 +141,7 @@ export default function LeadForm() {
         </div>
 
         {/* Справа: 6 колонок - Официальная CRM-форма Битрикс24 */}
-        <div className="lg:col-span-6 flex flex-col">
+        <div id="b24-form-container" className="lg:col-span-6 flex flex-col scroll-mt-20 md:scroll-mt-24">
           {/* Баннер с подтверждением передачи экспресс-анализа */}
           {prefillInfo && (
             <div className="mb-3 p-3.5 rounded-2xl bg-sky-50 border border-sky-200/90 text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in slide-in-from-top-1">
