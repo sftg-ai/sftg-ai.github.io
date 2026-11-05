@@ -84,11 +84,6 @@ export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
  * 4 ключевых микроузла, которые луч последовательно зажигает и соединяет
  */
 export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
-  // Определяем статус каждого узла в зависимости от шага:
-  // Узел 0: Компания/Сайт (активен с 0 шага)
-  // Узел 1: Реестры и данные (активен с 1 шага)
-  // Узел 2: Учет 1С и CRM (активен с 5 шага)
-  // Узел 3: Контур решений (активен с 9 шага)
   // Определяем активные и текущий узел:
   // Node 0 (Сайт): активен с 0 шага, пульсирует пока step < 1
   // Node 1 (Реестры): активен с 1 шага, пульсирует пока 1 <= step < 5
@@ -105,6 +100,33 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
   else if (step >= 1) currentNodeIndex = 1;
   else currentNodeIndex = 0;
 
+  // Дискретный прогресс 3 межблочных коннекторных шин (встык между гранями кубиков)
+  let seg0Progress = 0; // Шина 0 -> 1
+  let seg1Progress = 0; // Шина 1 -> 2
+  let seg2Progress = 0; // Шина 2 -> 3
+
+  if (step === 0) {
+    seg0Progress = 60;
+  } else {
+    seg0Progress = 100;
+  }
+
+  if (step < 1) {
+    seg1Progress = 0;
+  } else if (step >= 5) {
+    seg1Progress = 100;
+  } else {
+    seg1Progress = Math.min(100, Math.round(((step - 0.5) / 4) * 100));
+  }
+
+  if (step < 5) {
+    seg2Progress = 0;
+  } else if (step >= 9) {
+    seg2Progress = 100;
+  } else {
+    seg2Progress = Math.min(100, Math.round(((step - 4.5) / 4) * 100));
+  }
+
   const progressRatio = Math.min(1, (step + 1) / totalSteps);
 
   const nodes = [
@@ -116,38 +138,95 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
-      <div className="w-full relative py-2">
-        {/* Соединительная базовая шина */}
-        <div className="absolute top-[26px] left-[12%] right-[12%] h-[2px] bg-slate-200 -z-0" />
-
-        {/* Активная заполняющаяся шина прогресса */}
-        <div
-          className="absolute top-[26px] left-[12%] h-[2px] bg-sky-500 -z-0 transition-all duration-300 ease-out"
-          style={{ width: `${progressRatio * 76}%` }}
-        />
-
-        {/* 4 узла топологии */}
-        <div className="flex items-center justify-between relative z-10 px-2">
-          {nodes.map((node) => {
+      <div className="w-full py-2">
+        {/* Ряд кубиков и межблочных шин в единой аппаратной цепи */}
+        <div className="flex items-center w-full px-1">
+          {nodes.map((node, idx) => {
             const Icon = node.icon;
             const isCurrent = node.id === currentNodeIndex;
             const isCompleted = node.active && !isCurrent;
+            const incomingFull =
+              node.id === 0
+                ? true
+                : [seg0Progress, seg1Progress, seg2Progress][node.id - 1] >= 100;
+            const outgoingActive =
+              node.id === 3
+                ? false
+                : [seg0Progress, seg1Progress, seg2Progress][node.id] > 0;
 
             return (
-              <div key={node.id} className="flex flex-col items-center gap-1.5 select-none">
-                <div
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                    isCurrent
-                      ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/40 scale-105 animate-pulse ring-2 ring-sky-400/50'
-                      : isCompleted
-                        ? 'bg-sky-600 text-white shadow-sm shadow-sky-600/20 scale-100'
-                        : 'bg-white border border-slate-200 text-slate-400 scale-95'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
+              <React.Fragment key={node.id}>
+                {/* Кубик-узел с точными контактными портами на гранях */}
+                <div className="relative shrink-0 flex items-center justify-center">
+                  {/* Левый порт-коннектор (вход в грань) */}
+                  {node.id > 0 && (
+                    <span
+                      className={`absolute -left-[2px] top-1/2 -translate-y-1/2 w-[3px] h-2 rounded-l-xs z-20 transition-colors duration-300 ${
+                        incomingFull ? 'bg-sky-500 shadow-sm shadow-sky-500/50' : 'bg-slate-300'
+                      }`}
+                    />
+                  )}
+
+                  {/* Правый порт-коннектор (выход из грани) */}
+                  {node.id < 3 && (
+                    <span
+                      className={`absolute -right-[2px] top-1/2 -translate-y-1/2 w-[3px] h-2 rounded-r-xs z-20 transition-colors duration-300 ${
+                        outgoingActive ? 'bg-sky-500 shadow-sm shadow-sky-500/50' : 'bg-slate-300'
+                      }`}
+                    />
+                  )}
+
+                  {/* Тело кубика с внутренней шиной коннектора */}
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden transition-all duration-300 ${
+                      isCurrent
+                        ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/40 scale-105 animate-pulse ring-2 ring-sky-400/50'
+                        : isCompleted
+                          ? 'bg-sky-600 text-white shadow-sm shadow-sky-600/20 scale-100'
+                          : 'bg-white border border-slate-200 text-slate-400 scale-95'
+                    }`}
+                  >
+                    {/* Внутренняя шина сквозного коннектора (видна внутри кубика) */}
+                    <div
+                      className={`absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] transition-all duration-300 pointer-events-none ${
+                        isCurrent
+                          ? 'bg-sky-200/90 shadow-[0_0_8px_rgba(56,189,248,0.9)]'
+                          : isCompleted
+                            ? 'bg-sky-300/50'
+                            : 'bg-slate-200/60'
+                      }`}
+                    />
+
+                    {/* Иконка поверх внутренней шины */}
+                    <Icon className="w-4 h-4 relative z-10" />
+                  </div>
                 </div>
+
+                {/* Сегмент шины между кубиками (встык от грани к грани) */}
+                {idx < nodes.length - 1 && (
+                  <div className="flex-1 h-[2px] bg-slate-200 relative overflow-hidden">
+                    <div
+                      className="h-full bg-sky-500 transition-all duration-300 ease-out"
+                      style={{
+                        width: `${[seg0Progress, seg1Progress, seg2Progress][idx]}%`,
+                      }}
+                    />
+                  </div>
+                )}
+              </React.Fragment>
+            );
+          })}
+        </div>
+
+        {/* Подписи узлов точно под кубиками */}
+        <div className="flex justify-between w-full mt-2 px-1">
+          {nodes.map((node) => {
+            const isCurrent = node.id === currentNodeIndex;
+            const isCompleted = node.active && !isCurrent;
+            return (
+              <div key={node.id} className="w-9 flex justify-center text-center">
                 <span
-                  className={`text-[10px] transition-colors ${
+                  className={`text-[10px] whitespace-nowrap transition-colors ${
                     isCurrent
                       ? 'text-sky-700 font-bold'
                       : isCompleted
