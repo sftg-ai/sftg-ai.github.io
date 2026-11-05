@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Check, Sparkles, Loader2, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2, Copy } from 'lucide-react';
+import { ArrowRight, Check, Sparkles, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2, Copy } from 'lucide-react';
 import { applyB24Prefill } from '../utils/b24Bridge';
+import { ProcessOscilloscope, TopologyCircuit } from './AnalyzerVisualizer';
 
 const ICON_MAP = {
   FileText,
@@ -37,6 +38,7 @@ export default function HeroScenarioAnalyzer() {
     email: false,
   });
   const [status, setStatus] = useState('idle'); // 'idle' | 'analyzing' | 'done' | 'error'
+  const [visualMode, setVisualMode] = useState('oscilloscope'); // 'oscilloscope' | 'topology'
   const [analysisStep, setAnalysisStep] = useState(0);
   const [scenarios, setScenarios] = useState([]);
   const [companyProfile, setCompanyProfile] = useState(null);
@@ -216,6 +218,7 @@ export default function HeroScenarioAnalyzer() {
   const handleRunAnalysis = async (e) => {
     e.preventDefault();
     setStatus('analyzing');
+    setVisualMode(Math.random() > 0.5 ? 'oscilloscope' : 'topology');
     setAnalysisStep(0);
     setInsufficientNotice(null);
     setErrorMessage(null);
@@ -526,17 +529,15 @@ ${wishSection}${scenariosText}`.trim();
 
             {/* Состояние: Выполняется анализ */}
             {status === 'analyzing' && (
-              <div className="py-8 px-4 flex flex-col items-center justify-center text-center gap-3">
-                <Loader2 className="w-8 h-8 text-sky-600 animate-spin" />
+              <div className="py-6 px-3 flex flex-col items-center justify-center text-center gap-3">
+                {visualMode === 'oscilloscope' ? (
+                  <ProcessOscilloscope step={analysisStep} totalSteps={ANALYSIS_STEPS.length} />
+                ) : (
+                  <TopologyCircuit step={analysisStep} totalSteps={ANALYSIS_STEPS.length} />
+                )}
                 <p className="text-sm font-bold text-slate-900 transition-all duration-300 min-h-[40px] flex items-center justify-center">
                   {ANALYSIS_STEPS[analysisStep]?.text || ANALYSIS_STEPS[analysisStep]}
                 </p>
-                <div className="w-56 h-1.5 bg-slate-100 rounded-full overflow-hidden mt-1">
-                  <div
-                    className="h-full bg-sky-600 transition-all duration-300 rounded-full"
-                    style={{ width: `${Math.min(100, ((analysisStep + 1) / ANALYSIS_STEPS.length) * 100)}%` }}
-                  />
-                </div>
               </div>
             )}
 
