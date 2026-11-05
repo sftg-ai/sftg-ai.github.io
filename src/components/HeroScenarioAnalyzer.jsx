@@ -76,7 +76,7 @@ export default function HeroScenarioAnalyzer() {
 
     const cleanScenariosBlock = scenariosBlock.replace(/УНП/g, 'реквизиты');
 
-    return `${header}\n\nРекомендованные решения:\n\n${cleanScenariosBlock}\n\nСсылка на интерактивный расчет: https://softgreat.by/#audit`;
+    return `${header}\n\nРекомендованные решения:\n\n${cleanScenariosBlock}\n\nСсылка на форму расчета: https://softgreat.by/#audit`;
   };
 
   const handleCopyReport = () => {
@@ -365,11 +365,10 @@ ${wishSection}${scenariosText}`.trim();
     <div id="hero-analyzer" className="w-full max-w-xl text-left relative">
       {/* 1. Кнопка по умолчанию в Hero с синхронным мягким сворачиванием */}
       <div
-        className={`grid transition-[grid-template-rows,opacity] duration-400 ease-in-out ${
-          isOpen
+        className={`grid transition-[grid-template-rows,opacity] duration-400 ease-in-out ${isOpen
             ? 'grid-rows-[0fr] opacity-0 pointer-events-none'
             : 'grid-rows-[1fr] opacity-100'
-        }`}
+          }`}
       >
         <div className="min-h-0 overflow-hidden pb-1">
           <button
@@ -378,8 +377,8 @@ ${wishSection}${scenariosText}`.trim();
           >
             {/* Пульсирующий индикатор в фирменном синем стиле */}
             <span className="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
-              <span 
-                className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" 
+              <span
+                className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"
                 style={{ animationDuration: '2.5s' }}
               />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500" />
@@ -393,15 +392,14 @@ ${wishSection}${scenariosText}`.trim();
 
       {/* 2. Раскрытая интерактивная карточка с плавной анимацией выезда */}
       <div
-        className={`grid transition-[grid-template-rows,opacity] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-          isOpen
+        className={`grid transition-[grid-template-rows,opacity] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${isOpen
             ? 'grid-rows-[1fr] opacity-100'
             : 'grid-rows-[0fr] opacity-0 pointer-events-none'
-        }`}
+          }`}
       >
         <div className="min-h-0 overflow-hidden py-1">
           <div className="p-5 sm:p-6 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl text-slate-900 transition-opacity duration-500">
-            
+
             {/* Шапка карточки */}
             <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
               <div>
@@ -430,8 +428,8 @@ ${wishSection}${scenariosText}`.trim();
                   {status === 'done'
                     ? 'Рекомендованные сценарии'
                     : status === 'error'
-                    ? (errorMessage?.title || 'Сервис пока недоступен')
-                    : 'Укажите сайт и текущие системы'}
+                      ? (errorMessage?.title || 'Сервис пока недоступен')
+                      : 'Укажите сайт и текущие системы'}
                 </h3>
               </div>
               <div className="flex items-center shrink-0">
@@ -634,7 +632,7 @@ ${wishSection}${scenariosText}`.trim();
                       onClick={handleScrollToForm}
                       className="w-full sm:flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <span>Внедрить эти сценарии (Перейти к заявке)</span>
+                      <span>Отправить подбор и получить расширенный аудит</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                     <button
