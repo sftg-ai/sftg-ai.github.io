@@ -528,7 +528,7 @@ ${wishSection}${scenariosText}`.trim();
                     type="button"
                     onClick={handleCopyReportForTelegram}
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-semibold transition-colors cursor-pointer shrink-0"
-                    title="Скопировать готовый отчет для пересылки в Telegram"
+                    title="Скопировать отчет"
                   >
                     {copiedReport ? (
                       <>
@@ -538,7 +538,7 @@ ${wishSection}${scenariosText}`.trim();
                     ) : (
                       <>
                         <Copy className="w-3.5 h-3.5" />
-                        <span>В Telegram</span>
+                        <span>Скопировать</span>
                       </>
                     )}
                   </button>
@@ -579,22 +579,22 @@ ${wishSection}${scenariosText}`.trim();
                   })}
                 </div>
 
-                {/* Кнопки действий: Скопировать для Telegram + Перейти к заявке */}
+                {/* Кнопки действий: Скопировать отчет + Перейти к заявке */}
                 <div className="pt-2 space-y-2">
                   <button
                     type="button"
                     onClick={handleCopyReportForTelegram}
-                    className="w-full py-2.5 px-3 rounded-xl border border-sky-200 bg-sky-50/60 hover:bg-sky-100/80 text-sky-800 text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
+                    className="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
                   >
                     {copiedReport ? (
                       <>
                         <Check className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-emerald-700 font-bold">Отчет скопирован для отправки в Telegram!</span>
+                        <span className="text-emerald-700 font-bold">Отчет скопирован в буфер обмена</span>
                       </>
                     ) : (
                       <>
-                        <Copy className="w-3.5 h-3.5 text-sky-600" />
-                        <span>Скопировать отчет для Telegram</span>
+                        <Copy className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Скопировать отчет</span>
                       </>
                     )}
                   </button>
