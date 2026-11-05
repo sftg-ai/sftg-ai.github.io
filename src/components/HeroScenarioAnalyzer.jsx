@@ -45,8 +45,8 @@ export default function HeroScenarioAnalyzer() {
 
   const stepIntervalRef = useRef(null);
 
-  // Форматирование структурированного отчета с Markdown для Telegram
-  const generateTelegramMarkdown = () => {
+  // Форматирование структурированного подбора для копирования (строгий B2B)
+  const generateReportText = () => {
     const company = companyProfile?.display_name || companyInput.trim() || 'Компания';
     const industry = companyProfile?.industry;
 
@@ -55,30 +55,27 @@ export default function HeroScenarioAnalyzer() {
     if (systems.bitrix24) sysNames.push('Битрикс24');
     if (systems.email) sysNames.push('Почта / Telegram');
 
-    const numberEmojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
-
     const scenariosBlock = scenarios
       .map((sc, i) => {
-        const num = numberEmojis[i] || `${i + 1}.`;
         const system = sc.system ? `[${sc.system}] ` : '';
-        const benefit = sc.benefit ? `\n📈 *Эффект:* ${sc.benefit}` : '';
-        return `${num} *${system}${sc.title}*\n${sc.desc}${benefit}`;
+        const benefit = sc.benefit ? `\nОжидаемый эффект: ${sc.benefit}` : '';
+        return `${i + 1}. ${system}${sc.title}\n${sc.desc}${benefit}`;
       })
       .join('\n\n');
 
     const header = [
-      `📊 *Сценарии автоматизации SoftGreat AI*`,
-      `🏢 *Компания:* ${company}`,
-      industry ? `🏭 *Отрасль:* ${industry}` : null,
-      sysNames.length > 0 ? `⚙️ *Используемые системы:* ${sysNames.join(', ')}` : null,
-      userWish.trim() ? `💬 *Пожелания:* ${userWish.trim()}` : null,
+      `Экспресс-подбор сценариев автоматизации - SoftGreat AI`,
+      `Компания: ${company}`,
+      industry ? `Отрасль: ${industry}` : null,
+      sysNames.length > 0 ? `Текущие системы: ${sysNames.join(', ')}` : null,
+      userWish.trim() ? `Пожелания: ${userWish.trim()}` : null,
     ].filter(Boolean).join('\n');
 
-    return `${header}\n\n🚀 *Рекомендованные решения:*\n\n${scenariosBlock}\n\n🔗 _Сформировано онлайн: softgreat.by/#audit_`;
+    return `${header}\n\nРекомендованные решения:\n\n${scenariosBlock}\n\nСсылка на интерактивный расчет: https://softgreat.by/#audit`;
   };
 
-  const handleCopyReportForTelegram = () => {
-    const text = generateTelegramMarkdown();
+  const handleCopyReport = () => {
+    const text = generateReportText();
     if (typeof window !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(text);
     }
@@ -525,7 +522,7 @@ ${wishSection}${scenariosText}`.trim();
                   </div>
                   <button
                     type="button"
-                    onClick={handleCopyReportForTelegram}
+                    onClick={handleCopyReport}
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-semibold transition-colors cursor-pointer shrink-0"
                     title="Скопировать подбор"
                   >
@@ -582,7 +579,7 @@ ${wishSection}${scenariosText}`.trim();
                 <div className="pt-2 space-y-2">
                   <button
                     type="button"
-                    onClick={handleCopyReportForTelegram}
+                    onClick={handleCopyReport}
                     className="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
                   >
                     {copiedReport ? (
