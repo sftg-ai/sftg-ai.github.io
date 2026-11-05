@@ -254,7 +254,7 @@ ${wishSection}${scenariosText}`.trim();
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center justify-center gap-2 bg-white text-slate-900 hover:bg-sky-50 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
         >
-          <span>Экспресс-подбор автоматизации</span>
+          <span>Экспресс-подбор автоматизации онлайн</span>
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600" />
         </button>
       </div>
