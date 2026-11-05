@@ -32,6 +32,46 @@ const ANALYSIS_STEPS = [
   { text: 'Финализация персонального подбора решений...', duration: 1800 }
 ];
 
+/**
+ * Форматирует структурированный комментарий для Битрикс24
+ * с четким визуальным разделением блоков и двойными отступами между сценариями.
+ */
+function buildB24Comment({ profile, companyInput = '', systems, userWish = '', scenarios = [] }) {
+  const sysNames = [];
+  if (systems?.oneC) sysNames.push('1С');
+  if (systems?.bitrix24) sysNames.push('Битрикс24');
+  if (systems?.email) sysNames.push('Почта/Telegram');
+
+  const compName = profile?.display_name || companyInput.trim() || 'Указана на сайте';
+  const domainPart = profile?.domain ? ` (${profile.domain})` : '';
+  const compLine = `Компания / сайт: ${compName}${domainPart}`;
+  const indLine = `Отрасль: ${profile?.industry || 'Уточняется'}`;
+  const sysLine = `Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}`;
+
+  const scenariosBlock = (scenarios || [])
+    .map((sc, i) => {
+      const benefitPart = sc.benefit ? ` — ${sc.benefit}` : '';
+      return `${i + 1}. ${sc.system}: ${sc.title}${benefitPart}`;
+    })
+    .join('\n\n');
+
+  const parts = [
+    '[Экспресс-анализ SoftGreat AI]',
+    `${compLine}\n${indLine}`,
+    sysLine,
+  ];
+
+  if (userWish && userWish.trim()) {
+    parts.push(`Пожелания / приоритетная задача: ${userWish.trim()}`);
+  }
+
+  if (scenariosBlock) {
+    parts.push(`Подобранные сценарии автоматизации:\n\n${scenariosBlock}`);
+  }
+
+  return parts.join('\n\n');
+}
+
 export default function HeroScenarioAnalyzer() {
   const [isOpen, setIsOpen] = useState(false);
   const [companyInput, setCompanyInput] = useState('');
@@ -291,12 +331,14 @@ export default function HeroScenarioAnalyzer() {
 
         setScenarios(data.scenarios);
         setCompanyProfile(data.company_profile || null);
-        const rawComment = data.formatted_b24_comment || '';
-        const cleanComment = rawComment
-          .replace(/^УНП:.*$/gim, '')
-          .replace(/Дополнительный комментарий:\s*$/gi, '')
-          .replace(/\n{3,}/g, '\n\n')
-          .trim();
+
+        const cleanComment = buildB24Comment({
+          profile: data.company_profile,
+          companyInput,
+          systems,
+          userWish,
+          scenarios: data.scenarios,
+        });
         setFormattedComment(cleanComment);
 
         // Показываем 100% и выдерживаем микро-паузу перед открытием карточки с вариантами
@@ -336,33 +378,14 @@ export default function HeroScenarioAnalyzer() {
   };
 
   const handleScrollToForm = () => {
-    const sysNames = [];
-    if (systems.oneC) sysNames.push('1С');
-    if (systems.bitrix24) sysNames.push('Битрикс24');
-    if (systems.email) sysNames.push('Почта/Telegram');
-
-    // Если бэкенд отдал готовый комментарий — используем его
-    let comment = formattedComment;
-    if (comment) {
-      comment = comment
-        .replace(/^УНП:.*$/gim, '')
-        .replace(/Дополнительный комментарий:\s*$/gi, '')
-        .replace(/\n{3,}/g, '\n\n')
-        .trim();
-    } else {
-      const scenariosText = scenarios.length > 0
-        ? `\nПодобранные сценарии автоматизации:\n` + scenarios.map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`).join('\n')
-        : '';
-
-      const wishText = userWish.trim();
-      const wishSection = wishText
-        ? `Пожелания и комментарии: ${wishText}\n`
-        : '';
-
-      comment = `Сайт / название: ${companyProfile?.display_name || companyInput.trim() || 'Указана на сайте'}
-Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}
-${wishSection}${scenariosText}`.trim();
-    }
+    // Формируем чистый эталонный комментарий с аккуратными двойными отступами
+    const comment = buildB24Comment({
+      profile: companyProfile,
+      companyInput,
+      systems,
+      userWish,
+      scenarios,
+    });
 
     applyB24Prefill({
       company: companyProfile?.display_name || companyInput.trim(),
