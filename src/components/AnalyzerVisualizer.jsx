@@ -34,32 +34,6 @@ const FLUID_MILESTONES = {
   12: 611.5,  // удерживаем 95% у основания завершенной гистограммы
 };
 
-// Вспомогательная функция: силуэт только активной категории для локальной пульсации
-// Шаг 0..2: Здание (Сайт)
-// Шаг 3..5: Документ (Реестры)
-// Шаг 6..8: Шестерня (1С / CRM)
-// Шаг 9: Столбец 1 гистограммы (80%)
-// Шаг 10: Столбцы 1 и 2 гистограммы (85%)
-// Шаг 11..12: Все 3 столбца гистограммы (90% - 95%)
-function getActiveFigurePath(step) {
-  if (step < 3) {
-    return "M 40 30 L 40 18 L 60 8 L 63 8 L 63 12 L 65 10 L 80 18 L 80 30";
-  }
-  if (step < 6) {
-    return "M 125 30 L 125 10 L 155 10 L 165 20 L 155 20 L 155 10 L 165 20 L 165 30";
-  }
-  if (step < 9) {
-    return "M 215 30 L 215 20 L 223 20 L 223 30 L 232 30 L 232 12 L 242 12 L 242 30 L 251 30 L 251 20 L 259 20 L 259 30";
-  }
-  if (step === 9) {
-    return "M 310 30 L 310 22 L 316 22 L 316 30";
-  }
-  if (step === 10) {
-    return "M 310 30 L 310 22 L 316 22 L 316 30 L 321 30 L 321 14 L 328 14 L 328 30";
-  }
-  return "M 310 30 L 310 22 L 316 22 L 316 30 L 321 30 L 321 14 L 328 14 L 328 30 L 333 30 L 333 8 L 342 8 L 342 30";
-}
-
 export function ProcessOscilloscope({ step = 0, isComplete = false }) {
   const currentStage = Math.min(3, Math.floor(step / 3));
   const isFastPhase = currentStage >= 1;
@@ -89,7 +63,6 @@ export function ProcessOscilloscope({ step = 0, isComplete = false }) {
     ? TOTAL_PATH_LEN
     : (FLUID_MILESTONES[step] ?? (step >= 12 ? 611.5 : 40));
   const strokeOffset = Math.max(0, TOTAL_PATH_LEN - currentLen);
-  const activeFigurePath = getActiveFigurePath(step);
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
@@ -125,8 +98,25 @@ export function ProcessOscilloscope({ step = 0, isComplete = false }) {
             strokeLinejoin="round"
           />
 
-          {/* Основная непрерывная струя — ни одного разрыва, 100% единый поток от начала до конца.
-              Каналы спокойные и твердые, не пульсируют и не мигают. */}
+          {/* Мягкий неоновый ореол струи (свечение единого потока) */}
+          <path
+            d={MNEMONIC_CIRCUIT_PATH}
+            pathLength={TOTAL_PATH_LEN}
+            fill="none"
+            stroke="#38BDF8"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.35"
+            filter="url(#circuit-glow)"
+            style={{
+              strokeDasharray: TOTAL_PATH_LEN,
+              strokeDashoffset: strokeOffset,
+              transition: 'stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          />
+
+          {/* Основная непрерывная струя — ни одного разрыва, 100% единый поток от начала до конца */}
           <path
             d={MNEMONIC_CIRCUIT_PATH}
             pathLength={TOTAL_PATH_LEN}
@@ -135,40 +125,13 @@ export function ProcessOscilloscope({ step = 0, isComplete = false }) {
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className={!isComplete ? "animate-pulse" : ""}
             style={{
               strokeDasharray: TOTAL_PATH_LEN,
               strokeDashoffset: strokeOffset,
               transition: 'stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           />
-
-          {/* Пульсирующий жирный акцент ТОЛЬКО на активной фигуре категории (соединительные каналы остаются спокойными) */}
-          {!isComplete && activeFigurePath && (
-            <>
-              {/* Мягкий ореол вокруг активной категории */}
-              <path
-                d={activeFigurePath}
-                fill="none"
-                stroke="#38BDF8"
-                strokeWidth="5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                opacity="0.45"
-                filter="url(#circuit-glow)"
-                className="animate-pulse pointer-events-none"
-              />
-              {/* Плотный жирный контур активной категории */}
-              <path
-                d={activeFigurePath}
-                fill="none"
-                stroke="#0284C7"
-                strokeWidth="2.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="animate-pulse pointer-events-none"
-              />
-            </>
-          )}
         </svg>
       </div>
 
