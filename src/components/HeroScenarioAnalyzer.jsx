@@ -7,9 +7,9 @@ export default function HeroScenarioAnalyzer() {
   const [companyInput, setCompanyInput] = useState('');
   const [userWish, setUserWish] = useState('');
   const [systems, setSystems] = useState({
-    oneC: true,
-    bitrix24: true,
-    email: true,
+    oneC: false,
+    bitrix24: false,
+    email: false,
   });
   const [status, setStatus] = useState('idle'); // 'idle' | 'analyzing' | 'done'
   const [analysisStep, setAnalysisStep] = useState(0);
@@ -50,6 +50,24 @@ export default function HeroScenarioAnalyzer() {
         title: 'Умная маршрутизация документов и карточки контрагентов',
         desc: 'Извлечение реквизитов (УНП, IBAN, адрес) из карточек контрагентов в мессенджерах или письмах с автозаполнением договора и проверкой по реестрам.',
         benefit: 'Исключение опечаток в договорах и счетах',
+      });
+    }
+
+    // Если ни одна система не выбрана, показываем универсальный пакет для бизнеса
+    if (list.length === 0) {
+      list.push({
+        icon: FileText,
+        system: 'Документооборот',
+        title: 'Авторазбор входящей первички и сопоставление номенклатуры',
+        desc: 'Автоматическое считывание PDF, сканов и таблиц, извлечение строк спецификаций и перенос в учетную базу без ручной перебивки.',
+        benefit: 'Исключение ручного ввода и ошибок в артикулах',
+      });
+      list.push({
+        icon: Layers,
+        system: 'Продажи и клиентский сервис',
+        title: 'Мгновенная обработка входящих запросов и авторасчет',
+        desc: 'Система анализирует запрос из почты или мессенджера, проверяет остатки и прайс-листы и подготавливает черновик ответа менеджеру.',
+        benefit: 'Ответ клиенту за 1 минуту в любое время',
       });
     }
 
@@ -154,6 +172,11 @@ ${scenariosText}
     setStatus('idle');
     setCompanyInput('');
     setUserWish('');
+    setSystems({
+      oneC: false,
+      bitrix24: false,
+      email: false,
+    });
   };
 
   return (
