@@ -73,7 +73,7 @@ export default function HeroScenarioAnalyzer() {
       .join('\n\n');
 
     const header = [
-      `Экспресс-подбор сценариев автоматизации - SoftGreat AI`,
+      `Подбор кейсов автоматизации - SoftGreat AI`,
       `Компания: ${company}`,
       industry ? `Отрасль: ${industry}` : null,
       sysNames.length > 0 ? `Текущие системы: ${sysNames.join(', ')}` : null,
@@ -404,7 +404,7 @@ ${wishSection}${scenariosText}`.trim();
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500" />
             </span>
 
-            <span>Экспресс-подбор автоматизации за 1 минуту</span>
+            <span>Подбор кейсов автоматизации на сайте за 1 минуту</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600 shrink-0" />
           </button>
         </div>
@@ -425,7 +425,7 @@ ${wishSection}${scenariosText}`.trim();
               <div>
                 <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 uppercase tracking-wider mb-1">
                   <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                  <span>Экспресс-подбор автоматизации за 1 минуту</span>
+                  <span>Подбор кейсов автоматизации</span>
                   <button
                     type="button"
                     onClick={handleCopyDirectLink}
