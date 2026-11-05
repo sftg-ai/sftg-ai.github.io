@@ -143,7 +143,7 @@ export default function HeroScenarioAnalyzer() {
 
     const wishText = userWish.trim();
     const wishSection = wishText
-      ? `Пожелания и комментарий клиента: ${wishText}\n\n`
+      ? `Пожелания и комментарии: ${wishText}\n\n`
       : '';
 
     const comment = `[Экспресс-анализ SoftGreat AI]
