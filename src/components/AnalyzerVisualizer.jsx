@@ -112,7 +112,6 @@ export function ProcessOscilloscope({ step = 0, isComplete = false }) {
           {/* Прямые участки-мостики — простреливают быстро и сразу к следующему блоку */}
           {BRIDGES.map((bridge) => {
             const isActive = isComplete || currentStage >= bridge.activeStage;
-            const isCurrentBridge = !isComplete && currentStage === bridge.activeStage && stepInStage === 0;
             const len = bridge.x2 - bridge.x1;
             return (
               <line
@@ -124,8 +123,6 @@ export function ProcessOscilloscope({ step = 0, isComplete = false }) {
                 stroke="#0284C7"
                 strokeWidth="2.5"
                 strokeLinecap="round"
-                filter={isCurrentBridge ? "url(#glow)" : undefined}
-                className={isCurrentBridge ? "animate-pulse" : ""}
                 style={{
                   strokeDasharray: len,
                   strokeDashoffset: isActive ? 0 : len,
