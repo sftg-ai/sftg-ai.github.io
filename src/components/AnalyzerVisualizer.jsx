@@ -47,19 +47,33 @@ const BRIDGES = [
 export function ProcessOscilloscope({ step = 0, isComplete = false }) {
   const currentStage = Math.min(3, Math.floor(step / 3));
   const isFastPhase = currentStage >= 1;
-  // До завершения бэкенд-запроса держим максимум 95%. Ровно 100% только при подтверждении готовности!
-  const progressPercent = isComplete
-    ? 100
-    : currentStage === 3
-      ? 95
-      : (currentStage + 1) * 25;
+
+  // Динамический расчет процентов: 25% -> 50% -> 75% -> 80% -> 85% -> 90% -> 95% (держим до готовности) -> 100%
+  let progressPercent;
+  if (isComplete) {
+    progressPercent = 100;
+  } else if (step >= 12) {
+    progressPercent = 95;
+  } else if (step === 11) {
+    progressPercent = 90;
+  } else if (step === 10) {
+    progressPercent = 85;
+  } else if (step === 9) {
+    progressPercent = 80;
+  } else if (step >= 6) {
+    progressPercent = 75;
+  } else if (step >= 3) {
+    progressPercent = 50;
+  } else {
+    progressPercent = 25;
+  }
 
   // Внутри каждого этапа фигура прорисовывается строго от 0:
   // Шаг 0: линия только подошла к основанию фигуры (счет от 0, фигура еще не нарисована, линия пульсирует)
   // Шаг 1: фигура прорисовывается наполовину (~55%) и пульсирует
   // Шаг 2: фигура завершается полностью (100%)
   const stepInStage = step % 3;
-  const subProgress = isComplete ? 1.0 : stepInStage === 0 ? 0.0 : stepInStage === 1 ? 0.55 : 1.0;
+  const subProgress = isComplete ? 1.0 : step >= 11 ? 0.95 : stepInStage === 0 ? 0.0 : stepInStage === 1 ? 0.55 : 0.9;
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
@@ -188,12 +202,25 @@ export function TopologyCircuit({ step = 0, totalSteps = 12, isComplete = false 
   const seg1Progress = (isComplete || step >= 6) ? 100 : 0;
   const seg2Progress = (isComplete || step >= 9) ? 100 : 0;
 
-  // Округление процентов: 25% -> 50% -> 75% -> 95% (пока идет вычисление). Ровно 100% только при isComplete!
-  const nodeProgressPercent = isComplete
-    ? 100
-    : currentNodeIndex === 3
-      ? 95
-      : (currentNodeIndex + 1) * 25;
+  // Динамический расчет процентов: 25% -> 50% -> 75% -> 80% -> 85% -> 90% -> 95% (держим до готовности) -> 100%
+  let nodeProgressPercent;
+  if (isComplete) {
+    nodeProgressPercent = 100;
+  } else if (step >= 12) {
+    nodeProgressPercent = 95;
+  } else if (step === 11) {
+    nodeProgressPercent = 90;
+  } else if (step === 10) {
+    nodeProgressPercent = 85;
+  } else if (step === 9) {
+    nodeProgressPercent = 80;
+  } else if (step >= 6) {
+    nodeProgressPercent = 75;
+  } else if (step >= 3) {
+    nodeProgressPercent = 50;
+  } else {
+    nodeProgressPercent = 25;
+  }
 
   const nodes = [
     { id: 0, label: 'Сайт', icon: Globe, active: isNode0Active },

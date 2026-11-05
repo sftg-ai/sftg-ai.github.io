@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Check, Sparkles, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2, Copy, HelpCircle } from 'lucide-react';
+import { ArrowRight, Check, Sparkles, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2, Copy } from 'lucide-react';
 import { applyB24Prefill } from '../utils/b24Bridge';
 import { ProcessOscilloscope, TopologyCircuit } from './AnalyzerVisualizer';
 
@@ -242,6 +242,11 @@ export default function HeroScenarioAnalyzer() {
           scheduleNextStep,
           ANALYSIS_STEPS[currentStep].duration
         );
+      } else if (currentStep === ANALYSIS_STEPS.length - 1) {
+        // После 11-го шага переходим на шаг 12 (95%), где статус будет терпеливо ждать ответа сервера
+        stepIntervalRef.current = setTimeout(() => {
+          setAnalysisStep(12);
+        }, ANALYSIS_STEPS[currentStep].duration);
       }
     };
     stepIntervalRef.current = setTimeout(
@@ -393,11 +398,10 @@ ${wishSection}${scenariosText}`.trim();
           }`}
       >
         <div className="min-h-0 overflow-hidden pb-1">
-          {/* Вопрос-подводка перед кнопкой подбора */}
-          <div className="flex items-start gap-1.5 text-xs sm:text-sm text-sky-100/90 font-medium mb-3 select-none">
-            <HelpCircle className="w-3.5 h-3.5 text-sky-200/80 shrink-0 mt-[3px]" />
-            <span>Не знаете, что и как можно автоматизировать? Проведите экспресс-аудит вашего бизнеса.</span>
-          </div>
+          {/* Вопрос-подводка перед кнопкой подбора (чистая типографика без иконки) */}
+          <p className="text-xs sm:text-sm text-sky-100/90 font-medium mb-3 select-none">
+            Не знаете, что и как можно автоматизировать? Проведите экспресс-аудит вашего бизнеса.
+          </p>
 
           <button
             onClick={handleOpen}
@@ -563,7 +567,9 @@ ${wishSection}${scenariosText}`.trim();
                 <p className="text-sm font-bold text-slate-900 transition-all duration-300 min-h-[40px] flex items-center justify-center">
                   {isAnalysisComplete
                     ? 'Анализ завершен, открываем подбор решений...'
-                    : (ANALYSIS_STEPS[analysisStep]?.text || ANALYSIS_STEPS[analysisStep])}
+                    : analysisStep >= 12
+                      ? 'Формирование финального подбора и проверка сценариев...'
+                      : (ANALYSIS_STEPS[analysisStep]?.text || ANALYSIS_STEPS[analysisStep])}
                 </p>
               </div>
             )}
