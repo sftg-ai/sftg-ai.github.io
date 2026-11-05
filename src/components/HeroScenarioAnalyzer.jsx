@@ -33,12 +33,13 @@ export default function HeroScenarioAnalyzer() {
     bitrix24: false,
     email: false,
   });
-  const [status, setStatus] = useState('idle'); // 'idle' | 'analyzing' | 'done'
+  const [status, setStatus] = useState('idle'); // 'idle' | 'analyzing' | 'done' | 'error'
   const [analysisStep, setAnalysisStep] = useState(0);
   const [scenarios, setScenarios] = useState([]);
   const [companyProfile, setCompanyProfile] = useState(null);
   const [formattedComment, setFormattedComment] = useState('');
   const [insufficientNotice, setInsufficientNotice] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const stepIntervalRef = useRef(null);
 
@@ -123,6 +124,7 @@ export default function HeroScenarioAnalyzer() {
     setStatus('analyzing');
     setAnalysisStep(0);
     setInsufficientNotice(null);
+    setErrorMessage(null);
 
     // Плавный цикл смены технологических фаз
     if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
@@ -131,49 +133,59 @@ export default function HeroScenarioAnalyzer() {
     }, 450);
 
     const endpoint = import.meta.env.VITE_AI_ANALYSIS_ENDPOINT || 'https://audit.apps.aipush.dev/api/v1/analyze';
-    if (endpoint) {
-      try {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            company: companyInput,
-            systems,
-            userWish
-          }),
-        });
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          company: companyInput,
+          systems,
+          userWish,
+        }),
+      });
 
-        if (response.ok) {
-          const data = await response.json();
-          if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
-
-          if (data.status === 'insufficient_data') {
-            setInsufficientNotice(data.message || 'Не удалось найти сайт компании. Показаны базовые сценарии.');
-          }
-
-          setScenarios(data.scenarios && data.scenarios.length > 0 ? data.scenarios : generateLocalScenarios(companyInput, systems));
-          setCompanyProfile(data.company_profile || null);
-          setFormattedComment(data.formatted_b24_comment || '');
-          setStatus('done');
-          return;
-        } else if (response.status === 429) {
-          if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
-          setInsufficientNotice('Превышен лимит запросов для вашего IP. Пожалуйста, подождите 1 минуту или перейдите к заявке.');
-          setScenarios(generateLocalScenarios(companyInput, systems));
-          setStatus('done');
-          return;
-        }
-      } catch (err) {
-        // Fallback на локальный генератор
-      }
-    }
-
-    // Локальная генерация при отсутствии сети
-    setTimeout(() => {
       if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
-      setScenarios(generateLocalScenarios(companyInput, systems));
-      setStatus('done');
-    }, 1800);
+
+      if (response.ok) {
+        const data = await response.json();
+
+        if (data.status === 'insufficient_data') {
+          setInsufficientNotice(data.message || 'Не удалось найти сайт компании. Показаны базовые сценарии.');
+        }
+
+        setScenarios(data.scenarios && data.scenarios.length > 0 ? data.scenarios : []);
+        setCompanyProfile(data.company_profile || null);
+        setFormattedComment(data.formatted_b24_comment || '');
+        setStatus('done');
+        return;
+      }
+
+      if (response.status === 429) {
+        setErrorMessage({
+          title: 'Превышен лимит запросов',
+          description: 'Вы исчерпали лимит запросов для экспресс-подбора. Пожалуйста, подождите 1 минуту или отправьте заявку на аудит — мы свяжемся с вами напрямую.',
+          type: 'rate_limit',
+        });
+        setStatus('error');
+        return;
+      }
+
+      // 500, 502, 503 и прочие серверные сбои
+      setErrorMessage({
+        title: 'Сервис пока недоступен',
+        description: 'Сервис онлайн-анализа временно недоступен. Вы можете оставить заявку — наш ведущий архитектор изучит ваш бизнес и подготовит персональный разбор до звонка.',
+        type: 'service_unavailable',
+      });
+      setStatus('error');
+    } catch (err) {
+      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+      setErrorMessage({
+        title: 'Сервис пока недоступен',
+        description: 'Сервис онлайн-анализа временно недоступен. Вы можете оставить заявку — наш ведущий архитектор изучит ваш бизнес и подготовит персональный разбор до звонка.',
+        type: 'network_error',
+      });
+      setStatus('error');
+    }
   };
 
   const handleScrollToForm = () => {
@@ -185,19 +197,18 @@ export default function HeroScenarioAnalyzer() {
     // Если бэкенд отдал готовый комментарий — используем его
     let comment = formattedComment;
     if (!comment) {
-      const scenariosText = scenarios
-        .map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`)
-        .join('\n');
+      const scenariosText = scenarios.length > 0
+        ? `\nПодобранные сценарии автоматизации:\n` + scenarios.map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`).join('\n')
+        : '';
 
       const wishText = userWish.trim();
       const wishSection = wishText
-        ? `Пожелания и комментарии: ${wishText}\n\n`
+        ? `Пожелания и комментарии: ${wishText}\n`
         : '';
 
       comment = `Сайт / сфера бизнеса: ${companyProfile?.display_name || companyInput.trim() || 'Указана на сайте'}
 Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}
-${wishSection}Подобранные сценарии автоматизации:
-${scenariosText}`;
+${wishSection}${scenariosText}`.trim();
     }
 
     applyB24Prefill({
@@ -220,6 +231,8 @@ ${scenariosText}`;
     setCompanyProfile(null);
     setFormattedComment('');
     setInsufficientNotice(null);
+    setErrorMessage(null);
+    setScenarios([]);
     setSystems({
       oneC: false,
       bitrix24: false,
@@ -265,7 +278,11 @@ ${scenariosText}`;
                   <span>Экспресс-подбор автоматизации</span>
                 </div>
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                  {status === 'done' ? 'Рекомендованные сценарии' : 'Укажите сайт и текущие системы'}
+                  {status === 'done'
+                    ? 'Рекомендованные сценарии'
+                    : status === 'error'
+                    ? (errorMessage?.title || 'Сервис пока недоступен')
+                    : 'Укажите сайт и текущие системы'}
                 </h3>
               </div>
               <button
@@ -436,6 +453,45 @@ ${scenariosText}`;
                     title="Рассчитать заново"
                   >
                     <RefreshCw className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Состояние: Ошибка или лимит */}
+            {status === 'error' && (
+              <div className="space-y-4 py-2">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-left">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-lg bg-amber-100 text-amber-700 shrink-0 mt-0.5">
+                      <AlertCircle className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900 mb-1">
+                        {errorMessage?.title || 'Сервис пока недоступен'}
+                      </h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {errorMessage?.description || 'Не удалось выполнить автоматический анализ. Вы можете оставить заявку — наш ведущий архитектор изучит ваш бизнес и подготовит персональный разбор до звонка.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row items-center gap-2">
+                  <button
+                    onClick={handleScrollToForm}
+                    className="w-full sm:flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <span>Оставить заявку на персональный аудит</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleReset}
+                    className="w-full sm:w-auto py-3 px-4 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    title="Попробовать снова"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    <span>Попробовать снова</span>
                   </button>
                 </div>
               </div>
