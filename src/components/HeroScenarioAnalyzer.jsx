@@ -443,7 +443,7 @@ ${wishSection}${scenariosText}`.trim();
                     ? 'Рекомендованные сценарии'
                     : status === 'error'
                       ? (errorMessage?.title || 'Сервис пока недоступен')
-                      : 'Укажите сайт и текущие системы'}
+                      : 'Укажите сайт и системы'}
                 </h3>
               </div>
               <div className="flex items-center shrink-0">
