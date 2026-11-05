@@ -375,8 +375,25 @@ ${wishSection}${scenariosText}`.trim();
             <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
               <div>
                 <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 uppercase tracking-wider mb-1">
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Sparkles className="w-3.5 h-3.5 shrink-0" />
                   <span>Экспресс-подбор автоматизации</span>
+                  <button
+                    type="button"
+                    onClick={handleCopyDirectLink}
+                    className="p-1 rounded-md text-slate-400 hover:text-sky-600 hover:bg-sky-50 transition-colors cursor-pointer inline-flex items-center"
+                    title={copiedLink ? "Прямая ссылка скопирована в буфер!" : "Скопировать прямую ссылку на эту форму"}
+                  >
+                    {copiedLink ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    ) : (
+                      <Link2 className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                  {copiedLink && (
+                    <span className="text-[11px] font-semibold text-emerald-600 normal-case tracking-normal">
+                      ссылка скопирована
+                    </span>
+                  )}
                 </div>
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
                   {status === 'done'
@@ -386,25 +403,7 @@ ${wishSection}${scenariosText}`.trim();
                     : 'Укажите сайт и текущие системы'}
                 </h3>
               </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={handleCopyDirectLink}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-xs font-semibold transition-all cursor-pointer"
-                  title="Скопировать прямую ссылку на эту форму"
-                >
-                  {copiedLink ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-700">Скопировано!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Link2 className="w-3.5 h-3.5 text-sky-600" />
-                      <span className="hidden sm:inline">Ссылка</span>
-                    </>
-                  )}
-                </button>
+              <div className="flex items-center shrink-0">
                 <button
                   onClick={handleClose}
                   className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
@@ -528,7 +527,7 @@ ${wishSection}${scenariosText}`.trim();
                     type="button"
                     onClick={handleCopyReportForTelegram}
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-semibold transition-colors cursor-pointer shrink-0"
-                    title="Скопировать отчет"
+                    title="Скопировать подбор"
                   >
                     {copiedReport ? (
                       <>
@@ -538,7 +537,7 @@ ${wishSection}${scenariosText}`.trim();
                     ) : (
                       <>
                         <Copy className="w-3.5 h-3.5" />
-                        <span>Скопировать</span>
+                        <span>Скопировать подбор</span>
                       </>
                     )}
                   </button>
@@ -579,7 +578,7 @@ ${wishSection}${scenariosText}`.trim();
                   })}
                 </div>
 
-                {/* Кнопки действий: Скопировать отчет + Перейти к заявке */}
+                {/* Кнопки действий: Скопировать подбор + Перейти к заявке */}
                 <div className="pt-2 space-y-2">
                   <button
                     type="button"
@@ -589,12 +588,12 @@ ${wishSection}${scenariosText}`.trim();
                     {copiedReport ? (
                       <>
                         <Check className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-emerald-700 font-bold">Отчет скопирован в буфер обмена</span>
+                        <span className="text-emerald-700 font-bold">Подбор скопирован в буфер обмена</span>
                       </>
                     ) : (
                       <>
                         <Copy className="w-3.5 h-3.5 text-slate-500" />
-                        <span>Скопировать отчет</span>
+                        <span>Скопировать подбор</span>
                       </>
                     )}
                   </button>
