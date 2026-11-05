@@ -3,15 +3,55 @@ import { Globe, Database, Layers, BarChart3 } from 'lucide-react';
 
 /**
  * Режим 1: Осциллограф процессов (Mnemonic Continuous Circuit)
- * Непрерывная контурная линия, вырисовывающая слева направо 4 узнаваемых силуэта:
- * [Здание компании] ➔ [Документ накладной] ➔ [Шестерня 1С/CRM] ➔ [Анализ и генерация отчёта]
+ * Быстрые прямые прострелы между фигурами и пульсация активного силуэта
  */
 const MNEMONIC_CIRCUIT_PATH =
-  "M 0 30 L 30 30 L 40 30 L 40 18 L 60 8 L 63 8 L 63 12 L 65 10 L 80 18 L 80 30 L 115 30 L 125 30 L 125 10 L 155 10 L 165 20 L 155 20 L 155 10 L 165 20 L 165 30 L 205 30 L 215 30 L 215 20 L 223 20 L 223 30 L 232 30 L 232 12 L 242 12 L 242 30 L 251 30 L 251 20 L 259 20 L 259 30 L 295 30 L 305 30 L 310 30 L 310 22 L 316 22 L 316 30 L 321 30 L 321 14 L 328 14 L 328 30 L 333 30 L 333 8 L 342 8 L 342 30 L 348 30 L 360 30";
+  "M 0 30 L 40 30 L 40 18 L 60 8 L 63 8 L 63 12 L 65 10 L 80 18 L 80 30 L 125 30 L 125 10 L 155 10 L 165 20 L 155 20 L 155 10 L 165 20 L 165 30 L 215 30 L 215 20 L 223 20 L 223 30 L 232 30 L 232 12 L 242 12 L 242 30 L 251 30 L 251 20 L 259 20 L 259 30 L 310 30 L 310 22 L 316 22 L 316 30 L 321 30 L 321 14 L 328 14 L 328 30 L 333 30 L 333 8 L 342 8 L 342 30 L 360 30";
 
-export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
-  const isFastPhase = step >= 3;
-  const progressRatio = Math.min(1, (step + 1) / totalSteps);
+const FIGURES = [
+  // 0: Здание компании (Сайт, шаги 0..2)
+  {
+    id: 0,
+    path: "M 40 30 L 40 18 L 60 8 L 63 8 L 63 12 L 65 10 L 80 18 L 80 30",
+  },
+  // 1: Документ накладной (Реестры, шаги 3..5)
+  {
+    id: 1,
+    path: "M 125 30 L 125 10 L 155 10 L 165 20 L 155 20 L 155 10 L 165 20 L 165 30",
+  },
+  // 2: Шестерня интеграций (1С / CRM, шаги 6..8)
+  {
+    id: 2,
+    path: "M 215 30 L 215 20 L 223 20 L 223 30 L 232 30 L 232 12 L 242 12 L 242 30 L 251 30 L 251 20 L 259 20 L 259 30",
+  },
+  // 3: Гистограмма отчёта (Подбор решений, шаги 9..11)
+  {
+    id: 3,
+    path: "M 310 30 L 310 22 L 316 22 L 316 30 L 321 30 L 321 14 L 328 14 L 328 30 L 333 30 L 333 8 L 342 8 L 342 30",
+  },
+];
+
+const BRIDGES = [
+  // Прямой вход к Зданию (x: 0 -> 40)
+  { id: 0, x1: 0, x2: 40, activeStage: 0 },
+  // Прямой мостик Здание -> Документ (x: 80 -> 125)
+  { id: 1, x1: 80, x2: 125, activeStage: 1 },
+  // Прямой мостик Документ -> Шестерня (x: 165 -> 215)
+  { id: 2, x1: 165, x2: 215, activeStage: 2 },
+  // Прямой мостик Шестерня -> Гистограмма (x: 259 -> 310)
+  { id: 3, x1: 259, x2: 310, activeStage: 3 },
+  // Выходной хвостик (x: 342 -> 360)
+  { id: 4, x1: 342, x2: 360, activeStage: 3 },
+];
+
+export function ProcessOscilloscope({ step = 0 }) {
+  const currentStage = Math.min(3, Math.floor(step / 3));
+  const isFastPhase = currentStage >= 1;
+  const progressPercent = Math.min(100, (currentStage + 1) * 25);
+
+  // Внутри каждого этапа фигура прогрессивно прорисовывается за 3 шага
+  const stepInStage = step % 3;
+  const subProgress = stepInStage === 0 ? 0.5 : stepInStage === 1 ? 0.8 : 1.0;
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
@@ -27,7 +67,7 @@ export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
           preserveAspectRatio="none"
         >
           <defs>
-            {/* Мягкое свечение активного контура */}
+            {/* Мягкое технологическое свечение активной фигуры */}
             <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="2" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -37,7 +77,7 @@ export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
           {/* Базовая направляющая ось */}
           <line x1="0" y1="30" x2="360" y2="30" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="3 3" />
 
-          {/* Фоновый контур чертежа (серый контур всех 4 фигур) */}
+          {/* Фоновый чертеж всего контура (светло-серый) */}
           <path
             d={MNEMONIC_CIRCUIT_PATH}
             fill="none"
@@ -47,24 +87,56 @@ export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
             strokeLinejoin="round"
           />
 
-          {/* Активная сигнальная линия — рисуется СТРОГО слева направо без хвостов */}
-          <g className="animate-pulse">
-            <path
-              d={MNEMONIC_CIRCUIT_PATH}
-              pathLength="1"
-              fill="none"
-              stroke="#0284C7"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              filter="url(#glow)"
-              style={{
-                strokeDasharray: '1',
-                strokeDashoffset: `${Math.max(0, 1 - progressRatio)}`,
-                transition: 'stroke-dashoffset 0.35s ease-out',
-              }}
-            />
-          </g>
+          {/* Прямые участки-мостики — простреливают быстро и сразу к следующему блоку */}
+          {BRIDGES.map((bridge) => {
+            const isActive = currentStage >= bridge.activeStage;
+            const len = bridge.x2 - bridge.x1;
+            return (
+              <line
+                key={bridge.id}
+                x1={bridge.x1}
+                y1="30"
+                x2={bridge.x2}
+                y2="30"
+                stroke="#0284C7"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                style={{
+                  strokeDasharray: len,
+                  strokeDashoffset: isActive ? 0 : len,
+                  transition: 'stroke-dashoffset 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                }}
+              />
+            );
+          })}
+
+          {/* Фигурки на линии: текущая активно рисуется и пульсирует, завершенные горят сплошным */}
+          {FIGURES.map((fig) => {
+            const isCurrent = fig.id === currentStage;
+            const isCompleted = fig.id < currentStage;
+
+            if (!isCurrent && !isCompleted) return null;
+
+            return (
+              <path
+                key={fig.id}
+                d={fig.path}
+                pathLength="1"
+                fill="none"
+                stroke="#0284C7"
+                strokeWidth={isCurrent ? "2.5" : "2.5"}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                filter={isCurrent ? "url(#glow)" : undefined}
+                className={isCurrent ? "animate-pulse" : ""}
+                style={{
+                  strokeDasharray: '1',
+                  strokeDashoffset: isCurrent ? `${Math.max(0, 1 - subProgress)}` : '0',
+                  transition: 'stroke-dashoffset 0.35s ease-out',
+                }}
+              />
+            );
+          })}
         </svg>
       </div>
 
@@ -73,7 +145,7 @@ export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
         <span className="text-sky-600 font-mono tracking-wider">
           {isFastPhase ? 'ПРОЦЕССИНГ ВЫЧИСЛЕНИЙ' : 'ТЕЛЕМЕТРИЯ СБОРА ДАННЫХ'}
         </span>
-        <span className="font-mono text-slate-500">{Math.round(progressRatio * 100)}%</span>
+        <span className="font-mono text-slate-500">{progressPercent}%</span>
       </div>
     </div>
   );
