@@ -142,11 +142,11 @@ export default function HeroScenarioAnalyzer() {
       .join('\n');
 
     const wishSection = userWish.trim()
-      ? `Пожелания / приоритетная задача: ${userWish.trim()}\n\n`
+      ? `Дополнительная информация / пожелания: ${userWish.trim()}\n\n`
       : '';
 
     const comment = `[Экспресс-анализ SoftGreat AI]
-Компания / сайт: ${companyInput.trim() || 'Указана на сайте'}
+Сайт / сфера бизнеса: ${companyInput.trim() || 'Указана на сайте'}
 Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}
 ${wishSection}Подобранные сценарии автоматизации:
 ${scenariosText}
@@ -193,7 +193,7 @@ ${scenariosText}
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center justify-center gap-2 bg-white text-slate-900 hover:bg-sky-50 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
         >
-          <span>Экспресс-подбор автоматизации</span>
+          <span>Экспресс-подбор автоматизации по сайту или названию компании</span>
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600" />
         </button>
       </div>
@@ -239,14 +239,14 @@ ${scenariosText}
             <form onSubmit={handleRunAnalysis} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Сайт компании или название *
+                  Сайт компании или сфера бизнеса *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="например: alfasb.by или ЧП «Альфа-СБ»"
+                  placeholder="например: alfasb.by или оптовая поставка оборудования"
                   value={companyInput}
-                  onInvalid={(e) => e.target.setCustomValidity('Пожалуйста, укажите сайт вашей компании или название')}
+                  onInvalid={(e) => e.target.setCustomValidity('Пожалуйста, укажите сайт вашей компании или сферу бизнеса')}
                   onInput={(e) => {
                     e.target.setCustomValidity('');
                     setCompanyInput(e.target.value);
@@ -294,7 +294,7 @@ ${scenariosText}
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Приоритетная задача или пожелания (необязательно)
+                  Укажите дополнительную информацию или пожелания (необязательно)
                 </label>
                 <textarea
                   rows={2}

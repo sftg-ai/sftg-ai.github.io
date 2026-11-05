@@ -128,6 +128,16 @@ function applyValues(data) {
         string: companyValue,
         text: commentValue,
       });
+
+      // Передаем скрытые свойства в инстанс формы (для трекинга источника заявки)
+      if (typeof formInstance.setProperty === 'function') {
+        try {
+          formInstance.setProperty('express_analysis', 'Y');
+          formInstance.setProperty('express_company', companyValue);
+        } catch {
+          // Игнорируем если setProperty не настроен
+        }
+      }
     } catch (err) {
       console.warn('Bitrix24 form.setValues error:', err);
     }
