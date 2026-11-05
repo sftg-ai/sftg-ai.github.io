@@ -5,6 +5,7 @@ import { applyB24Prefill } from '../utils/b24Bridge';
 export default function HeroScenarioAnalyzer() {
   const [isOpen, setIsOpen] = useState(false);
   const [companyInput, setCompanyInput] = useState('');
+  const [userWish, setUserWish] = useState('');
   const [systems, setSystems] = useState({
     oneC: true,
     bitrix24: true,
@@ -122,11 +123,14 @@ export default function HeroScenarioAnalyzer() {
       .map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`)
       .join('\n');
 
+    const wishSection = userWish.trim()
+      ? `Пожелания / приоритетная задача: ${userWish.trim()}\n\n`
+      : '';
+
     const comment = `[Экспресс-анализ SoftGreat AI]
 Компания / сайт: ${companyInput.trim() || 'Указана на сайте'}
 Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}
-
-Подобранные сценарии автоматизации:
+${wishSection}Подобранные сценарии автоматизации:
 ${scenariosText}
 
 Дополнительный комментарий:
@@ -137,6 +141,7 @@ ${scenariosText}
       company: companyInput.trim(),
       comment,
       scenariosCount: scenarios.length,
+      userWish: userWish.trim(),
     });
 
     const el = document.getElementById('lead-form');
@@ -148,6 +153,7 @@ ${scenariosText}
   const handleReset = () => {
     setStatus('idle');
     setCompanyInput('');
+    setUserWish('');
   };
 
   return (
@@ -256,6 +262,19 @@ ${scenariosText}
                     <span><strong>Корпоративная почта и мессенджеры</strong> (заявки и файлы)</span>
                   </label>
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Приоритетная задача или пожелания (необязательно)
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="например: автоматизировать ввод накладных в 1С или ускорить ответ на заявки"
+                  value={userWish}
+                  onChange={(e) => setUserWish(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors resize-none"
+                />
               </div>
 
               <button

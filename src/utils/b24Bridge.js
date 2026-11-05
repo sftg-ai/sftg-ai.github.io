@@ -68,3 +68,4 @@ export function onB24PrefillApplied(callback) {
   }
   return () => listeners.delete(callback);
 }
+
