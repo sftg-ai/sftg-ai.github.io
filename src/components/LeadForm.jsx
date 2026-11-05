@@ -1,44 +1,51 @@
-import React, { useState } from 'react';
-import { ArrowRight, Send, ShieldCheck, Search, MessageSquare, PhoneCall, CheckCircle2 } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Search, MessageSquare, PhoneCall, CheckCircle2, ShieldCheck, ExternalLink, Send, Loader2 } from 'lucide-react';
 
 export default function LeadForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    contact: '',
-    companyOrSphere: '',
-    taskDesc: ''
-  });
-  const [noticeOpen, setNoticeOpen] = useState(false);
+  const containerRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
-  // Формируем персональный текст для Telegram на основе того, что человек уже ввел в поля
-  const getPersonalizedTgLink = () => {
-    let msg = 'Здравствуйте! Хочу получить персональный разбор автоматизации для бизнеса.';
-    const details = [];
-    if (formData.name.trim()) details.push(`Имя: ${formData.name.trim()}`);
-    if (formData.companyOrSphere.trim()) details.push(`Компания/сфера: ${formData.companyOrSphere.trim()}`);
-    if (formData.contact.trim()) details.push(`Контакт: ${formData.contact.trim()}`);
-    if (formData.taskDesc.trim()) details.push(`Задача: ${formData.taskDesc.trim()}`);
-    
-    if (details.length > 0) {
-      msg += `\n\n${details.join('\n')}`;
-    }
-    return `https://t.me/yurasvidersky?text=${encodeURIComponent(msg)}`;
-  };
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setNoticeOpen(true);
-  };
+    // Очищаем контейнер перед добавлением скрипта
+    container.innerHTML = '';
 
-  // Русскоязычные подсказки для стандартной валидации браузера
-  const handleInvalid = (msg) => (e) => {
-    e.target.setCustomValidity(msg);
-  };
+    // Таймер на случай блокировки корпоративными AdBlock / Firewall
+    const fallbackTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
 
-  const handleInput = (setter, field) => (e) => {
-    e.target.setCustomValidity('');
-    setter({ ...formData, [field]: e.target.value });
-  };
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://cdn-ru.bitrix24.by/b33075640/crm/form/loader_43.js?${(Date.now() / 180000) | 0}`;
+    script.setAttribute('data-b24-form', 'inline/43/jps6a7');
+    script.setAttribute(
+      'data-b24-form-telemetry-sign',
+      'v1:43:site.423e8e2979092b628b864e7b9f98f9f489e3d6b866abe3289cfba0e03246c715'
+    );
+    script.setAttribute('data-skip-moving', 'true');
+
+    script.onload = () => {
+      clearTimeout(fallbackTimer);
+      // Небольшая задержка, чтобы iframe Битрикс24 успел отрендериться
+      setTimeout(() => setIsLoading(false), 300);
+    };
+
+    script.onerror = () => {
+      clearTimeout(fallbackTimer);
+      setIsLoading(false);
+      setLoadError(true);
+    };
+
+    container.appendChild(script);
+
+    return () => {
+      clearTimeout(fallbackTimer);
+    };
+  }, []);
 
   const steps = [
     {
@@ -110,125 +117,85 @@ export default function LeadForm() {
           </div>
         </div>
 
-        {/* Справа: 6 колонок - Форма (растягивается точно вровень с шагами слева) */}
+        {/* Справа: 6 колонок - Официальная CRM-форма Битрикс24 */}
         <div className="lg:col-span-6 flex flex-col">
-          <div className="p-6 sm:p-8 md:p-9 rounded-3xl bg-white border border-slate-200 shadow-xl relative h-full flex flex-col justify-between">
+          <div className="p-6 sm:p-8 md:p-9 rounded-3xl bg-white border border-slate-200 shadow-xl relative h-full flex flex-col justify-between overflow-hidden">
             
-            <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 h-full">
+            {/* Заголовок карточки формы */}
+            <div className="mb-4">
+              <h3 className="text-xl font-bold text-slate-900 mb-1">
+                Заявка на аудит и подбор решений
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500">
+                Заполните форму, и мы вернемся с готовыми сценариями для вашей компании
+              </p>
+            </div>
+
+            {/* Контейнер для нативного виджета Битрикс24 */}
+            <div className="relative min-h-[460px] flex-1 flex flex-col justify-center">
               
-              {/* 1. Ваше имя */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Ваше имя *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Алексей"
-                  value={formData.name}
-                  onInvalid={handleInvalid("Пожалуйста, укажите ваше имя")}
-                  onChange={handleInput(setFormData, 'name')}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
-                />
-              </div>
-
-              {/* 2. Телефон или Telegram */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Телефон или Telegram *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="+375 (29) 000-00-00 или @username"
-                  value={formData.contact}
-                  onInvalid={handleInvalid("Пожалуйста, укажите телефон или Telegram для связи")}
-                  onChange={handleInput(setFormData, 'contact')}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
-                />
-              </div>
-
-              {/* 3. Сайт компании или сфера бизнеса */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Сайт компании или сфера бизнеса *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Например: kompaniya.by или оптовая поставка оборудования"
-                  value={formData.companyOrSphere}
-                  onInvalid={handleInvalid("Пожалуйста, укажите сайт или сферу бизнеса")}
-                  onChange={handleInput(setFormData, 'companyOrSphere')}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
-                />
-              </div>
-
-              {/* 4. Ваша задача или комментарий (необязательно) */}
-              <div className="flex-1 flex flex-col">
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Ваша задача или комментарий (необязательно)
-                </label>
-                <textarea
-                  rows={4}
-                  placeholder="Если уже знаете, какой участок хотите автоматизировать - напишите пару слов"
-                  value={formData.taskDesc}
-                  onChange={(e) => setFormData({ ...formData, taskDesc: e.target.value })}
-                  className="w-full flex-1 min-h-[90px] px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors resize-none"
-                />
-              </div>
-
-              {/* Раздвигающаяся шторка с Telegram Юрия при нажатии на кнопку */}
-              {noticeOpen && (
-                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-sky-50 to-blue-50/60 border border-sky-200/90 text-left transition-all duration-300 animate-in fade-in slide-in-from-top-3">
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-sky-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-sky-600/30">
-                      <Send className="w-4 h-4 ml-0.5" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-bold text-slate-900">
-                          Отправка через форму пока недоступна
-                        </span>
-                        <span className="text-[10px] font-semibold bg-amber-100 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full">
-                          В разработке
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-600 leading-relaxed mb-3">
-                        Чтобы сразу получить варианты автоматизации и не ждать, отправьте запрос напрямую в Telegram:
-                      </p>
-                      <a
-                        href={getPersonalizedTgLink()}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/25 active:scale-[0.98] transition-all"
-                      >
-                        <Send className="w-3.5 h-3.5" />
-                        <span>Написать в Telegram</span>
-                      </a>
-                    </div>
-                  </div>
+              {/* Прелоадер на время инициализации виджета */}
+              {isLoading && (
+                <div className="absolute inset-0 z-10 bg-white/90 backdrop-blur-xs flex flex-col items-center justify-center gap-3 text-slate-400 py-12">
+                  <Loader2 className="w-8 h-8 text-sky-600 animate-spin" />
+                  <span className="text-xs font-medium text-slate-500">
+                    Загрузка формы Битрикс24...
+                  </span>
                 </div>
               )}
 
-              {/* Кнопка отправки формы */}
-              {!noticeOpen ? (
-                <button
-                  type="submit"
-                  className="w-full mt-2 py-3.5 px-6 rounded-xl text-sm font-bold bg-sky-600 text-white hover:bg-sky-700 shadow-md shadow-sky-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span>Получить персональный разбор бизнеса -&gt;</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              ) : null}
+              {/* DOM-точка монтирования скрипта Битрикс24 */}
+              <div 
+                ref={containerRef} 
+                className="b24-form-wrapper w-full flex-1"
+              />
 
-              {/* Подпись соответствия Закону 99-З */}
-              <div className="flex items-center justify-center gap-2 text-center text-xs text-slate-500 mt-2">
+              {/* Fallback-блок если форма заблокирована браузером или AdBlock */}
+              {loadError && (
+                <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-left my-4">
+                  <p className="text-xs font-semibold text-amber-900 mb-2">
+                    Форма не смогла загрузиться из-за настроек блокировщика рекламы в вашем браузере.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2 mt-3">
+                    <a
+                      href="https://b24-xxbdwe.b24site.online/crm_form_gg1ic/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 text-white hover:bg-sky-500 transition-colors"
+                    >
+                      <span>Открыть форму в новом окне</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                    <a
+                      href="https://t.me/yurasvidersky"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Написать напрямую в Telegram</span>
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Подпись соответствия Закону 99-З и прямая ссылка */}
+            <div className="pt-4 mt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+              <div className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Обработка данных в строгом соответствии с Законом Республики Беларусь № 99-З.</span>
+                <span>Закон Республики Беларусь № 99-З</span>
               </div>
-
-            </form>
+              <a
+                href="https://b24-xxbdwe.b24site.online/crm_form_gg1ic/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] text-sky-600 hover:text-sky-700 font-medium transition-colors"
+              >
+                <span>Открыть на отдельной странице</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
 
           </div>
         </div>
