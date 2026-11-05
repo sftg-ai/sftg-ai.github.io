@@ -292,7 +292,11 @@ export default function HeroScenarioAnalyzer() {
         setScenarios(data.scenarios);
         setCompanyProfile(data.company_profile || null);
         const rawComment = data.formatted_b24_comment || '';
-        const cleanComment = rawComment.replace(/^УНП:.*$/gim, '').replace(/\n{3,}/g, '\n\n').trim();
+        const cleanComment = rawComment
+          .replace(/^УНП:.*$/gim, '')
+          .replace(/Дополнительный комментарий:\s*$/gi, '')
+          .replace(/\n{3,}/g, '\n\n')
+          .trim();
         setFormattedComment(cleanComment);
 
         // Показываем 100% и выдерживаем микро-паузу перед открытием карточки с вариантами
@@ -340,7 +344,11 @@ export default function HeroScenarioAnalyzer() {
     // Если бэкенд отдал готовый комментарий — используем его
     let comment = formattedComment;
     if (comment) {
-      comment = comment.replace(/^УНП:.*$/gim, '').replace(/\n{3,}/g, '\n\n').trim();
+      comment = comment
+        .replace(/^УНП:.*$/gim, '')
+        .replace(/Дополнительный комментарий:\s*$/gi, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
     } else {
       const scenariosText = scenarios.length > 0
         ? `\nПодобранные сценарии автоматизации:\n` + scenarios.map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`).join('\n')
