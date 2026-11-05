@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, TrendingDown, Zap, TrendingUp, Award } from 'lucide-react';
+import HeroScenarioAnalyzer from './HeroScenarioAnalyzer';
 
 export default function Hero({ onSelectCase, activeCaseIndex }) {
   return (
@@ -64,16 +65,8 @@ export default function Hero({ onSelectCase, activeCaseIndex }) {
               <p className="font-semibold text-white">Опытная инженерная команда, быстрый запуск и гарантированная надежность решений.</p>
             </div>
 
-            {/* Кнопка действия */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
-              <a
-                href="#lead-form"
-                className="inline-flex items-center justify-center gap-2 bg-white text-sky-900 hover:bg-sky-50 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/15 transition-all active:scale-[0.98] text-sm sm:text-base group"
-              >
-                <span>Получить разбор вашего бизнеса</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </a>
-            </div>
+            {/* Интерактивный экспресс-подбор сценариев автоматизации */}
+            <HeroScenarioAnalyzer />
           </div>
 
           {/* Справа: Иллюстрация контроля процессов (5 колонок) */}
