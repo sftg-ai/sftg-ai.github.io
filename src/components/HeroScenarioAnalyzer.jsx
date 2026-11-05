@@ -517,7 +517,7 @@ ${wishSection}${scenariosText}`.trim();
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Укажите дополнительную информацию или пожелания (необязательно)
+                    Укажите дополнительную информацию, проблемы или пожелания
                   </label>
                   <textarea
                     rows={2}
