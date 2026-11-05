@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Check, Sparkles, Loader2, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2 } from 'lucide-react';
+import { ArrowRight, Check, Sparkles, Loader2, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2, Copy } from 'lucide-react';
 import { applyB24Prefill } from '../utils/b24Bridge';
 
 const ICON_MAP = {
@@ -41,8 +41,50 @@ export default function HeroScenarioAnalyzer() {
   const [insufficientNotice, setInsufficientNotice] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedReport, setCopiedReport] = useState(false);
 
   const stepIntervalRef = useRef(null);
+
+  // Форматирование структурированного отчета с Markdown для Telegram
+  const generateTelegramMarkdown = () => {
+    const company = companyProfile?.display_name || companyInput.trim() || 'Компания';
+    const industry = companyProfile?.industry;
+
+    const sysNames = [];
+    if (systems.oneC) sysNames.push('1С');
+    if (systems.bitrix24) sysNames.push('Битрикс24');
+    if (systems.email) sysNames.push('Почта / Telegram');
+
+    const numberEmojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
+
+    const scenariosBlock = scenarios
+      .map((sc, i) => {
+        const num = numberEmojis[i] || `${i + 1}.`;
+        const system = sc.system ? `[${sc.system}] ` : '';
+        const benefit = sc.benefit ? `\n📈 *Эффект:* ${sc.benefit}` : '';
+        return `${num} *${system}${sc.title}*\n${sc.desc}${benefit}`;
+      })
+      .join('\n\n');
+
+    const header = [
+      `📊 *Сценарии автоматизации SoftGreat AI*`,
+      `🏢 *Компания:* ${company}`,
+      industry ? `🏭 *Отрасль:* ${industry}` : null,
+      sysNames.length > 0 ? `⚙️ *Используемые системы:* ${sysNames.join(', ')}` : null,
+      userWish.trim() ? `💬 *Пожелания:* ${userWish.trim()}` : null,
+    ].filter(Boolean).join('\n');
+
+    return `${header}\n\n🚀 *Рекомендованные решения:*\n\n${scenariosBlock}\n\n🔗 _Сформировано онлайн: softgreat.by/#audit_`;
+  };
+
+  const handleCopyReportForTelegram = () => {
+    const text = generateTelegramMarkdown();
+    if (typeof window !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+    }
+    setCopiedReport(true);
+    setTimeout(() => setCopiedReport(false), 2400);
+  };
 
   // Обработка прямой ссылки с хэшем (#audit, #express, #analyzer)
   useEffect(() => {
@@ -473,13 +515,33 @@ ${wishSection}${scenariosText}`.trim();
             {/* Состояние: Результат анализа */}
             {status === 'done' && (
               <div className="space-y-3.5">
-                <div className="text-xs text-slate-500">
-                  Подобрано для: <strong className="text-slate-900">{companyProfile?.display_name || companyInput || 'вашей компании'}</strong>
-                  {companyProfile?.industry && (
-                    <span className="block text-[11px] text-slate-500 mt-0.5">
-                      Отрасль: {companyProfile.industry}
-                    </span>
-                  )}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="text-xs text-slate-500">
+                    Подобрано для: <strong className="text-slate-900">{companyProfile?.display_name || companyInput || 'вашей компании'}</strong>
+                    {companyProfile?.industry && (
+                      <span className="block text-[11px] text-slate-500 mt-0.5">
+                        Отрасль: {companyProfile.industry}
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleCopyReportForTelegram}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-semibold transition-colors cursor-pointer shrink-0"
+                    title="Скопировать готовый отчет для пересылки в Telegram"
+                  >
+                    {copiedReport ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-emerald-700 font-bold">Скопировано!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>В Telegram</span>
+                      </>
+                    )}
+                  </button>
                 </div>
 
                 {insufficientNotice && (
@@ -517,22 +579,42 @@ ${wishSection}${scenariosText}`.trim();
                   })}
                 </div>
 
-                {/* Кнопка перехода к форме Битрикс24 */}
-                <div className="pt-2 flex flex-col sm:flex-row items-center gap-2">
+                {/* Кнопки действий: Скопировать для Telegram + Перейти к заявке */}
+                <div className="pt-2 space-y-2">
                   <button
-                    onClick={handleScrollToForm}
-                    className="w-full sm:flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    type="button"
+                    onClick={handleCopyReportForTelegram}
+                    className="w-full py-2.5 px-3 rounded-xl border border-sky-200 bg-sky-50/60 hover:bg-sky-100/80 text-sky-800 text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
                   >
-                    <span>Внедрить эти сценарии (Перейти к заявке)</span>
-                    <ArrowRight className="w-4 h-4" />
+                    {copiedReport ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-emerald-700 font-bold">Отчет скопирован для отправки в Telegram!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-sky-600" />
+                        <span>Скопировать отчет для Telegram</span>
+                      </>
+                    )}
                   </button>
-                  <button
-                    onClick={handleReset}
-                    className="p-3 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors"
-                    title="Рассчитать заново"
-                  >
-                    <RefreshCw className="w-4 h-4" />
-                  </button>
+
+                  <div className="flex flex-col sm:flex-row items-center gap-2">
+                    <button
+                      onClick={handleScrollToForm}
+                      className="w-full sm:flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <span>Внедрить эти сценарии (Перейти к заявке)</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={handleReset}
+                      className="p-3 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer"
+                      title="Рассчитать заново"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
