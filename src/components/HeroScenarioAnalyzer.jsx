@@ -62,7 +62,7 @@ function buildB24Comment({ profile, companyInput = '', systems, userWish = '', s
   ];
 
   if (userWish && userWish.trim()) {
-    parts.push(`Пожелания / приоритетная задача: ${userWish.trim()}`);
+    parts.push(`Дополнительный комментарий:\n${userWish.trim()}`);
   }
 
   if (scenariosBlock) {
