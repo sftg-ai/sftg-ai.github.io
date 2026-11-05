@@ -69,7 +69,8 @@ function buildB24Comment({ profile, companyInput = '', systems, userWish = '', s
     parts.push(`Подобранные сценарии автоматизации:\n\n${scenariosBlock}`);
   }
 
-  return parts.join('\n\n');
+  // Два энтера (\n\n) в самом конце, чтобы пользователю было удобно дописывать свои задачи без прилипания к последнему сценарию
+  return `${parts.join('\n\n')}\n\n`;
 }
 
 export default function HeroScenarioAnalyzer() {
