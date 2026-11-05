@@ -241,13 +241,13 @@ ${wishSection}${scenariosText}`.trim();
   };
 
   return (
-    <div className="w-full max-w-xl text-left">
+    <div className="w-full max-w-xl text-left relative">
       {/* 1. Кнопка по умолчанию в Hero с мягким затуханием */}
       <div
         className={`transition-all duration-300 ease-out ${
           isOpen
-            ? 'opacity-0 -translate-y-2 pointer-events-none max-h-0 overflow-hidden'
-            : 'opacity-100 translate-y-0 max-h-16'
+            ? 'opacity-0 scale-95 pointer-events-none absolute inset-x-0 top-0'
+            : 'opacity-100 scale-100 relative'
         }`}
       >
         <button
@@ -270,14 +270,14 @@ ${wishSection}${scenariosText}`.trim();
 
       {/* 2. Раскрытая интерактивная карточка с плавной анимацией выезда */}
       <div
-        className={`grid transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isOpen
-            ? 'grid-rows-[1fr] opacity-100 translate-y-0 mt-0'
-            : 'grid-rows-[0fr] opacity-0 -translate-y-4 pointer-events-none mt-0'
+            ? 'grid-rows-[1fr] opacity-100'
+            : 'grid-rows-[0fr] opacity-0 pointer-events-none'
         }`}
       >
-        <div className="overflow-hidden">
-          <div className="p-5 sm:p-6 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl text-slate-900">
+        <div className="min-h-0 overflow-hidden">
+          <div className="p-5 sm:p-6 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl text-slate-900 transition-opacity duration-400">
             
             {/* Шапка карточки */}
             <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
