@@ -90,10 +90,21 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
   // Узел 1: Реестры и данные (активен с 1 шага)
   // Узел 2: Учет 1С и CRM (активен с 5 шага)
   // Узел 3: Контур решений (активен с 9 шага)
+  // Определяем активные и текущий узел:
+  // Node 0 (Сайт): активен с 0 шага, пульсирует пока step < 1
+  // Node 1 (Реестры): активен с 1 шага, пульсирует пока 1 <= step < 5
+  // Node 2 (1С / CRM): активен с 5 шага, пульсирует пока 5 <= step < 9
+  // Node 3 (AI-контур): активен с 9 шага, пульсирует пока step >= 9
   const isNode0Active = true;
   const isNode1Active = step >= 1;
   const isNode2Active = step >= 5;
   const isNode3Active = step >= 9;
+
+  let currentNodeIndex = 0;
+  if (step >= 9) currentNodeIndex = 3;
+  else if (step >= 5) currentNodeIndex = 2;
+  else if (step >= 1) currentNodeIndex = 1;
+  else currentNodeIndex = 0;
 
   const progressRatio = Math.min(1, (step + 1) / totalSteps);
 
@@ -120,29 +131,29 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
         <div className="flex items-center justify-between relative z-10 px-2">
           {nodes.map((node) => {
             const Icon = node.icon;
-            const isAI = node.id === 3;
+            const isCurrent = node.id === currentNodeIndex;
+            const isCompleted = node.active && !isCurrent;
+
             return (
               <div key={node.id} className="flex flex-col items-center gap-1.5 select-none">
                 <div
                   className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                    node.active
-                      ? isAI
-                        ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/40 scale-105 animate-pulse ring-2 ring-sky-400/50'
-                        : 'bg-sky-600 text-white shadow-md shadow-sky-600/30 scale-105'
-                      : isAI
-                        ? 'bg-sky-50/90 border border-sky-300 text-sky-600 animate-pulse shadow-sm shadow-sky-500/10'
-                        : 'bg-white border border-slate-200 text-slate-400'
+                    isCurrent
+                      ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/40 scale-105 animate-pulse ring-2 ring-sky-400/50'
+                      : isCompleted
+                        ? 'bg-sky-600 text-white shadow-sm shadow-sky-600/20 scale-100'
+                        : 'bg-white border border-slate-200 text-slate-400 scale-95'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
                 </div>
                 <span
-                  className={`text-[10px] font-bold transition-colors ${
-                    node.active
-                      ? 'text-sky-700'
-                      : isAI
-                        ? 'text-sky-600'
-                        : 'text-slate-400'
+                  className={`text-[10px] transition-colors ${
+                    isCurrent
+                      ? 'text-sky-700 font-bold'
+                      : isCompleted
+                        ? 'text-sky-800 font-semibold'
+                        : 'text-slate-400 font-medium'
                   }`}
                 >
                   {node.label}
