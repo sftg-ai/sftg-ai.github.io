@@ -3,46 +3,36 @@ import { Globe, Database, Layers, BarChart3 } from 'lucide-react';
 
 /**
  * Режим 1: Осциллограф процессов (Mnemonic Continuous Circuit)
- * Быстрые прямые прострелы между фигурами и пульсация активного силуэта
+ * Единый непрерывный поток данных сквозь контур — как вода по трубам
  */
 const MNEMONIC_CIRCUIT_PATH =
   "M 0 30 L 40 30 L 40 18 L 60 8 L 63 8 L 63 12 L 65 10 L 80 18 L 80 30 L 125 30 L 125 10 L 155 10 L 165 20 L 155 20 L 155 10 L 165 20 L 165 30 L 215 30 L 215 20 L 223 20 L 223 30 L 232 30 L 232 12 L 242 12 L 242 30 L 251 30 L 251 20 L 259 20 L 259 30 L 310 30 L 310 22 L 316 22 L 316 30 L 321 30 L 321 14 L 328 14 L 328 30 L 333 30 L 333 8 L 342 8 L 342 30 L 360 30";
 
-const FIGURES = [
-  // 0: Здание компании (Сайт, шаги 0..2)
-  {
-    id: 0,
-    path: "M 40 30 L 40 18 L 60 8 L 63 8 L 63 12 L 65 10 L 80 18 L 80 30",
-  },
-  // 1: Документ накладной (Реестры, шаги 3..5)
-  {
-    id: 1,
-    path: "M 125 30 L 125 10 L 155 10 L 165 20 L 155 20 L 155 10 L 165 20 L 165 30",
-  },
-  // 2: Шестерня интеграций (1С / CRM, шаги 6..8)
-  {
-    id: 2,
-    path: "M 215 30 L 215 20 L 223 20 L 223 30 L 232 30 L 232 12 L 242 12 L 242 30 L 251 30 L 251 20 L 259 20 L 259 30",
-  },
-  // 3: Гистограмма отчёта (Подбор решений, шаги 9..11)
-  {
-    id: 3,
-    path: "M 310 30 L 310 22 L 316 22 L 316 30 L 321 30 L 321 14 L 328 14 L 328 30 L 333 30 L 333 8 L 342 8 L 342 30",
-  },
-];
+// Полная длина единого векторного пути контура
+const TOTAL_PATH_LEN = 629.5;
 
-const BRIDGES = [
-  // Прямой вход к Зданию (x: 0 -> 40)
-  { id: 0, x1: 0, x2: 40, activeStage: 0 },
-  // Прямой мостик Здание -> Документ (x: 80 -> 125)
-  { id: 1, x1: 80, x2: 125, activeStage: 1 },
-  // Прямой мостик Документ -> Шестерня (x: 165 -> 215)
-  { id: 2, x1: 165, x2: 215, activeStage: 2 },
-  // Прямой мостик Шестерня -> Гистограмма (x: 259 -> 310)
-  { id: 3, x1: 259, x2: 310, activeStage: 3 },
-  // Выходной хвостик (x: 342 -> 360) — активируется ТОЛЬКО после полного завершения 4-го блока (при 100%)
-  { id: 4, x1: 342, x2: 360, activeStage: 4 },
-];
+// Точки заполнения пути (как вода в трубах) строго по шагам пайплайна:
+// Шаг 0..2: Здание компании (Сайт)
+// Шаг 3..5: Документ накладной (Реестры)
+// Шаг 6..8: Шестерня интеграций (1С / CRM)
+// Шаг 9..11: Гистограмма отчета (Подбор решений)
+// Шаг 12: Все 3 столбца гистограммы стоят, ожидаем ответа сервера (95%)
+// isComplete: Выходной хвост простреливает до правого края (100%)
+const FLUID_MILESTONES = {
+  0: 40,      // вход к основанию здания
+  1: 85,      // середина крыши здания
+  2: 158.2,   // здание завершено, поток дошел до документа
+  3: 158.2,   // вход в документ
+  4: 215,     // документ наполовину нарисован
+  5: 316.5,   // документ закрыт, поток дошел до шестерни
+  6: 316.5,   // вход в шестерню
+  7: 380,     // зубья шестерни рисуются
+  8: 487.5,   // шестерня завершена, поток дошел до гистограммы
+  9: 515,     // первый столбец гистограммы (80%)
+  10: 555,    // второй столбец гистограммы (85%)
+  11: 611.5,  // все 3 столбца гистограммы завершены (90%)
+  12: 611.5,  // удерживаем 95% у основания завершенной гистограммы
+};
 
 export function ProcessOscilloscope({ step = 0, isComplete = false }) {
   const currentStage = Math.min(3, Math.floor(step / 3));
@@ -68,12 +58,11 @@ export function ProcessOscilloscope({ step = 0, isComplete = false }) {
     progressPercent = 25;
   }
 
-  // Внутри каждого этапа фигура прорисовывается строго от 0:
-  // Шаг 0: линия только подошла к основанию фигуры (счет от 0, фигура еще не нарисована, линия пульсирует)
-  // Шаг 1: фигура прорисовывается наполовину (~55%) и пульсирует
-  // Шаг 2: фигура завершается полностью (100%)
-  const stepInStage = step % 3;
-  const subProgress = isComplete ? 1.0 : step >= 11 ? 0.95 : stepInStage === 0 ? 0.0 : stepInStage === 1 ? 0.55 : 0.9;
+  // Расчет текущей длины потока (как вода в трубе)
+  const currentLen = isComplete
+    ? TOTAL_PATH_LEN
+    : (FLUID_MILESTONES[step] ?? (step >= 12 ? 611.5 : 40));
+  const strokeOffset = Math.max(0, TOTAL_PATH_LEN - currentLen);
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
@@ -89,9 +78,9 @@ export function ProcessOscilloscope({ step = 0, isComplete = false }) {
           preserveAspectRatio="none"
         >
           <defs>
-            {/* Мягкое технологическое свечение активной фигуры */}
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="2" result="blur" />
+            {/* Мягкое технологическое свечение активного потока */}
+            <filter id="circuit-glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2.5" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
@@ -99,7 +88,7 @@ export function ProcessOscilloscope({ step = 0, isComplete = false }) {
           {/* Базовая направляющая ось */}
           <line x1="0" y1="30" x2="360" y2="30" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="3 3" />
 
-          {/* Фоновый чертеж всего контура (светло-серый) */}
+          {/* Фоновый чертеж всей трубы контура (светло-серый) */}
           <path
             d={MNEMONIC_CIRCUIT_PATH}
             fill="none"
@@ -109,56 +98,40 @@ export function ProcessOscilloscope({ step = 0, isComplete = false }) {
             strokeLinejoin="round"
           />
 
-          {/* Прямые участки-мостики — простреливают быстро и сразу к следующему блоку */}
-          {BRIDGES.map((bridge) => {
-            const isActive = isComplete || currentStage >= bridge.activeStage;
-            const len = bridge.x2 - bridge.x1;
-            return (
-              <line
-                key={bridge.id}
-                x1={bridge.x1}
-                y1="30"
-                x2={bridge.x2}
-                y2="30"
-                stroke="#0284C7"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                style={{
-                  strokeDasharray: len,
-                  strokeDashoffset: isActive ? 0 : len,
-                  transition: 'stroke-dashoffset 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
-              />
-            );
-          })}
+          {/* Мягкий неоновый ореол струи (свечение единого потока) */}
+          <path
+            d={MNEMONIC_CIRCUIT_PATH}
+            pathLength={TOTAL_PATH_LEN}
+            fill="none"
+            stroke="#38BDF8"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.35"
+            filter="url(#circuit-glow)"
+            style={{
+              strokeDasharray: TOTAL_PATH_LEN,
+              strokeDashoffset: strokeOffset,
+              transition: 'stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          />
 
-          {/* Фигурки на линии: текущая активно рисуется и пульсирует, завершенные горят сплошным */}
-          {FIGURES.map((fig) => {
-            const isCurrent = !isComplete && fig.id === currentStage;
-            const isCompleted = fig.id < currentStage || isComplete;
-
-            if (!isCurrent && !isCompleted) return null;
-
-            return (
-              <path
-                key={fig.id}
-                d={fig.path}
-                pathLength="1"
-                fill="none"
-                stroke="#0284C7"
-                strokeWidth={isCurrent ? "2.5" : "2.5"}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                filter={isCurrent ? "url(#glow)" : undefined}
-                className={isCurrent ? "animate-pulse" : ""}
-                style={{
-                  strokeDasharray: '1',
-                  strokeDashoffset: isCurrent ? `${Math.max(0, 1 - subProgress)}` : '0',
-                  transition: 'stroke-dashoffset 0.5s ease-out',
-                }}
-              />
-            );
-          })}
+          {/* Основная непрерывная струя — ни одного разрыва, 100% единый поток от начала до конца */}
+          <path
+            d={MNEMONIC_CIRCUIT_PATH}
+            pathLength={TOTAL_PATH_LEN}
+            fill="none"
+            stroke="#0284C7"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={!isComplete ? "animate-pulse" : ""}
+            style={{
+              strokeDasharray: TOTAL_PATH_LEN,
+              strokeDashoffset: strokeOffset,
+              transition: 'stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          />
         </svg>
       </div>
 
