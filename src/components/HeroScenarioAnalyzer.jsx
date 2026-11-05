@@ -10,18 +10,21 @@ const ICON_MAP = {
 };
 
 const ANALYSIS_STEPS = [
-  'Подключаемся к сайту и проверяем доступность...',
-  'Считываем структуру каталога и разделы услуг...',
-  'Определяем отраслевой профиль и товарную номенклатуру...',
-  'Анализируем модель продаж и каналы заявок...',
-  'Ищем маркеры интеграций и используемого стека...',
-  'Оцениваем объем входящей документации и первички...',
-  'Выявляем рутинные операции в обработке заказов...',
-  'Сопоставляем точки потерь времени менеджеров...',
-  'Исключаем нерелевантные контуры автоматизации...',
-  'Рассчитываем прямую экономию часов сотрудников...',
-  'Формируем прикладные сценарии внедрения...',
-  'Финализируем рекомендации...'
+  // 1. Первые пункты - основательный сбор данных (держатся подольше, чтобы человек видел каждый этап)
+  { text: 'Сбор информации о компании...', duration: 1800 },
+  { text: 'Сбор данных на публичных ресурсах и в реестрах...', duration: 1800 },
+  { text: 'Сбор данных сайта и анализ структуры каталога...', duration: 1600 },
+
+  // 2. Дальше - высокоскоростные технологические вычисления (быстро, как машинный процессинг)
+  { text: 'Определение отраслевого профиля и модели бизнеса...', duration: 180 },
+  { text: 'Анализ каналов заявок и структуры продаж...', duration: 160 },
+  { text: 'Поиск маркеров интеграций с 1С, CRM и почтой...', duration: 160 },
+  { text: 'Оценка объема входящей первички и рутинных операций...', duration: 160 },
+  { text: 'Сопоставление узких мест и потерь времени менеджеров...', duration: 160 },
+  { text: 'Исключение нерелевантных сценариев автоматизации...', duration: 160 },
+  { text: 'Расчет прямой экономии рабочих часов сотрудников...', duration: 160 },
+  { text: 'Генерация персональных сценариев внедрения...', duration: 200 },
+  { text: 'Финализация персонального подбора решений...', duration: 260 }
 ];
 
 export default function HeroScenarioAnalyzer() {
@@ -215,15 +218,33 @@ export default function HeroScenarioAnalyzer() {
     setInsufficientNotice(null);
     setErrorMessage(null);
 
-    // Плавный цикл смены технологических фаз
-    if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
-    stepIntervalRef.current = setInterval(() => {
-      setAnalysisStep((prev) => (prev < ANALYSIS_STEPS.length - 1 ? prev + 1 : prev));
-    }, 450);
+    // Очищаем предыдущую цепочку таймеров, если была
+    if (stepIntervalRef.current) clearTimeout(stepIntervalRef.current);
+
+    // Последовательная смена шагов с индивидуальным таймингом для каждого этапа
+    let currentStep = 0;
+    const scheduleNextStep = () => {
+      if (currentStep < ANALYSIS_STEPS.length - 1) {
+        currentStep += 1;
+        setAnalysisStep(currentStep);
+        stepIntervalRef.current = setTimeout(
+          scheduleNextStep,
+          ANALYSIS_STEPS[currentStep].duration
+        );
+      }
+    };
+    stepIntervalRef.current = setTimeout(
+      scheduleNextStep,
+      ANALYSIS_STEPS[0].duration
+    );
+
+    // Общая длительность анимации, чтобы человек успел прочитать первые важные шаги
+    const totalAnimationTime = ANALYSIS_STEPS.reduce((sum, s) => sum + s.duration, 0);
+    const animationPromise = new Promise((resolve) => setTimeout(resolve, totalAnimationTime));
 
     const endpoint = import.meta.env.VITE_AI_ANALYSIS_ENDPOINT || 'https://audit.apps.aipush.dev/api/v1/analyze';
     try {
-      const response = await fetch(endpoint, {
+      const fetchPromise = fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -233,7 +254,10 @@ export default function HeroScenarioAnalyzer() {
         }),
       });
 
-      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+      // Ждем и результат от бэкенда, и завершение анимации шагов
+      const [response] = await Promise.all([fetchPromise, animationPromise]);
+
+      if (stepIntervalRef.current) clearTimeout(stepIntervalRef.current);
 
       if (response.ok) {
         const data = await response.json();
@@ -267,7 +291,7 @@ export default function HeroScenarioAnalyzer() {
       });
       setStatus('error');
     } catch (err) {
-      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+      if (stepIntervalRef.current) clearTimeout(stepIntervalRef.current);
       setErrorMessage({
         title: 'Сервис пока недоступен',
         description: 'Сервис онлайн-анализа временно недоступен. Вы можете оставить заявку — наш ведущий архитектор изучит ваш бизнес и подготовит персональный разбор до звонка.',
@@ -314,7 +338,9 @@ ${wishSection}${scenariosText}`.trim();
   };
 
   const handleReset = () => {
+    if (stepIntervalRef.current) clearTimeout(stepIntervalRef.current);
     setStatus('idle');
+    setAnalysisStep(0);
     setCompanyInput('');
     setUserWish('');
     setCompanyProfile(null);
@@ -497,7 +523,7 @@ ${wishSection}${scenariosText}`.trim();
               <div className="py-8 px-4 flex flex-col items-center justify-center text-center gap-3">
                 <Loader2 className="w-8 h-8 text-sky-600 animate-spin" />
                 <p className="text-sm font-bold text-slate-900 transition-all duration-300 min-h-[40px] flex items-center justify-center">
-                  {ANALYSIS_STEPS[analysisStep]}
+                  {ANALYSIS_STEPS[analysisStep]?.text || ANALYSIS_STEPS[analysisStep]}
                 </p>
                 <div className="w-56 h-1.5 bg-slate-100 rounded-full overflow-hidden mt-1">
                   <div
