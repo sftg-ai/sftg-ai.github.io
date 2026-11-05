@@ -53,8 +53,8 @@ export default function EcosystemLogos() {
     },
     {
       name: 'beCloud / Hoster.by',
-      role: 'Закрытый контур в Беларуси',
-      note: 'Закон РБ № 99-З (локальный сервер)',
+      role: 'Защищенный закрытый контур',
+      note: 'Локальный сервер или облако',
       svg: (
         <svg viewBox="0 0 24 24" className="h-6 w-auto text-emerald-600" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -71,7 +71,7 @@ export default function EcosystemLogos() {
     },
     {
       icon: Lock,
-      text: 'Закрытый контур на ваших серверах или в Беларуси по Закону № 99-З РБ',
+      text: 'Закрытый контур на ваших серверах или в защищенном облаке компании',
     },
     {
       icon: CheckCircle2,
@@ -83,7 +83,7 @@ export default function EcosystemLogos() {
     <section className="py-10 px-4 sm:px-6 max-w-7xl mx-auto border-y border-slate-200/80 bg-slate-50/50 rounded-3xl">
       <div className="text-center mb-6">
         <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-          Штатная работа с учетными системами и инфраструктурой Беларуси
+          Штатная работа с корпоративными учетными системами и инфраструктурой
         </span>
       </div>
 
