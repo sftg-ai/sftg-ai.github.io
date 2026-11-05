@@ -1,6 +1,28 @@
-import React, { useState } from 'react';
-import { ArrowRight, Check, Sparkles, Loader2, X, RefreshCw, Layers, FileText, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowRight, Check, Sparkles, Loader2, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
 import { applyB24Prefill } from '../utils/b24Bridge';
+
+const ICON_MAP = {
+  FileText,
+  Layers,
+  Sparkles,
+  CheckCircle2,
+};
+
+const ANALYSIS_STEPS = [
+  'Подключаемся к сайту и проверяем доступность...',
+  'Считываем структуру каталога и разделы услуг...',
+  'Определяем отраслевой профиль и товарную номенклатуру...',
+  'Анализируем модель продаж и каналы заявок...',
+  'Ищем маркеры интеграций и используемого стека...',
+  'Оцениваем объем входящей документации и первички...',
+  'Выявляем рутинные операции в обработке заказов...',
+  'Сопоставляем точки потерь времени менеджеров...',
+  'Исключаем нерелевантные контуры автоматизации...',
+  'Рассчитываем прямую экономию часов сотрудников...',
+  'Формируем прикладные сценарии внедрения...',
+  'Финализируем рекомендации...'
+];
 
 export default function HeroScenarioAnalyzer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +36,19 @@ export default function HeroScenarioAnalyzer() {
   const [status, setStatus] = useState('idle'); // 'idle' | 'analyzing' | 'done'
   const [analysisStep, setAnalysisStep] = useState(0);
   const [scenarios, setScenarios] = useState([]);
+  const [companyProfile, setCompanyProfile] = useState(null);
+  const [formattedComment, setFormattedComment] = useState('');
+  const [insufficientNotice, setInsufficientNotice] = useState(null);
+
+  const stepIntervalRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (stepIntervalRef.current) {
+        clearInterval(stepIntervalRef.current);
+      }
+    };
+  }, []);
 
   const toggleSystem = (key) => {
     setSystems((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -87,73 +122,80 @@ export default function HeroScenarioAnalyzer() {
     e.preventDefault();
     setStatus('analyzing');
     setAnalysisStep(0);
+    setInsufficientNotice(null);
 
-    const steps = [
-      'Анализируем специфику бизнеса...',
-      'Сопоставляем рутинные операции в 1С и Битрикс24...',
-      'Формируем прикладные сценарии...',
-    ];
+    // Плавный цикл смены технологических фаз
+    if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+    stepIntervalRef.current = setInterval(() => {
+      setAnalysisStep((prev) => (prev < ANALYSIS_STEPS.length - 1 ? prev + 1 : prev));
+    }, 450);
 
-    steps.forEach((_, idx) => {
-      setTimeout(() => {
-        setAnalysisStep(idx);
-      }, idx * 600);
-    });
-
-    // Проверяем внешний эндпоинт (iPushDev), если настроен
     const endpoint = import.meta.env.VITE_AI_ANALYSIS_ENDPOINT;
     if (endpoint) {
       try {
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ company: companyInput, systems }),
+          body: JSON.stringify({
+            company: companyInput,
+            systems,
+            userWish
+          }),
         });
+
         if (response.ok) {
           const data = await response.json();
-          setTimeout(() => {
-            setScenarios(data.scenarios || generateLocalScenarios(companyInput, systems));
-            setStatus('done');
-          }, 1800);
+          if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+
+          if (data.status === 'insufficient_data') {
+            setInsufficientNotice(data.message || 'Не удалось найти сайт компании. Показаны базовые сценарии.');
+          }
+
+          setScenarios(data.scenarios && data.scenarios.length > 0 ? data.scenarios : generateLocalScenarios(companyInput, systems));
+          setCompanyProfile(data.company_profile || null);
+          setFormattedComment(data.formatted_b24_comment || '');
+          setStatus('done');
           return;
         }
-      } catch {
+      } catch (err) {
         // Fallback на локальный генератор
       }
     }
 
-    // Локальная генерация
+    // Локальная генерация при отсутствии сети
     setTimeout(() => {
+      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
       setScenarios(generateLocalScenarios(companyInput, systems));
       setStatus('done');
     }, 1800);
   };
 
   const handleScrollToForm = () => {
-    // Формируем список используемых систем
     const sysNames = [];
     if (systems.oneC) sysNames.push('1С');
     if (systems.bitrix24) sysNames.push('Битрикс24');
     if (systems.email) sysNames.push('Почта/Telegram');
 
-    // Формируем структурированный комментарий
-    const scenariosText = scenarios
-      .map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`)
-      .join('\n');
+    // Если бэкенд отдал готовый комментарий — используем его
+    let comment = formattedComment;
+    if (!comment) {
+      const scenariosText = scenarios
+        .map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`)
+        .join('\n');
 
-    const wishText = userWish.trim();
-    const wishSection = wishText
-      ? `Пожелания и комментарии: ${wishText}\n\n`
-      : '';
+      const wishText = userWish.trim();
+      const wishSection = wishText
+        ? `Пожелания и комментарии: ${wishText}\n\n`
+        : '';
 
-    const comment = `Сайт / сфера бизнеса: ${companyInput.trim() || 'Указана на сайте'}
+      comment = `Сайт / сфера бизнеса: ${companyProfile?.display_name || companyInput.trim() || 'Указана на сайте'}
 Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}
 ${wishSection}Подобранные сценарии автоматизации:
 ${scenariosText}`;
+    }
 
-    // Передаем данные в форму Битрикс24
     applyB24Prefill({
-      company: companyInput.trim(),
+      company: companyProfile?.display_name || companyInput.trim(),
       comment,
       scenariosCount: scenarios.length,
       userWish: userWish.trim(),
@@ -169,6 +211,9 @@ ${scenariosText}`;
     setStatus('idle');
     setCompanyInput('');
     setUserWish('');
+    setCompanyProfile(null);
+    setFormattedComment('');
+    setInsufficientNotice(null);
     setSystems({
       oneC: false,
       bitrix24: false,
@@ -190,7 +235,7 @@ ${scenariosText}`;
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center justify-center gap-2 bg-white text-slate-900 hover:bg-sky-50 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
         >
-          <span>Проверить свой бизнес на варианты автоматизации онлайн</span>
+          <span>Экспресс-подбор автоматизации</span>
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600" />
         </button>
       </div>
@@ -211,16 +256,11 @@ ${scenariosText}`;
               <div>
                 <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 uppercase tracking-wider mb-1">
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Онлайн-проверка прямо на экране</span>
+                  <span>Экспресс-подбор автоматизации</span>
                 </div>
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                  {status === 'done' ? 'Рекомендованные сценарии' : 'Проверка бизнеса на варианты автоматизации'}
+                  {status === 'done' ? 'Рекомендованные сценарии' : 'Укажите сайт и текущие системы'}
                 </h3>
-                {status !== 'done' && (
-                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1 leading-relaxed">
-                    Выберите ваши системы — покажем готовые сценарии прямо на экране за 10 секунд.
-                  </p>
-                )}
               </div>
               <button
                 onClick={() => setIsOpen(false)}
@@ -231,158 +271,169 @@ ${scenariosText}`;
               </button>
             </div>
 
-          {/* Состояние: Ввод данных */}
-          {status === 'idle' && (
-            <form onSubmit={handleRunAnalysis} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Сайт компании или сфера бизнеса *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="например: alfasb.by или оптовая поставка оборудования"
-                  value={companyInput}
-                  onInvalid={(e) => e.target.setCustomValidity('Пожалуйста, укажите сайт вашей компании или сферу бизнеса')}
-                  onInput={(e) => {
-                    e.target.setCustomValidity('');
-                    setCompanyInput(e.target.value);
-                  }}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-2">
-                  Какие системы уже используются:
-                </label>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs sm:text-sm text-slate-700 select-none">
-                    <input
-                      type="checkbox"
-                      checked={systems.oneC}
-                      onChange={() => toggleSystem('oneC')}
-                      className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300"
-                    />
-                    <span><strong>1С</strong> (Бухгалтерия, Торговля или Склад)</span>
+            {/* Состояние: Ввод данных */}
+            {status === 'idle' && (
+              <form onSubmit={handleRunAnalysis} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    Сайт компании или название *
                   </label>
-
-                  <label className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs sm:text-sm text-slate-700 select-none">
-                    <input
-                      type="checkbox"
-                      checked={systems.bitrix24}
-                      onChange={() => toggleSystem('bitrix24')}
-                      className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300"
-                    />
-                    <span><strong>Битрикс24</strong> (CRM, сделки, задачи)</span>
-                  </label>
-
-                  <label className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs sm:text-sm text-slate-700 select-none">
-                    <input
-                      type="checkbox"
-                      checked={systems.email}
-                      onChange={() => toggleSystem('email')}
-                      className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300"
-                    />
-                    <span><strong>Корпоративная почта и мессенджеры</strong> (заявки и файлы)</span>
-                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="например: alfasb.by или СП ВИ-МЕНС"
+                    value={companyInput}
+                    onInvalid={(e) => e.target.setCustomValidity('Пожалуйста, укажите сайт вашей компании или название')}
+                    onInput={(e) => {
+                      e.target.setCustomValidity('');
+                      setCompanyInput(e.target.value);
+                    }}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
+                  />
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Укажите дополнительную информацию или пожелания (необязательно)
-                </label>
-                <textarea
-                  rows={2}
-                  placeholder="например: автоматизировать ввод накладных в 1С или ускорить ответ на заявки"
-                  value={userWish}
-                  onChange={(e) => setUserWish(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors resize-none"
-                />
-              </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-2">
+                    Какие системы уже используются:
+                  </label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs sm:text-sm text-slate-700 select-none">
+                      <input
+                        type="checkbox"
+                        checked={systems.oneC}
+                        onChange={() => toggleSystem('oneC')}
+                        className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300"
+                      />
+                      <span><strong>1С</strong> (Бухгалтерия, Торговля или Склад)</span>
+                    </label>
 
-              <button
-                type="submit"
-                className="w-full mt-2 py-3 px-5 rounded-xl text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>Проверить варианты автоматизации</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </form>
-          )}
+                    <label className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs sm:text-sm text-slate-700 select-none">
+                      <input
+                        type="checkbox"
+                        checked={systems.bitrix24}
+                        onChange={() => toggleSystem('bitrix24')}
+                        className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300"
+                      />
+                      <span><strong>Битрикс24</strong> (CRM, сделки, задачи)</span>
+                    </label>
 
-          {/* Состояние: Выполняется анализ */}
-          {status === 'analyzing' && (
-            <div className="py-8 px-4 flex flex-col items-center justify-center text-center gap-3">
-              <Loader2 className="w-8 h-8 text-sky-600 animate-spin" />
-              <p className="text-sm font-bold text-slate-900">
-                {analysisStep === 0 && 'Изучаем специфику бизнеса...'}
-                {analysisStep === 1 && 'Сопоставляем рутинные операции в 1С и Битрикс24...'}
-                {analysisStep === 2 && 'Формируем прикладные сценарии окупаемости...'}
-              </p>
-              <div className="w-48 h-1.5 bg-slate-100 rounded-full overflow-hidden mt-1">
-                <div
-                  className="h-full bg-sky-600 transition-all duration-500 rounded-full"
-                  style={{ width: `${((analysisStep + 1) / 3) * 100}%` }}
-                />
-              </div>
-            </div>
-          )}
+                    <label className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs sm:text-sm text-slate-700 select-none">
+                      <input
+                        type="checkbox"
+                        checked={systems.email}
+                        onChange={() => toggleSystem('email')}
+                        className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300"
+                      />
+                      <span><strong>Корпоративная почта и мессенджеры</strong> (заявки и файлы)</span>
+                    </label>
+                  </div>
+                </div>
 
-          {/* Состояние: Результат анализа */}
-          {status === 'done' && (
-            <div className="space-y-3.5">
-              <div className="text-xs text-slate-500">
-                Подобрано для: <strong className="text-slate-800">{companyInput || 'вашей компании'}</strong>
-              </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    Укажите дополнительную информацию или пожелания (необязательно)
+                  </label>
+                  <textarea
+                    rows={2}
+                    placeholder="например: автоматизировать ввод накладных в 1С или ускорить ответ на заявки"
+                    value={userWish}
+                    onChange={(e) => setUserWish(e.target.value)}
+                    className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors resize-none"
+                  />
+                </div>
 
-              <div className="space-y-2.5 max-h-[320px] overflow-y-auto pr-1">
-                {scenarios.map((sc, idx) => {
-                  const Icon = sc.icon || Sparkles;
-                  return (
-                    <div
-                      key={idx}
-                      className="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-left"
-                    >
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <span className="text-[10px] font-bold text-sky-700 bg-sky-100 px-2 py-0.5 rounded">
-                          {sc.system}
-                        </span>
-                        <span className="text-[10px] font-semibold text-emerald-700">
-                          {sc.benefit}
-                        </span>
-                      </div>
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 mb-1">
-                        {sc.title}
-                      </h4>
-                      <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
-                        {sc.desc}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Кнопка перехода к форме Битрикс24 */}
-              <div className="pt-2 flex flex-col sm:flex-row items-center gap-2">
                 <button
-                  onClick={handleScrollToForm}
-                  className="w-full sm:flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  type="submit"
+                  className="w-full mt-2 py-3 px-5 rounded-xl text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <span>Внедрить эти сценарии (Перейти к заявке)</span>
+                  <span>Провести экспресс-анализ и подобрать решения</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
-                <button
-                  onClick={handleReset}
-                  className="p-3 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors"
-                  title="Рассчитать заново"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                </button>
+              </form>
+            )}
+
+            {/* Состояние: Выполняется анализ */}
+            {status === 'analyzing' && (
+              <div className="py-8 px-4 flex flex-col items-center justify-center text-center gap-3">
+                <Loader2 className="w-8 h-8 text-sky-600 animate-spin" />
+                <p className="text-sm font-bold text-slate-900 transition-all duration-300 min-h-[40px] flex items-center justify-center">
+                  {ANALYSIS_STEPS[analysisStep]}
+                </p>
+                <div className="w-56 h-1.5 bg-slate-100 rounded-full overflow-hidden mt-1">
+                  <div
+                    className="h-full bg-sky-600 transition-all duration-300 rounded-full"
+                    style={{ width: `${Math.min(100, ((analysisStep + 1) / ANALYSIS_STEPS.length) * 100)}%` }}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {/* Состояние: Результат анализа */}
+            {status === 'done' && (
+              <div className="space-y-3.5">
+                <div className="text-xs text-slate-500">
+                  Подобрано для: <strong className="text-slate-900">{companyProfile?.display_name || companyInput || 'вашей компании'}</strong>
+                  {companyProfile?.industry && (
+                    <span className="block text-[11px] text-slate-500 mt-0.5">
+                      Отрасль: {companyProfile.industry}
+                    </span>
+                  )}
+                </div>
+
+                {insufficientNotice && (
+                  <div className="flex items-start gap-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs">
+                    <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    <span>{insufficientNotice}</span>
+                  </div>
+                )}
+
+                <div className="space-y-2.5 max-h-[320px] overflow-y-auto pr-1">
+                  {scenarios.map((sc, idx) => {
+                    const iconKey = typeof sc.icon === 'string' ? sc.icon : null;
+                    const Icon = (iconKey && ICON_MAP[iconKey]) || sc.icon || Sparkles;
+                    return (
+                      <div
+                        key={idx}
+                        className="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-left hover:border-sky-300 transition-colors"
+                      >
+                        <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+                          <span className="text-[10px] font-bold text-sky-700 bg-sky-100 px-2 py-0.5 rounded">
+                            {sc.system}
+                          </span>
+                          <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                            {sc.benefit}
+                          </span>
+                        </div>
+                        <h4 className="text-xs sm:text-sm font-bold text-slate-900 mb-1">
+                          {sc.title}
+                        </h4>
+                        <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
+                          {sc.desc}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Кнопка перехода к форме Битрикс24 */}
+                <div className="pt-2 flex flex-col sm:flex-row items-center gap-2">
+                  <button
+                    onClick={handleScrollToForm}
+                    className="w-full sm:flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <span>Внедрить эти сценарии (Перейти к заявке)</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleReset}
+                    className="p-3 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors"
+                    title="Рассчитать заново"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
 
           </div>
         </div>
@@ -390,4 +441,3 @@ ${scenariosText}`;
     </div>
   );
 }
-
