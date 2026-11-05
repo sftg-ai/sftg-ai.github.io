@@ -1,0 +1,15 @@
+$ORIGIN softgreat.by.
+$TTL 3600
+
+; Серверы имен hoster.by
+@       IN  NS      u1.hoster.by.
+@       IN  NS      u2.hoster.by.
+
+; GitHub Pages A-записи для apex-домена (softgreat.by)
+@       IN  A       185.199.108.153
+@       IN  A       185.199.109.153
+@       IN  A       185.199.110.153
+@       IN  A       185.199.111.153
+
+; Поддомен www (CNAME на GitHub Pages)
+www     IN  CNAME   sftg-ai.github.io.
