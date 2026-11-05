@@ -386,8 +386,8 @@ ${wishSection}${scenariosText}`.trim();
       >
         <div className="min-h-0 overflow-hidden pb-1">
           {/* Вопрос-подводка перед кнопкой подбора */}
-          <div className="flex items-start sm:items-center gap-1.5 text-xs sm:text-sm text-sky-100/90 font-medium mb-3 select-none">
-            <HelpCircle className="w-3.5 h-3.5 text-sky-200/80 shrink-0 mt-0.5 sm:mt-0" />
+          <div className="flex items-start gap-1.5 text-xs sm:text-sm text-sky-100/90 font-medium mb-3 select-none">
+            <HelpCircle className="w-3.5 h-3.5 text-sky-200/80 shrink-0 mt-[3px]" />
             <span>Не знаете, что и как можно автоматизировать? Проведите экспресс-аудит вашего бизнеса.</span>
           </div>
 
