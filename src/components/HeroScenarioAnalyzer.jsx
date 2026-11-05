@@ -328,7 +328,7 @@ export default function HeroScenarioAnalyzer() {
         ? `Пожелания и комментарии: ${wishText}\n`
         : '';
 
-      comment = `Сайт / сфера бизнеса: ${companyProfile?.display_name || companyInput.trim() || 'Указана на сайте'}
+      comment = `Сайт / название: ${companyProfile?.display_name || companyInput.trim() || 'Указана на сайте'}
 Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}
 ${wishSection}${scenariosText}`.trim();
     }
@@ -451,14 +451,14 @@ ${wishSection}${scenariosText}`.trim();
               <form onSubmit={handleRunAnalysis} className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Сайт компании или сфера бизнеса *
+                    Сайт компании или название *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="например: alfasb.by или оптовая поставка оборудования"
+                    placeholder="например: alfasb.by или Альфа СБ"
                     value={companyInput}
-                    onInvalid={(e) => e.target.setCustomValidity('Пожалуйста, укажите сайт вашей компании или сферу бизнеса')}
+                    onInvalid={(e) => e.target.setCustomValidity('Пожалуйста, укажите сайт вашей компании или название')}
                     onInput={(e) => {
                       e.target.setCustomValidity('');
                       setCompanyInput(e.target.value);
