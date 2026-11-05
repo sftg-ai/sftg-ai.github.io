@@ -44,7 +44,7 @@ export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
           <line x1="0" y1="30" x2="360" y2="30" stroke="#E2E8F0" strokeWidth="1.5" />
 
           {/* Кардиограмма / Волна процесса */}
-          <g>
+          <g className="animate-pulse">
             <path
               d={
                 isFastPhase
@@ -65,25 +65,14 @@ export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
                 transition: 'stroke-dashoffset 0.3s ease-out, d 0.4s ease',
               }}
             />
-
-            {/* Бегущая пульсирующая точка сканирования */}
-            <circle
-              cx={Math.max(12, Math.min(348, 360 * progressRatio))}
-              cy="30"
-              r="4"
-              fill="#0284C7"
-              filter="url(#glow)"
-              className="animate-pulse"
-            />
           </g>
         </svg>
       </div>
 
       {/* Тонкий статус осциллографа */}
       <div className="w-full flex items-center justify-between text-[10px] font-semibold text-slate-400 mt-1 px-1">
-        <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-ping" style={{ animationDuration: waveSpeed }} />
-          <span>{isFastPhase ? 'ПРОЦЕССИНГ ВЫЧИСЛЕНИЙ' : 'ТЕЛЕМЕТРИЯ СБОРА ДАННЫХ'}</span>
+        <span className="text-sky-600 font-mono tracking-wider">
+          {isFastPhase ? 'ПРОЦЕССИНГ ВЫЧИСЛЕНИЙ' : 'ТЕЛЕМЕТРИЯ СБОРА ДАННЫХ'}
         </span>
         <span className="font-mono text-slate-500">{Math.round(progressRatio * 100)}%</span>
       </div>
@@ -135,10 +124,10 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
             return (
               <div key={node.id} className="flex flex-col items-center gap-1.5 select-none">
                 <div
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 relative ${
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
                     node.active
                       ? isAI
-                        ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/40 scale-105 animate-pulse ring-2 ring-sky-400/60 ring-offset-1'
+                        ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/40 scale-105 animate-pulse ring-2 ring-sky-400/50'
                         : 'bg-sky-600 text-white shadow-md shadow-sky-600/30 scale-105'
                       : isAI
                         ? 'bg-sky-50/90 border border-sky-300 text-sky-600 animate-pulse shadow-sm shadow-sky-500/10'
@@ -146,12 +135,6 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
                   }`}
                 >
                   <Icon className="w-4 h-4" />
-                  {isAI && (
-                    <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500" />
-                    </span>
-                  )}
                 </div>
                 <span
                   className={`text-[10px] font-bold transition-colors ${
@@ -172,10 +155,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
 
       {/* Индикатор статуса топологии */}
       <div className="w-full flex items-center justify-between text-[10px] font-semibold text-slate-400 mt-1 px-1">
-        <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
-          <span>СИНХРОНИЗАЦИЯ УЗЛОВ</span>
-        </span>
+        <span className="text-sky-600 font-mono tracking-wider">СИНХРОНИЗАЦИЯ УЗЛОВ</span>
         <span className="font-mono text-slate-500">{Math.round(progressRatio * 100)}%</span>
       </div>
     </div>
