@@ -7,28 +7,28 @@ export default function Hero({ onSelectCase, activeCaseIndex }) {
     <section className="relative bg-sky-600 text-white overflow-hidden pt-28 sm:pt-32 md:pt-36 pb-16 md:pb-24">
       {/* Мягкие SVG-волны и изолинии фона */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <svg 
-          className="absolute inset-0 w-full h-full object-cover opacity-20" 
-          viewBox="0 0 1440 800" 
-          fill="none" 
+        <svg
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
+          viewBox="0 0 1440 800"
+          fill="none"
           preserveAspectRatio="none"
         >
-          <path 
-            d="M-100 200 C300 120 600 280 1000 180 C1200 130 1400 220 1600 160" 
-            stroke="#FFFFFF" 
-            strokeWidth="1.5" 
-            strokeDasharray="6 6" 
+          <path
+            d="M-100 200 C300 120 600 280 1000 180 C1200 130 1400 220 1600 160"
+            stroke="#FFFFFF"
+            strokeWidth="1.5"
+            strokeDasharray="6 6"
           />
-          <path 
-            d="M-100 450 C350 350 700 550 1100 400 C1300 320 1500 420 1600 380" 
-            stroke="#FFFFFF" 
-            strokeWidth="1.5" 
+          <path
+            d="M-100 450 C350 350 700 550 1100 400 C1300 320 1500 420 1600 380"
+            stroke="#FFFFFF"
+            strokeWidth="1.5"
           />
-          <path 
-            d="M-100 650 C250 580 650 720 1050 620 C1300 560 1450 640 1600 600" 
-            stroke="#FFFFFF" 
-            strokeWidth="1" 
-            strokeDasharray="4 4" 
+          <path
+            d="M-100 650 C250 580 650 720 1050 620 C1300 560 1450 640 1600 600"
+            stroke="#FFFFFF"
+            strokeWidth="1"
+            strokeDasharray="4 4"
           />
         </svg>
         <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-sky-400/25 blur-3xl" />
@@ -38,7 +38,7 @@ export default function Hero({ onSelectCase, activeCaseIndex }) {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-left">
         {/* 2 колонки: Текст слева, Иллюстрация справа */}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
+
           {/* Слева: Текстовый блок (7 колонок) */}
           <div className="lg:col-span-7 flex flex-col items-start">
             {/* Плашки над заголовком */}
@@ -85,7 +85,7 @@ export default function Hero({ onSelectCase, activeCaseIndex }) {
 
         {/* По низу голубого экрана: 3 крупные карточки экономической выгоды */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12 md:mt-16">
-          
+
           {/* Карточка 1 - Сокращение расходов (кристальный лазурно-бирюзовый оттенок точности и контроля затрат) */}
           <div className="relative overflow-hidden bg-gradient-to-br from-sky-50/95 via-white to-cyan-50/90 text-slate-900 rounded-2xl p-6 shadow-xl border border-sky-200/90 flex flex-col justify-between">
             <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-cyan-300/25 blur-2xl pointer-events-none" />
