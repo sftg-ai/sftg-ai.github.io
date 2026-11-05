@@ -112,7 +112,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
     { id: 0, label: 'Сайт', icon: Globe, active: isNode0Active },
     { id: 1, label: 'Реестры', icon: Database, active: isNode1Active },
     { id: 2, label: '1С / CRM', icon: Layers, active: isNode2Active },
-    { id: 3, label: 'Контур', icon: Sparkles, active: isNode3Active },
+    { id: 3, label: 'AI-контур', icon: Sparkles, active: isNode3Active },
   ];
 
   return (
@@ -131,20 +131,35 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
         <div className="flex items-center justify-between relative z-10 px-2">
           {nodes.map((node) => {
             const Icon = node.icon;
+            const isAI = node.id === 3;
             return (
               <div key={node.id} className="flex flex-col items-center gap-1.5 select-none">
                 <div
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 relative ${
                     node.active
-                      ? 'bg-sky-600 text-white shadow-md shadow-sky-600/30 scale-105'
-                      : 'bg-white border border-slate-200 text-slate-400'
+                      ? isAI
+                        ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/40 scale-105 animate-pulse ring-2 ring-sky-400/60 ring-offset-1'
+                        : 'bg-sky-600 text-white shadow-md shadow-sky-600/30 scale-105'
+                      : isAI
+                        ? 'bg-sky-50/90 border border-sky-300 text-sky-600 animate-pulse shadow-sm shadow-sky-500/10'
+                        : 'bg-white border border-slate-200 text-slate-400'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
+                  {isAI && (
+                    <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500" />
+                    </span>
+                  )}
                 </div>
                 <span
                   className={`text-[10px] font-bold transition-colors ${
-                    node.active ? 'text-sky-700' : 'text-slate-400'
+                    node.active
+                      ? 'text-sky-700'
+                      : isAI
+                        ? 'text-sky-600'
+                        : 'text-slate-400'
                   }`}
                 >
                   {node.label}
@@ -166,3 +181,4 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
     </div>
   );
 }
+
