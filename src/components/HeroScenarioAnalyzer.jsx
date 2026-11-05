@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowRight, Check, Sparkles, Loader2, X, RefreshCw, Layers, FileText, CheckCircle2 } from 'lucide-react';
+import { applyB24Prefill } from '../utils/b24Bridge';
 
 export default function HeroScenarioAnalyzer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,6 +111,34 @@ export default function HeroScenarioAnalyzer() {
   };
 
   const handleScrollToForm = () => {
+    // Формируем список используемых систем
+    const sysNames = [];
+    if (systems.oneC) sysNames.push('1С');
+    if (systems.bitrix24) sysNames.push('Битрикс24');
+    if (systems.email) sysNames.push('Почта/Telegram');
+
+    // Формируем структурированный комментарий
+    const scenariosText = scenarios
+      .map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`)
+      .join('\n');
+
+    const comment = `[Экспресс-анализ SoftGreat AI]
+Компания / сайт: ${companyInput.trim() || 'Указана на сайте'}
+Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}
+
+Подобранные сценарии автоматизации:
+${scenariosText}
+
+Дополнительный комментарий:
+`;
+
+    // Передаем данные в форму Битрикс24
+    applyB24Prefill({
+      company: companyInput.trim(),
+      comment,
+      scenariosCount: scenarios.length,
+    });
+
     const el = document.getElementById('lead-form');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });

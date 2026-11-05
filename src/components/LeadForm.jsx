@@ -1,10 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Search, MessageSquare, PhoneCall, CheckCircle2, ExternalLink, Send, Loader2 } from 'lucide-react';
+import { Search, MessageSquare, PhoneCall, CheckCircle2, ExternalLink, Send, Loader2, Sparkles } from 'lucide-react';
+import { onB24PrefillApplied } from '../utils/b24Bridge';
 
 export default function LeadForm() {
   const containerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+  const [prefillInfo, setPrefillInfo] = useState(null);
+
+  useEffect(() => {
+    // Подписка на префилл из HeroScenarioAnalyzer
+    const unsubscribe = onB24PrefillApplied((data) => {
+      setPrefillInfo(data);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -117,6 +127,17 @@ export default function LeadForm() {
 
         {/* Справа: 6 колонок - Официальная CRM-форма Битрикс24 */}
         <div className="lg:col-span-6 flex flex-col">
+          {/* Баннер с подтверждением передачи экспресс-анализа */}
+          {prefillInfo && (
+            <div className="mb-3 p-3.5 rounded-2xl bg-sky-50 border border-sky-200/90 text-left flex items-start gap-2.5 animate-in fade-in slide-in-from-top-1">
+              <Sparkles className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+              <div className="text-xs text-sky-950 leading-relaxed">
+                <span className="font-bold">Экспресс-анализ добавлен в заявку:</span>{' '}
+                сценарии для компании <strong>{prefillInfo.company || 'вашего бизнеса'}</strong> внесены в комментарий к форме. Вы можете дополнить или скорректировать их.
+              </div>
+            </div>
+          )}
+
           <p className="text-xs sm:text-sm text-slate-500 mb-2">
             Заполните форму, и мы вернемся с готовыми сценариями для вашей компании
           </p>
