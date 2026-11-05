@@ -234,19 +234,21 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
         </div>
 
         {/* Подписи узлов точно под кубиками */}
-        <div className="flex justify-between w-full mt-2 px-1">
+        <div className="flex justify-between w-full mt-2 px-1 min-h-[26px]">
           {nodes.map((node) => {
             const isCurrent = node.id === currentNodeIndex;
             const isCompleted = node.active && !isCurrent;
             return (
               <div
                 key={node.id}
-                className={`flex flex-col justify-start text-center ${
-                  node.id === 3 ? 'w-14 -mr-2.5 items-end text-right' : 'w-9 items-center'
-                }`}
+                className="w-9 relative flex justify-center text-center select-none"
               >
                 <span
-                  className={`text-[10px] leading-tight transition-colors ${
+                  className={`text-[10px] leading-tight text-center transition-colors ${
+                    node.id === 3
+                      ? 'absolute top-0 left-1/2 -translate-x-1/2 w-20'
+                      : 'whitespace-nowrap'
+                  } ${
                     isCurrent
                       ? 'text-sky-700 font-bold'
                       : isCompleted
@@ -254,7 +256,13 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
                         : 'text-slate-400 font-medium'
                   }`}
                 >
-                  {node.label}
+                  {node.id === 3 ? (
+                    <>
+                      Анализ и<br />подбор
+                    </>
+                  ) : (
+                    node.label
+                  )}
                 </span>
               </div>
             );
