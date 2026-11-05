@@ -129,7 +129,7 @@ export default function HeroScenarioAnalyzer() {
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center justify-center gap-2 bg-white text-slate-900 hover:bg-sky-50 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
         >
-          <span>Подобрать сценарии автоматизации</span>
+          <span>Экспресс-подбор автоматизации</span>
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600" />
         </button>
       ) : (
@@ -214,7 +214,7 @@ export default function HeroScenarioAnalyzer() {
                 type="submit"
                 className="w-full mt-2 py-3 px-5 rounded-xl text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Рассчитать сценарии автоматизации</span>
+                <span>Провести экспресс-анализ и подобрать решения</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
@@ -297,3 +297,4 @@ export default function HeroScenarioAnalyzer() {
     </div>
   );
 }
+

@@ -52,3 +52,4 @@ const analyzeScenarios = async (data) => {
 - Фон карточки в раскрытом виде: `bg-white/95 backdrop-blur-xl border border-white/40 shadow-2xl rounded-2xl p-5 sm:p-6 text-slate-900`.
 - Плавная анимация раскрытия через `transition-all duration-300`.
 - Кнопка перехода к форме Битрикс24: плавный `document.getElementById('lead-form').scrollIntoView({ behavior: 'smooth' })`.
+
