@@ -81,7 +81,7 @@ export default function Hero({ onSelectCase, activeCaseIndex }) {
             <div className="relative rounded-3xl shadow-2xl border border-white/20 overflow-hidden bg-white/10 backdrop-blur-sm p-2 sm:p-2.5">
               <img
                 src="/images/hero-ai-control.png"
-                alt="AI-контроль бизнес-процессов SFTG"
+                alt="AI-контроль бизнес-процессов Softgreat"
                 className="w-full h-auto rounded-2xl object-cover block shadow-inner"
                 loading="eager"
               />

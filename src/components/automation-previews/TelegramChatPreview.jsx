@@ -38,7 +38,7 @@ export default function TelegramChatPreview() {
         <div className="flex flex-col items-end max-w-[92%] self-end">
           <div className="rounded-2xl rounded-tr-sm bg-gradient-to-br from-sky-950/70 to-indigo-950/80 border border-sky-500/30 text-white p-3 shadow-md">
             <div className="text-[10px] font-semibold text-sky-400 mb-1 flex items-center gap-1">
-              <span>SFTG Sales Bot (Интеграция с 1С:Склад)</span>
+              <span>Softgreat Sales Bot (Интеграция с 1С:Склад)</span>
             </div>
             <p className="text-[11px] leading-relaxed text-white/90">
               Здравствуйте, Дмитрий.

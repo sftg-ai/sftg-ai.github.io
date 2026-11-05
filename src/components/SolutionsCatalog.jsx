@@ -151,7 +151,7 @@ export default function SolutionsCatalog() {
 
                 {/* Ответ ИИ-агента */}
                 <div className="bg-sky-950/40 border border-sky-500/20 p-3 rounded-xl rounded-tr-sm text-xs text-sky-100 max-w-[90%] ml-auto">
-                  <div className="text-[10px] text-sky-400 font-mono mb-1">SFTG AI Consultant (23:42:04)</div>
+                  <div className="text-[10px] text-sky-400 font-mono mb-1">Softgreat AI Consultant (23:42:04)</div>
                   «Добрый вечер! Кабель ВВГнг-LS 3х2.5 в наличии на центральном складе (свободный остаток 4 200 м). При объеме от 500 м спеццена 84.50 ₽/м. Партия 1 500 м выйдет в 126 750 ₽. Забронировать партию на отгрузку на понедельник утро?»
                 </div>
               </div>
@@ -517,7 +517,7 @@ export default function SolutionsCatalog() {
               {/* Решение (Стало) */}
               <div className="mb-4">
                 <div className="text-xs font-semibold text-zinc-400 mb-1">
-                  Как решает SFTG AI:
+                  Как решает Softgreat AI:
                 </div>
                 <p className="text-xs text-zinc-300 leading-relaxed">
                   {item.solution}

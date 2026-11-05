@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowRight, Phone, Send } from 'lucide-react';
-import SftgLogo from './SftgLogo';
+import SoftgreatLogo from './SoftgreatLogo';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -37,13 +37,8 @@ export default function Header() {
           }`}
         >
           {/* Логотип */}
-          <a href="#" className="flex items-center gap-2.5 group">
-            <SftgLogo className="w-8 h-8 transition-transform duration-300 group-hover:scale-105" glow={false} />
-            <div className="flex flex-col">
-              <span className="text-base font-bold tracking-tight text-slate-900 leading-none">
-                SFTG <span className="text-sky-600 font-semibold">AI</span>
-              </span>
-            </div>
+          <a href="#" className="flex items-center gap-2 group">
+            <SoftgreatLogo className="h-7" theme="dark" />
           </a>
 
           {/* Десктоп навигация */}

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://softgreat.com/ai/sitemap.xml
+Sitemap: https://softgreat.by/sitemap.xml

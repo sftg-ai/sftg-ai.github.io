@@ -15,7 +15,7 @@ export default function TeamAndExpertise() {
     {
       image: teamSlide1Img,
       badge: 'Архитектура и надежность',
-      title: 'Инженерная команда SFTG',
+      title: 'Инженерная команда Softgreat',
       desc: 'Проектирование и сопровождение корпоративных систем интеграции',
     },
     {
@@ -105,7 +105,7 @@ export default function TeamAndExpertise() {
           Опыт промышленной разработки и надежность решений
         </h2>
         <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-3xl">
-          Команда SFTG (ООО «Инновационный Софт», резидент ПВТ) более 15 лет разрабатывает корпоративные платформы, надежные интеграции и высоконагруженные сервисы.
+          Команда Softgreat (ООО «Инновационный Софт», резидент ПВТ) более 15 лет разрабатывает корпоративные платформы, надежные интеграции и высоконагруженные сервисы.
         </p>
       </div>
 
@@ -164,7 +164,7 @@ export default function TeamAndExpertise() {
           <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between h-full bg-slate-50/70">
             <div>
               <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
-                Инженерный фокус SFTG AI:
+                Инженерный фокус Softgreat AI:
               </div>
               <div className="space-y-3">
                 {slides.map((s, idx) => (

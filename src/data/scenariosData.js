@@ -98,7 +98,7 @@ export const scenariosData = [
     ],
     output: {
       title: 'Сводная таблица маржинальности и готовое КП',
-      system: 'Модуль расценки SFTG AI ➔ 1С / Битрикс24',
+      system: 'Модуль расценки Softgreat AI ➔ 1С / Битрикс24',
       status: 'Смета сведена · КП сформировано',
       timeTaken: '8 минут',
       fields: [
@@ -134,7 +134,7 @@ export const scenariosData = [
     ],
     output: {
       title: 'Результат работы Computer Vision (Наш боевой стенд)',
-      system: 'SFTG Vision AI Engine + 1C:Склад',
+      system: 'Softgreat Vision AI Engine + 1C:Склад',
       status: 'Деталь распознана · Артикул найден',
       timeTaken: '2.8 сек',
       fields: [
