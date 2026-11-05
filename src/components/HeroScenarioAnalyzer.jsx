@@ -183,7 +183,11 @@ export default function HeroScenarioAnalyzer() {
                   required
                   placeholder="например: alfasb.by или ЧП «Альфа-СБ»"
                   value={companyInput}
-                  onChange={(e) => setCompanyInput(e.target.value)}
+                  onInvalid={(e) => e.target.setCustomValidity('Пожалуйста, укажите сайт вашей компании или название')}
+                  onInput={(e) => {
+                    e.target.setCustomValidity('');
+                    setCompanyInput(e.target.value);
+                  }}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition-colors"
                 />
               </div>
