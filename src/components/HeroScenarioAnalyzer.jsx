@@ -146,8 +146,7 @@ export default function HeroScenarioAnalyzer() {
       ? `Пожелания и комментарии: ${wishText}\n\n`
       : '';
 
-    const comment = `[Экспресс-анализ SoftGreat AI]
-Сайт / сфера бизнеса: ${companyInput.trim() || 'Указана на сайте'}
+    const comment = `Сайт / сфера бизнеса: ${companyInput.trim() || 'Указана на сайте'}
 Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}
 ${wishSection}Подобранные сценарии автоматизации:
 ${scenariosText}`;
