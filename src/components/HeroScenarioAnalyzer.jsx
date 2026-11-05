@@ -404,7 +404,7 @@ ${wishSection}${scenariosText}`.trim();
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500" />
             </span>
 
-            <span>Подбор кейсов автоматизации на сайте за 1 минуту</span>
+            <span>Подбор вариантов автоматизации для вашего бизнеса за 1 минуту</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600 shrink-0" />
           </button>
         </div>
