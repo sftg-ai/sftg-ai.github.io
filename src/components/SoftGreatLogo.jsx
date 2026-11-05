@@ -1,12 +1,12 @@
 import React from 'react';
 
 /**
- * Фирменный логотип Softgreat AI.
+ * Фирменный логотип SoftGreat AI.
  * 
- * Включает официальное начертание логотипа Softgreat с фирменной буквой 'A'
+ * Включает официальное начертание логотипа SoftGreat с фирменной буквой 'A'
  * и акцентный постфикс 'AI' в фирменном технологичном цианово-голубом цвете.
  */
-export default function SoftgreatLogo({ className = "h-7", theme = "dark" }) {
+export default function SoftGreatLogo({ className = "h-7", theme = "dark" }) {
   const isWhite = theme === "white";
   const logoSrc = isWhite 
     ? "/images/brand/softgreat-logo-white.png" 
@@ -14,10 +14,10 @@ export default function SoftgreatLogo({ className = "h-7", theme = "dark" }) {
 
   return (
     <div className={`inline-flex items-center gap-2 select-none group ${className}`}>
-      {/* Официальное начертание Softgreat */}
+      {/* Официальное начертание SoftGreat */}
       <img
         src={logoSrc}
-        alt="Softgreat"
+        alt="SoftGreat"
         className="h-6 w-auto object-contain block transition-transform duration-200 group-hover:opacity-95"
       />
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowRight, Phone, Send } from 'lucide-react';
-import SoftgreatLogo from './SoftgreatLogo';
+import SoftGreatLogo from './SoftGreatLogo';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -38,7 +38,7 @@ export default function Header() {
         >
           {/* Логотип */}
           <a href="#" className="flex items-center gap-2 group">
-            <SoftgreatLogo className="h-7" theme="dark" />
+            <SoftGreatLogo className="h-7" theme="dark" />
           </a>
 
           {/* Десктоп навигация */}

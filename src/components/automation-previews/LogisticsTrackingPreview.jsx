@@ -40,7 +40,7 @@ export default function LogisticsTrackingPreview() {
             <div className="text-[10px] font-semibold text-sky-400 mb-1.5 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <Truck className="w-3.5 h-3.5 text-sky-400" />
-                Softgreat Logistics Agent (Авто-трекинг рейса Р-4821)
+                SoftGreat Logistics Agent (Авто-трекинг рейса Р-4821)
               </span>
               <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
                 В графике

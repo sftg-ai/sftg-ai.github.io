@@ -1,6 +1,6 @@
 import React from 'react';
 import { ShieldCheck, Send, Phone, MapPin, Clock, MessageSquare, Award } from 'lucide-react';
-import SoftgreatLogo from './SoftgreatLogo';
+import SoftGreatLogo from './SoftGreatLogo';
 
 export default function Footer() {
   const tgLink = "https://t.me/yurasvidersky?text=Здравствуйте!%20Хочу%20заказать%20бесплатный%20аудит%20процессов";
@@ -26,7 +26,7 @@ export default function Footer() {
           {/* Бренд и описание (5 колонок) */}
           <div className="lg:col-span-5 flex flex-col gap-2">
             <div className="flex items-center gap-2">
-              <SoftgreatLogo className="h-7" theme="dark" />
+              <SoftGreatLogo className="h-7" theme="dark" />
             </div>
             <p className="text-xs text-slate-500 leading-relaxed mt-1 max-w-sm">
               Белорусский разработчик и интегратор интеллектуальных систем автоматизации документов, заказов и B2B-процессов.
@@ -116,7 +116,7 @@ export default function Footer() {
             </div>
           </div>
           <div className="shrink-0 text-slate-600 font-medium">
-            © 2026 Softgreat AI (ООО «Инновационный Софт»). Минск, Беларусь.
+            © 2026 SoftGreat AI (ООО «Инновационный Софт»). Минск, Беларусь.
           </div>
         </div>
 
