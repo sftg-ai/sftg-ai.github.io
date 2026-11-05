@@ -1,13 +1,13 @@
 import React from 'react';
-import { Globe, Database, Layers, Sparkles } from 'lucide-react';
+import { Globe, Database, Layers, BarChart3 } from 'lucide-react';
 
 /**
  * Режим 1: Осциллограф процессов (Mnemonic Continuous Circuit)
  * Непрерывная контурная линия, вырисовывающая слева направо 4 узнаваемых силуэта:
- * [Здание компании] ➔ [Документ накладной] ➔ [Шестерня 1С/CRM] ➔ [AI-искра]
+ * [Здание компании] ➔ [Документ накладной] ➔ [Шестерня 1С/CRM] ➔ [Анализ и генерация отчёта]
  */
 const MNEMONIC_CIRCUIT_PATH =
-  "M 0 30 L 30 30 L 40 30 L 40 18 L 60 8 L 63 8 L 63 12 L 65 10 L 80 18 L 80 30 L 115 30 L 125 30 L 125 10 L 155 10 L 165 20 L 155 20 L 155 10 L 165 20 L 165 30 L 205 30 L 215 30 L 215 20 L 223 20 L 223 30 L 232 30 L 232 12 L 242 12 L 242 30 L 251 30 L 251 20 L 259 20 L 259 30 L 295 30 L 305 30 L 318 24 L 324 8 L 330 24 L 344 30 L 330 36 L 324 52 L 318 36 L 305 30 L 360 30";
+  "M 0 30 L 30 30 L 40 30 L 40 18 L 60 8 L 63 8 L 63 12 L 65 10 L 80 18 L 80 30 L 115 30 L 125 30 L 125 10 L 155 10 L 165 20 L 155 20 L 155 10 L 165 20 L 165 30 L 205 30 L 215 30 L 215 20 L 223 20 L 223 30 L 232 30 L 232 12 L 242 12 L 242 30 L 251 30 L 251 20 L 259 20 L 259 30 L 295 30 L 305 30 L 310 30 L 310 22 L 316 22 L 316 30 L 321 30 L 321 14 L 328 14 L 328 30 L 333 30 L 333 8 L 342 8 L 342 30 L 348 30 L 360 30";
 
 export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
   const isFastPhase = step >= 3;
@@ -93,7 +93,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
   // Node 0 (Сайт): активен с 0 шага, пульсирует пока step < 1
   // Node 1 (Реестры): активен с 1 шага, пульсирует пока 1 <= step < 5
   // Node 2 (1С / CRM): активен с 5 шага, пульсирует пока 5 <= step < 9
-  // Node 3 (AI-контур): активен с 9 шага, пульсирует пока step >= 9
+  // Node 3 (Генерация): активен с 9 шага, пульсирует пока step >= 9
   const isNode0Active = true;
   const isNode1Active = step >= 1;
   const isNode2Active = step >= 5;
@@ -111,7 +111,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
     { id: 0, label: 'Сайт', icon: Globe, active: isNode0Active },
     { id: 1, label: 'Реестры', icon: Database, active: isNode1Active },
     { id: 2, label: '1С / CRM', icon: Layers, active: isNode2Active },
-    { id: 3, label: 'AI-контур', icon: Sparkles, active: isNode3Active },
+    { id: 3, label: 'Генерация', icon: BarChart3, active: isNode3Active },
   ];
 
   return (
