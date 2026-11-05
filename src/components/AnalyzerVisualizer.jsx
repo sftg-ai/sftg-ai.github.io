@@ -40,8 +40,8 @@ const BRIDGES = [
   { id: 2, x1: 165, x2: 215, activeStage: 2 },
   // Прямой мостик Шестерня -> Гистограмма (x: 259 -> 310)
   { id: 3, x1: 259, x2: 310, activeStage: 3 },
-  // Выходной хвостик (x: 342 -> 360)
-  { id: 4, x1: 342, x2: 360, activeStage: 3 },
+  // Выходной хвостик (x: 342 -> 360) — активируется ТОЛЬКО после полного завершения 4-го блока (при 100%)
+  { id: 4, x1: 342, x2: 360, activeStage: 4 },
 ];
 
 export function ProcessOscilloscope({ step = 0, isComplete = false }) {
