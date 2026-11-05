@@ -123,8 +123,14 @@ export default function HeroScenarioAnalyzer() {
 
   return (
     <div className="w-full max-w-xl text-left">
-      {/* 1. Кнопка по умолчанию в Hero */}
-      {!isOpen ? (
+      {/* 1. Кнопка по умолчанию в Hero с мягким затуханием */}
+      <div
+        className={`transition-all duration-300 ease-out ${
+          isOpen
+            ? 'opacity-0 -translate-y-2 pointer-events-none max-h-0 overflow-hidden'
+            : 'opacity-100 translate-y-0 max-h-16'
+        }`}
+      >
         <button
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center justify-center gap-2 bg-white text-slate-900 hover:bg-sky-50 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
@@ -132,29 +138,38 @@ export default function HeroScenarioAnalyzer() {
           <span>Экспресс-подбор автоматизации</span>
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600" />
         </button>
-      ) : (
-        /* 2. Раскрытая интерактивная карточка */
-        <div className="p-5 sm:p-6 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl text-slate-900 transition-all duration-300 animate-in fade-in slide-in-from-top-2">
-          
-          {/* Шапка карточки */}
-          <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
-            <div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 uppercase tracking-wider mb-1">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Экспресс-подбор автоматизации</span>
+      </div>
+
+      {/* 2. Раскрытая интерактивная карточка с плавной анимацией выезда */}
+      <div
+        className={`grid transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isOpen
+            ? 'grid-rows-[1fr] opacity-100 translate-y-0 mt-0'
+            : 'grid-rows-[0fr] opacity-0 -translate-y-4 pointer-events-none mt-0'
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="p-5 sm:p-6 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl text-slate-900">
+            
+            {/* Шапка карточки */}
+            <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
+              <div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 uppercase tracking-wider mb-1">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Экспресс-подбор автоматизации</span>
+                </div>
+                <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                  {status === 'done' ? 'Рекомендованные сценарии' : 'Укажите сайт и текущие системы'}
+                </h3>
               </div>
-              <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                {status === 'done' ? 'Рекомендованные сценарии' : 'Укажите сайт и текущие системы'}
-              </h3>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+                title="Свернуть"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
-              title="Свернуть"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
 
           {/* Состояние: Ввод данных */}
           {status === 'idle' && (
@@ -292,8 +307,9 @@ export default function HeroScenarioAnalyzer() {
             </div>
           )}
 
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
