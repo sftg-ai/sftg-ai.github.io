@@ -2,15 +2,16 @@ import React from 'react';
 import { Globe, Database, Layers, Sparkles } from 'lucide-react';
 
 /**
- * Режим 1: Осциллограф процессов (Process Cardiogram)
- * Бегущая технологическая волна импульсов с ускорением на фазе вычислений
+ * Режим 1: Осциллограф процессов (Mnemonic Continuous Circuit)
+ * Непрерывная контурная линия, вырисовывающая слева направо 4 узнаваемых силуэта:
+ * [Здание компании] ➔ [Документ накладной] ➔ [Шестерня 1С/CRM] ➔ [AI-искра]
  */
+const MNEMONIC_CIRCUIT_PATH =
+  "M 0 30 L 30 30 L 40 30 L 40 18 L 60 8 L 63 8 L 63 12 L 65 10 L 80 18 L 80 30 L 115 30 L 125 30 L 125 10 L 155 10 L 165 20 L 155 20 L 155 10 L 165 20 L 165 30 L 205 30 L 215 30 L 215 20 L 223 20 L 223 30 L 232 30 L 232 12 L 242 12 L 242 30 L 251 30 L 251 20 L 259 20 L 259 30 L 295 30 L 305 30 L 318 24 L 324 8 L 330 24 L 344 30 L 330 36 L 324 52 L 318 36 L 305 30 L 360 30";
+
 export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
   const isFastPhase = step >= 3;
   const progressRatio = Math.min(1, (step + 1) / totalSteps);
-
-  // Динамическая амплитуда и плотность пиков в зависимости от фазы
-  const waveSpeed = isFastPhase ? '0.75s' : '1.8s';
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
@@ -26,43 +27,41 @@ export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
           preserveAspectRatio="none"
         >
           <defs>
-            {/* Градиент затухания сигнального луча */}
-            <linearGradient id="signalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0284C7" stopOpacity="0.1" />
-              <stop offset="60%" stopColor="#0284C7" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="#0284C7" stopOpacity="1" />
-            </linearGradient>
-
-            {/* Мягкое свечение на острие луча */}
+            {/* Мягкое свечение активного контура */}
             <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="2" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
 
-          {/* Базовая ось */}
-          <line x1="0" y1="30" x2="360" y2="30" stroke="#E2E8F0" strokeWidth="1.5" />
+          {/* Базовая направляющая ось */}
+          <line x1="0" y1="30" x2="360" y2="30" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="3 3" />
 
-          {/* Кардиограмма / Волна процесса */}
+          {/* Фоновый контур чертежа (серый контур всех 4 фигур) */}
+          <path
+            d={MNEMONIC_CIRCUIT_PATH}
+            fill="none"
+            stroke="#E2E8F0"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+
+          {/* Активная сигнальная линия — рисуется СТРОГО слева направо без хвостов */}
           <g className="animate-pulse">
             <path
-              d={
-                isFastPhase
-                  ? // Высокочастотный вычислительный пульс (много частых пиков)
-                    "M 0 30 L 40 30 L 48 24 L 54 36 L 62 14 L 70 46 L 78 28 L 86 32 L 95 30 L 140 30 L 148 18 L 156 42 L 164 10 L 172 50 L 180 26 L 190 30 L 230 30 L 238 22 L 246 38 L 254 12 L 262 48 L 270 30 L 310 30 L 318 20 L 326 40 L 334 16 L 342 44 L 350 30 L 360 30"
-                  : // Размеренный, спокойный пульс фазы сбора данных
-                    "M 0 30 L 60 30 L 72 26 L 80 34 L 90 14 L 100 46 L 110 28 L 120 30 L 200 30 L 212 24 L 220 36 L 230 12 L 240 48 L 250 28 L 260 30 L 360 30"
-              }
+              d={MNEMONIC_CIRCUIT_PATH}
+              pathLength="1"
               fill="none"
-              stroke="url(#signalGradient)"
+              stroke="#0284C7"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               filter="url(#glow)"
               style={{
-                strokeDasharray: '360',
-                strokeDashoffset: `${360 - 360 * progressRatio}`,
-                transition: 'stroke-dashoffset 0.3s ease-out, d 0.4s ease',
+                strokeDasharray: '1',
+                strokeDashoffset: `${Math.max(0, 1 - progressRatio)}`,
+                transition: 'stroke-dashoffset 0.35s ease-out',
               }}
             />
           </g>
