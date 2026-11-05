@@ -88,7 +88,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
   // Node 0 (Сайт): активен с 0 шага, пульсирует пока step < 1
   // Node 1 (Реестры): активен с 1 шага, пульсирует пока 1 <= step < 5
   // Node 2 (1С / CRM): активен с 5 шага, пульсирует пока 5 <= step < 9
-  // Node 3 (Генерация): активен с 9 шага, пульсирует пока step >= 9
+  // Node 3 (Финализация): активен с 9 шага, пульсирует пока step >= 9
   const isNode0Active = true;
   const isNode1Active = step >= 1;
   const isNode2Active = step >= 5;
@@ -133,7 +133,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
     { id: 0, label: 'Сайт', icon: Globe, active: isNode0Active },
     { id: 1, label: 'Реестры', icon: Database, active: isNode1Active },
     { id: 2, label: '1С / CRM', icon: Layers, active: isNode2Active },
-    { id: 3, label: 'Генерация', icon: BarChart3, active: isNode3Active },
+    { id: 3, label: 'Финализация', icon: BarChart3, active: isNode3Active },
   ];
 
   return (
@@ -224,7 +224,16 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
             const isCurrent = node.id === currentNodeIndex;
             const isCompleted = node.active && !isCurrent;
             return (
-              <div key={node.id} className="w-9 flex justify-center text-center">
+              <div
+                key={node.id}
+                className={`w-9 flex ${
+                  node.id === 0
+                    ? 'justify-start text-left'
+                    : node.id === 3
+                      ? 'justify-end text-right'
+                      : 'justify-center text-center'
+                }`}
+              >
                 <span
                   className={`text-[10px] whitespace-nowrap transition-colors ${
                     isCurrent
