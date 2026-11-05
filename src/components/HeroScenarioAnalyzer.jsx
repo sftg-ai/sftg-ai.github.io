@@ -619,42 +619,22 @@ ${wishSection}${scenariosText}`.trim();
                   })}
                 </div>
 
-                {/* Кнопки действий: Скопировать подбор + Перейти к заявке */}
-                <div className="pt-2 space-y-2">
+                {/* Кнопка действия: Перейти к заявке + сброс */}
+                <div className="pt-2 flex flex-col sm:flex-row items-center gap-2">
                   <button
-                    type="button"
-                    onClick={handleCopyReport}
-                    className="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
+                    onClick={handleScrollToForm}
+                    className="w-full sm:flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    {copiedReport ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-emerald-700 font-bold">Подбор скопирован в буфер обмена</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5 text-slate-500" />
-                        <span>Скопировать подбор</span>
-                      </>
-                    )}
+                    <span>Отправить подбор и получить расширенный аудит</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
-
-                  <div className="flex flex-col sm:flex-row items-center gap-2">
-                    <button
-                      onClick={handleScrollToForm}
-                      className="w-full sm:flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <span>Отправить подбор и получить расширенный аудит</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={handleReset}
-                      className="p-3 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer"
-                      title="Рассчитать заново"
-                    >
-                      <RefreshCw className="w-4 h-4" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={handleReset}
+                    className="p-3 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer shrink-0"
+                    title="Рассчитать заново"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             )}
