@@ -51,6 +51,7 @@ export default function HeroScenarioAnalyzer() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedReport, setCopiedReport] = useState(false);
+  const [isAnalysisComplete, setIsAnalysisComplete] = useState(false);
 
   const stepIntervalRef = useRef(null);
 
@@ -222,6 +223,7 @@ export default function HeroScenarioAnalyzer() {
   const handleRunAnalysis = async (e) => {
     e.preventDefault();
     setStatus('analyzing');
+    setIsAnalysisComplete(false);
     setVisualMode(Math.random() > 0.5 ? 'oscilloscope' : 'topology');
     setAnalysisStep(0);
     setInsufficientNotice(null);
@@ -287,6 +289,11 @@ export default function HeroScenarioAnalyzer() {
         const rawComment = data.formatted_b24_comment || '';
         const cleanComment = rawComment.replace(/^УНП:.*$/gim, '').replace(/\n{3,}/g, '\n\n').trim();
         setFormattedComment(cleanComment);
+
+        // Показываем 100% и выдерживаем микро-паузу перед открытием карточки с вариантами
+        setIsAnalysisComplete(true);
+        await new Promise((resolve) => setTimeout(resolve, 600));
+
         setStatus('done');
         return;
       }
@@ -360,6 +367,7 @@ ${wishSection}${scenariosText}`.trim();
   const handleReset = () => {
     if (stepIntervalRef.current) clearTimeout(stepIntervalRef.current);
     setStatus('idle');
+    setIsAnalysisComplete(false);
     setAnalysisStep(0);
     setCompanyInput('');
     setUserWish('');
@@ -548,12 +556,14 @@ ${wishSection}${scenariosText}`.trim();
             {status === 'analyzing' && (
               <div className="py-6 px-3 flex flex-col items-center justify-center text-center gap-3">
                 {visualMode === 'oscilloscope' ? (
-                  <ProcessOscilloscope step={analysisStep} totalSteps={ANALYSIS_STEPS.length} />
+                  <ProcessOscilloscope step={analysisStep} isComplete={isAnalysisComplete} />
                 ) : (
-                  <TopologyCircuit step={analysisStep} totalSteps={ANALYSIS_STEPS.length} />
+                  <TopologyCircuit step={analysisStep} totalSteps={ANALYSIS_STEPS.length} isComplete={isAnalysisComplete} />
                 )}
                 <p className="text-sm font-bold text-slate-900 transition-all duration-300 min-h-[40px] flex items-center justify-center">
-                  {ANALYSIS_STEPS[analysisStep]?.text || ANALYSIS_STEPS[analysisStep]}
+                  {isAnalysisComplete
+                    ? 'Анализ завершен, открываем подбор решений...'
+                    : (ANALYSIS_STEPS[analysisStep]?.text || ANALYSIS_STEPS[analysisStep])}
                 </p>
               </div>
             )}

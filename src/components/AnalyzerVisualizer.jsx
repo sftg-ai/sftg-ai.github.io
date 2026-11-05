@@ -44,17 +44,22 @@ const BRIDGES = [
   { id: 4, x1: 342, x2: 360, activeStage: 3 },
 ];
 
-export function ProcessOscilloscope({ step = 0 }) {
+export function ProcessOscilloscope({ step = 0, isComplete = false }) {
   const currentStage = Math.min(3, Math.floor(step / 3));
   const isFastPhase = currentStage >= 1;
-  const progressPercent = Math.min(100, (currentStage + 1) * 25);
+  // До завершения бэкенд-запроса держим максимум 95%. Ровно 100% только при подтверждении готовности!
+  const progressPercent = isComplete
+    ? 100
+    : currentStage === 3
+      ? 95
+      : (currentStage + 1) * 25;
 
   // Внутри каждого этапа фигура прорисовывается строго от 0:
   // Шаг 0: линия только подошла к основанию фигуры (счет от 0, фигура еще не нарисована, линия пульсирует)
   // Шаг 1: фигура прорисовывается наполовину (~55%) и пульсирует
   // Шаг 2: фигура завершается полностью (100%)
   const stepInStage = step % 3;
-  const subProgress = stepInStage === 0 ? 0.0 : stepInStage === 1 ? 0.55 : 1.0;
+  const subProgress = isComplete ? 1.0 : stepInStage === 0 ? 0.0 : stepInStage === 1 ? 0.55 : 1.0;
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
@@ -92,8 +97,8 @@ export function ProcessOscilloscope({ step = 0 }) {
 
           {/* Прямые участки-мостики — простреливают быстро и сразу к следующему блоку */}
           {BRIDGES.map((bridge) => {
-            const isActive = currentStage >= bridge.activeStage;
-            const isCurrentBridge = currentStage === bridge.activeStage && stepInStage === 0;
+            const isActive = isComplete || currentStage >= bridge.activeStage;
+            const isCurrentBridge = !isComplete && currentStage === bridge.activeStage && stepInStage === 0;
             const len = bridge.x2 - bridge.x1;
             return (
               <line
@@ -118,8 +123,8 @@ export function ProcessOscilloscope({ step = 0 }) {
 
           {/* Фигурки на линии: текущая активно рисуется и пульсирует, завершенные горят сплошным */}
           {FIGURES.map((fig) => {
-            const isCurrent = fig.id === currentStage;
-            const isCompleted = fig.id < currentStage;
+            const isCurrent = !isComplete && fig.id === currentStage;
+            const isCompleted = fig.id < currentStage || isComplete;
 
             if (!isCurrent && !isCompleted) return null;
 
@@ -149,7 +154,7 @@ export function ProcessOscilloscope({ step = 0 }) {
       {/* Тонкий статус осциллографа */}
       <div className="w-full flex items-center justify-between text-[10px] font-semibold text-slate-400 mt-1 px-1">
         <span className="text-sky-600 font-mono tracking-wider">
-          {isFastPhase ? 'ПРОЦЕССИНГ ВЫЧИСЛЕНИЙ' : 'ТЕЛЕМЕТРИЯ СБОРА ДАННЫХ'}
+          {isComplete ? 'ВЫЧИСЛЕНИЯ ЗАВЕРШЕНЫ' : isFastPhase ? 'ПРОЦЕССИНГ ВЫЧИСЛЕНИЙ' : 'ТЕЛЕМЕТРИЯ СБОРА ДАННЫХ'}
         </span>
         <span className="font-mono text-slate-500">{progressPercent}%</span>
       </div>
@@ -161,35 +166,34 @@ export function ProcessOscilloscope({ step = 0 }) {
  * Режим 2: Сетевая топология (Circuit Topology Trace)
  * 4 ключевых микроузла, которые луч последовательно зажигает и соединяет
  */
-export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
+export function TopologyCircuit({ step = 0, totalSteps = 12, isComplete = false }) {
   // Определяем активные и текущий узел:
-  // Определяем активные и текущий узел (по 3 шага на каждый узел):
   // Node 0 (Сайт): активен с 0 шага, пульсирует пока step < 3
   // Node 1 (Реестры): активен с 3 шага, пульсирует пока 3 <= step < 6
   // Node 2 (1С / CRM): активен с 6 шага, пульсирует пока 6 <= step < 9
-  // Node 3 (Анализ и подбор): активен с 9 шага, пульсирует пока step >= 9
+  // Node 3 (Анализ и подбор): активен с 9 шага, пульсирует пока step >= 9 (при isComplete горит сплошным)
   const isNode0Active = true;
-  const isNode1Active = step >= 3;
-  const isNode2Active = step >= 6;
-  const isNode3Active = step >= 9;
+  const isNode1Active = isComplete || step >= 3;
+  const isNode2Active = isComplete || step >= 6;
+  const isNode3Active = isComplete || step >= 9;
 
   let currentNodeIndex = 0;
-  if (step >= 9) currentNodeIndex = 3;
+  if (isComplete || step >= 9) currentNodeIndex = 3;
   else if (step >= 6) currentNodeIndex = 2;
   else if (step >= 3) currentNodeIndex = 1;
   else currentNodeIndex = 0;
 
   // Линия не зависает между кубиками, а всегда полностью соединена с активным кубиком:
-  // Кубик 0 (Сайт): шины еще не включены
-  // Кубик 1 (Реестры): шина 0 -> 1 полностью заполнена на 100%
-  // Кубик 2 (1С / CRM): шины 0->1 и 1->2 полностью заполнены на 100%
-  // Кубик 3 (Анализ и подбор): все 3 шины заполнены на 100%
-  const seg0Progress = step >= 3 ? 100 : 0;
-  const seg1Progress = step >= 6 ? 100 : 0;
-  const seg2Progress = step >= 9 ? 100 : 0;
+  const seg0Progress = (isComplete || step >= 3) ? 100 : 0;
+  const seg1Progress = (isComplete || step >= 6) ? 100 : 0;
+  const seg2Progress = (isComplete || step >= 9) ? 100 : 0;
 
-  // Округление процентов синхронизации узлов по кубикам: 25% -> 50% -> 75% -> 100%
-  const nodeProgressPercent = Math.min(100, (currentNodeIndex + 1) * 25);
+  // Округление процентов: 25% -> 50% -> 75% -> 95% (пока идет вычисление). Ровно 100% только при isComplete!
+  const nodeProgressPercent = isComplete
+    ? 100
+    : currentNodeIndex === 3
+      ? 95
+      : (currentNodeIndex + 1) * 25;
 
   const nodes = [
     { id: 0, label: 'Сайт', icon: Globe, active: isNode0Active },
@@ -205,8 +209,8 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
         <div className="flex items-center w-full px-1">
           {nodes.map((node, idx) => {
             const Icon = node.icon;
-            const isCurrent = node.id === currentNodeIndex;
-            const isCompleted = node.active && !isCurrent;
+            const isCurrent = !isComplete && node.id === currentNodeIndex;
+            const isCompleted = isComplete || (node.active && !isCurrent);
 
             return (
               <React.Fragment key={node.id}>
@@ -242,8 +246,8 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
         {/* Подписи узлов точно под кубиками */}
         <div className="flex justify-between w-full mt-2 px-1 min-h-[26px]">
           {nodes.map((node) => {
-            const isCurrent = node.id === currentNodeIndex;
-            const isCompleted = node.active && !isCurrent;
+            const isCurrent = !isComplete && node.id === currentNodeIndex;
+            const isCompleted = isComplete || (node.active && !isCurrent);
             return (
               <div
                 key={node.id}
@@ -278,7 +282,9 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
 
       {/* Индикатор статуса топологии */}
       <div className="w-full flex items-center justify-between text-[10px] font-semibold text-slate-400 mt-1 px-1">
-        <span className="text-sky-600 font-mono tracking-wider">СИНХРОНИЗАЦИЯ УЗЛОВ</span>
+        <span className="text-sky-600 font-mono tracking-wider">
+          {isComplete ? 'СИНХРОНИЗАЦИЯ ЗАВЕРШЕНА' : 'СИНХРОНИЗАЦИЯ УЗЛОВ'}
+        </span>
         <span className="font-mono text-slate-500">{nodeProgressPercent}%</span>
       </div>
     </div>
