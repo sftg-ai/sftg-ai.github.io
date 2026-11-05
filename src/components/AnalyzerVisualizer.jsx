@@ -85,46 +85,47 @@ export function ProcessOscilloscope({ step = 0, totalSteps = 12 }) {
  */
 export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
   // Определяем активные и текущий узел:
-  // Node 0 (Сайт): активен с 0 шага, пульсирует пока step < 1
-  // Node 1 (Реестры): активен с 1 шага, пульсирует пока 1 <= step < 5
-  // Node 2 (1С / CRM): активен с 5 шага, пульсирует пока 5 <= step < 9
+  // Определяем активные и текущий узел (по 3 шага на каждый узел):
+  // Node 0 (Сайт): активен с 0 шага, пульсирует пока step < 3
+  // Node 1 (Реестры): активен с 3 шага, пульсирует пока 3 <= step < 6
+  // Node 2 (1С / CRM): активен с 6 шага, пульсирует пока 6 <= step < 9
   // Node 3 (Подбор): активен с 9 шага, пульсирует пока step >= 9
   const isNode0Active = true;
-  const isNode1Active = step >= 1;
-  const isNode2Active = step >= 5;
+  const isNode1Active = step >= 3;
+  const isNode2Active = step >= 6;
   const isNode3Active = step >= 9;
 
   let currentNodeIndex = 0;
   if (step >= 9) currentNodeIndex = 3;
-  else if (step >= 5) currentNodeIndex = 2;
-  else if (step >= 1) currentNodeIndex = 1;
+  else if (step >= 6) currentNodeIndex = 2;
+  else if (step >= 3) currentNodeIndex = 1;
   else currentNodeIndex = 0;
 
-  // Дискретный прогресс 3 межблочных коннекторных шин (встык между гранями кубиков)
+  // Дискретный прогресс 3 межблочных коннекторных шин (по 3 шага на заполнение)
   let seg0Progress = 0; // Шина 0 -> 1
   let seg1Progress = 0; // Шина 1 -> 2
   let seg2Progress = 0; // Шина 2 -> 3
 
-  if (step === 0) {
-    seg0Progress = 60;
+  if (step < 3) {
+    seg0Progress = Math.min(100, Math.round(((step + 1) / 3) * 100));
   } else {
     seg0Progress = 100;
   }
 
-  if (step < 1) {
+  if (step < 3) {
     seg1Progress = 0;
-  } else if (step >= 5) {
+  } else if (step >= 6) {
     seg1Progress = 100;
   } else {
-    seg1Progress = Math.min(100, Math.round(((step - 0.5) / 4) * 100));
+    seg1Progress = Math.min(100, Math.round(((step - 2) / 3) * 100));
   }
 
-  if (step < 5) {
+  if (step < 6) {
     seg2Progress = 0;
   } else if (step >= 9) {
     seg2Progress = 100;
   } else {
-    seg2Progress = Math.min(100, Math.round(((step - 4.5) / 4) * 100));
+    seg2Progress = Math.min(100, Math.round(((step - 5) / 3) * 100));
   }
 
   const progressRatio = Math.min(1, (step + 1) / totalSteps);
