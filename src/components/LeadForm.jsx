@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Search, MessageSquare, PhoneCall, CheckCircle2, ExternalLink, Send, Loader2, Sparkles } from 'lucide-react';
-import { onB24PrefillApplied } from '../utils/b24Bridge';
+import { Search, MessageSquare, PhoneCall, CheckCircle2, ExternalLink, Send, Loader2, Sparkles, Copy, Check } from 'lucide-react';
+import { onB24PrefillApplied, getPendingPrefill, applyB24Prefill } from '../utils/b24Bridge';
 
 export default function LeadForm() {
   const containerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [prefillInfo, setPrefillInfo] = useState(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     // Подписка на префилл из HeroScenarioAnalyzer
@@ -40,8 +41,14 @@ export default function LeadForm() {
 
     script.onload = () => {
       clearTimeout(fallbackTimer);
-      // Небольшая задержка, чтобы iframe Битрикс24 успел отрендериться
-      setTimeout(() => setIsLoading(false), 300);
+      // Задержка на монтирование DOM формы и применение префилла
+      setTimeout(() => {
+        setIsLoading(false);
+        const currentPrefill = getPendingPrefill();
+        if (currentPrefill) {
+          applyB24Prefill(currentPrefill);
+        }
+      }, 300);
     };
 
     script.onerror = () => {
@@ -56,6 +63,14 @@ export default function LeadForm() {
       clearTimeout(fallbackTimer);
     };
   }, []);
+
+  const handleCopyComment = () => {
+    if (prefillInfo?.comment) {
+      navigator.clipboard?.writeText(prefillInfo.comment);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   const steps = [
     {
@@ -129,12 +144,33 @@ export default function LeadForm() {
         <div className="lg:col-span-6 flex flex-col">
           {/* Баннер с подтверждением передачи экспресс-анализа */}
           {prefillInfo && (
-            <div className="mb-3 p-3.5 rounded-2xl bg-sky-50 border border-sky-200/90 text-left flex items-start gap-2.5 animate-in fade-in slide-in-from-top-1">
-              <Sparkles className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
-              <div className="text-xs text-sky-950 leading-relaxed">
-                <span className="font-bold">Экспресс-анализ добавлен в заявку:</span>{' '}
-                сценарии для компании <strong>{prefillInfo.company || 'вашего бизнеса'}</strong> внесены в комментарий к форме. Вы можете дополнить или скорректировать их.
+            <div className="mb-3 p-3.5 rounded-2xl bg-sky-50 border border-sky-200/90 text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in slide-in-from-top-1">
+              <div className="flex items-start gap-2.5">
+                <Sparkles className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+                <div className="text-xs text-sky-950 leading-relaxed">
+                  <span className="font-bold">Экспресс-анализ добавлен в заявку:</span>{' '}
+                  сценарии для компании <strong>{prefillInfo.company || 'вашего бизнеса'}</strong> внесены в комментарий к форме. Вы можете дополнить или скорректировать их.
+                </div>
               </div>
+              {prefillInfo.comment && (
+                <button
+                  type="button"
+                  onClick={handleCopyComment}
+                  className="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-lg bg-white border border-sky-200 text-sky-700 hover:bg-sky-100 transition-colors flex items-center gap-1.5 shadow-2xs self-end sm:self-auto cursor-pointer"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-emerald-700">Скопировано</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-sky-600" />
+                      <span>Скопировать текст</span>
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           )}
 
