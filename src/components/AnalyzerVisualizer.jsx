@@ -101,34 +101,17 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
   else if (step >= 3) currentNodeIndex = 1;
   else currentNodeIndex = 0;
 
-  // Дискретный прогресс 3 межблочных коннекторных шин (по 3 шага на заполнение)
-  let seg0Progress = 0; // Шина 0 -> 1
-  let seg1Progress = 0; // Шина 1 -> 2
-  let seg2Progress = 0; // Шина 2 -> 3
+  // Линия не зависает между кубиками, а всегда полностью соединена с активным кубиком:
+  // Кубик 0 (Сайт): шины еще не включены
+  // Кубик 1 (Реестры): шина 0 -> 1 полностью заполнена на 100%
+  // Кубик 2 (1С / CRM): шины 0->1 и 1->2 полностью заполнены на 100%
+  // Кубик 3 (Подбор): все 3 шины заполнены на 100%
+  const seg0Progress = step >= 3 ? 100 : 0;
+  const seg1Progress = step >= 6 ? 100 : 0;
+  const seg2Progress = step >= 9 ? 100 : 0;
 
-  if (step < 3) {
-    seg0Progress = Math.min(100, Math.round(((step + 1) / 3) * 100));
-  } else {
-    seg0Progress = 100;
-  }
-
-  if (step < 3) {
-    seg1Progress = 0;
-  } else if (step >= 6) {
-    seg1Progress = 100;
-  } else {
-    seg1Progress = Math.min(100, Math.round(((step - 2) / 3) * 100));
-  }
-
-  if (step < 6) {
-    seg2Progress = 0;
-  } else if (step >= 9) {
-    seg2Progress = 100;
-  } else {
-    seg2Progress = Math.min(100, Math.round(((step - 5) / 3) * 100));
-  }
-
-  const progressRatio = Math.min(1, (step + 1) / totalSteps);
+  // Округление процентов синхронизации узлов по кубикам: 25% -> 50% -> 75% -> 100%
+  const nodeProgressPercent = Math.min(100, (currentNodeIndex + 1) * 25);
 
   const nodes = [
     { id: 0, label: 'Сайт', icon: Globe, active: isNode0Active },
@@ -205,7 +188,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
       {/* Индикатор статуса топологии */}
       <div className="w-full flex items-center justify-between text-[10px] font-semibold text-slate-400 mt-1 px-1">
         <span className="text-sky-600 font-mono tracking-wider">СИНХРОНИЗАЦИЯ УЗЛОВ</span>
-        <span className="font-mono text-slate-500">{Math.round(progressRatio * 100)}%</span>
+        <span className="font-mono text-slate-500">{nodeProgressPercent}%</span>
       </div>
     </div>
   );
