@@ -380,15 +380,15 @@ ${wishSection}${scenariosText}`.trim();
       {/* 1. Кнопка по умолчанию в Hero с синхронным мягким сворачиванием */}
       <div
         className={`grid transition-[grid-template-rows,opacity] duration-400 ease-in-out ${isOpen
-            ? 'grid-rows-[0fr] opacity-0 pointer-events-none'
-            : 'grid-rows-[1fr] opacity-100'
+          ? 'grid-rows-[0fr] opacity-0 pointer-events-none'
+          : 'grid-rows-[1fr] opacity-100'
           }`}
       >
         <div className="min-h-0 overflow-hidden pb-1">
           {/* Вопрос-подводка перед кнопкой подбора */}
-          <div className="flex items-center gap-1.5 text-xs sm:text-sm text-sky-100/90 font-medium mb-3 select-none">
-            <HelpCircle className="w-3.5 h-3.5 text-sky-200/80 shrink-0" />
-            <span>Не знаете, что и как можно автоматизировать?</span>
+          <div className="flex items-start sm:items-center gap-1.5 text-xs sm:text-sm text-sky-100/90 font-medium mb-3 select-none">
+            <HelpCircle className="w-3.5 h-3.5 text-sky-200/80 shrink-0 mt-0.5 sm:mt-0" />
+            <span>Не знаете, что и как можно автоматизировать? Проведите экспресс-аудит вашего бизнеса.</span>
           </div>
 
           <button
@@ -413,8 +413,8 @@ ${wishSection}${scenariosText}`.trim();
       {/* 2. Раскрытая интерактивная карточка с плавной анимацией выезда */}
       <div
         className={`grid transition-[grid-template-rows,opacity] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${isOpen
-            ? 'grid-rows-[1fr] opacity-100'
-            : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+          ? 'grid-rows-[1fr] opacity-100'
+          : 'grid-rows-[0fr] opacity-0 pointer-events-none'
           }`}
       >
         <div className="min-h-0 overflow-hidden py-1">
