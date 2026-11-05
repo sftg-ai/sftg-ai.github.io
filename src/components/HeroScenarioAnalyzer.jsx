@@ -74,7 +74,9 @@ export default function HeroScenarioAnalyzer() {
       userWish.trim() ? `Пожелания: ${userWish.trim()}` : null,
     ].filter(Boolean).join('\n');
 
-    return `${header}\n\nРекомендованные решения:\n\n${scenariosBlock}\n\nСсылка на интерактивный расчет: https://softgreat.by/#audit`;
+    const cleanScenariosBlock = scenariosBlock.replace(/УНП/g, 'реквизиты');
+
+    return `${header}\n\nРекомендованные решения:\n\n${cleanScenariosBlock}\n\nСсылка на интерактивный расчет: https://softgreat.by/#audit`;
   };
 
   const handleCopyReport = () => {
@@ -176,7 +178,7 @@ export default function HeroScenarioAnalyzer() {
         icon: Sparkles,
         system: 'Почта и Telegram',
         title: 'Умная маршрутизация документов и карточки контрагентов',
-        desc: 'Извлечение реквизитов (УНП, IBAN, адрес) из карточек контрагентов в мессенджерах или письмах с автозаполнением договора и проверкой по реестрам.',
+        desc: 'Извлечение реквизитов компании, счетов и адресов из карточек контрагентов в мессенджерах или письмах с автозаполнением договора и проверкой по реестрам.',
         benefit: 'Исключение опечаток в договорах и счетах',
       });
     }
@@ -268,7 +270,9 @@ export default function HeroScenarioAnalyzer() {
 
         setScenarios(data.scenarios && data.scenarios.length > 0 ? data.scenarios : []);
         setCompanyProfile(data.company_profile || null);
-        setFormattedComment(data.formatted_b24_comment || '');
+        const rawComment = data.formatted_b24_comment || '';
+        const cleanComment = rawComment.replace(/^УНП:.*$/gim, '').replace(/\n{3,}/g, '\n\n').trim();
+        setFormattedComment(cleanComment);
         setStatus('done');
         return;
       }
@@ -309,7 +313,9 @@ export default function HeroScenarioAnalyzer() {
 
     // Если бэкенд отдал готовый комментарий — используем его
     let comment = formattedComment;
-    if (!comment) {
+    if (comment) {
+      comment = comment.replace(/^УНП:.*$/gim, '').replace(/\n{3,}/g, '\n\n').trim();
+    } else {
       const scenariosText = scenarios.length > 0
         ? `\nПодобранные сценарии автоматизации:\n` + scenarios.map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`).join('\n')
         : '';
