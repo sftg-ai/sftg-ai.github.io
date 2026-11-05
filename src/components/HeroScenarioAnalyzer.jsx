@@ -252,10 +252,16 @@ ${wishSection}${scenariosText}`.trim();
       >
         <button
           onClick={() => setIsOpen(true)}
-          className="inline-flex items-center justify-center gap-2 bg-white text-slate-900 hover:bg-sky-50 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
+          className="inline-flex items-center justify-center gap-3 bg-white text-slate-900 hover:bg-sky-50 font-bold px-5 sm:px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 hover:shadow-xl hover:shadow-sky-950/30 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
         >
+          {/* Пульсирующий индикатор «Live / В сети» */}
+          <span className="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+          </span>
+
           <span>Экспресс-подбор автоматизации онлайн</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600" />
+          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600 shrink-0" />
         </button>
       </div>
 
