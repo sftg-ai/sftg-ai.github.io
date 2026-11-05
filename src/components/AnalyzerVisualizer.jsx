@@ -161,7 +161,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
   // Node 0 (Сайт): активен с 0 шага, пульсирует пока step < 3
   // Node 1 (Реестры): активен с 3 шага, пульсирует пока 3 <= step < 6
   // Node 2 (1С / CRM): активен с 6 шага, пульсирует пока 6 <= step < 9
-  // Node 3 (Подбор): активен с 9 шага, пульсирует пока step >= 9
+  // Node 3 (Анализ и подбор): активен с 9 шага, пульсирует пока step >= 9
   const isNode0Active = true;
   const isNode1Active = step >= 3;
   const isNode2Active = step >= 6;
@@ -177,7 +177,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
   // Кубик 0 (Сайт): шины еще не включены
   // Кубик 1 (Реестры): шина 0 -> 1 полностью заполнена на 100%
   // Кубик 2 (1С / CRM): шины 0->1 и 1->2 полностью заполнены на 100%
-  // Кубик 3 (Подбор): все 3 шины заполнены на 100%
+  // Кубик 3 (Анализ и подбор): все 3 шины заполнены на 100%
   const seg0Progress = step >= 3 ? 100 : 0;
   const seg1Progress = step >= 6 ? 100 : 0;
   const seg2Progress = step >= 9 ? 100 : 0;
@@ -189,7 +189,7 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
     { id: 0, label: 'Сайт', icon: Globe, active: isNode0Active },
     { id: 1, label: 'Реестры', icon: Database, active: isNode1Active },
     { id: 2, label: '1С / CRM', icon: Layers, active: isNode2Active },
-    { id: 3, label: 'Подбор', icon: BarChart3, active: isNode3Active },
+    { id: 3, label: 'Анализ и подбор', icon: BarChart3, active: isNode3Active },
   ];
 
   return (
@@ -239,9 +239,14 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
             const isCurrent = node.id === currentNodeIndex;
             const isCompleted = node.active && !isCurrent;
             return (
-              <div key={node.id} className="w-9 flex justify-center text-center">
+              <div
+                key={node.id}
+                className={`flex flex-col justify-start text-center ${
+                  node.id === 3 ? 'w-14 -mr-2.5 items-end text-right' : 'w-9 items-center'
+                }`}
+              >
                 <span
-                  className={`text-[10px] whitespace-nowrap transition-colors ${
+                  className={`text-[10px] leading-tight transition-colors ${
                     isCurrent
                       ? 'text-sky-700 font-bold'
                       : isCompleted
