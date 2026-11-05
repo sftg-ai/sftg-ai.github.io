@@ -49,9 +49,12 @@ export function ProcessOscilloscope({ step = 0 }) {
   const isFastPhase = currentStage >= 1;
   const progressPercent = Math.min(100, (currentStage + 1) * 25);
 
-  // Внутри каждого этапа фигура прогрессивно прорисовывается за 3 шага
+  // Внутри каждого этапа фигура прорисовывается строго от 0:
+  // Шаг 0: линия только подошла к основанию фигуры (счет от 0, фигура еще не нарисована, линия пульсирует)
+  // Шаг 1: фигура прорисовывается наполовину (~55%) и пульсирует
+  // Шаг 2: фигура завершается полностью (100%)
   const stepInStage = step % 3;
-  const subProgress = stepInStage === 0 ? 0.5 : stepInStage === 1 ? 0.8 : 1.0;
+  const subProgress = stepInStage === 0 ? 0.0 : stepInStage === 1 ? 0.55 : 1.0;
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center">
@@ -90,6 +93,7 @@ export function ProcessOscilloscope({ step = 0 }) {
           {/* Прямые участки-мостики — простреливают быстро и сразу к следующему блоку */}
           {BRIDGES.map((bridge) => {
             const isActive = currentStage >= bridge.activeStage;
+            const isCurrentBridge = currentStage === bridge.activeStage && stepInStage === 0;
             const len = bridge.x2 - bridge.x1;
             return (
               <line
@@ -101,6 +105,8 @@ export function ProcessOscilloscope({ step = 0 }) {
                 stroke="#0284C7"
                 strokeWidth="2.5"
                 strokeLinecap="round"
+                filter={isCurrentBridge ? "url(#glow)" : undefined}
+                className={isCurrentBridge ? "animate-pulse" : ""}
                 style={{
                   strokeDasharray: len,
                   strokeDashoffset: isActive ? 0 : len,
@@ -132,7 +138,7 @@ export function ProcessOscilloscope({ step = 0 }) {
                 style={{
                   strokeDasharray: '1',
                   strokeDashoffset: isCurrent ? `${Math.max(0, 1 - subProgress)}` : '0',
-                  transition: 'stroke-dashoffset 0.35s ease-out',
+                  transition: 'stroke-dashoffset 0.5s ease-out',
                 }}
               />
             );
