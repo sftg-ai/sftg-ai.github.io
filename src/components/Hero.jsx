@@ -59,7 +59,7 @@ export default function Hero({ onSelectCase, activeCaseIndex }) {
             </h1>
 
             {/* Подзаголовок: 3 аккуратные строки/предложения */}
-            <div className="space-y-1.5 text-sky-100 text-base sm:text-lg leading-relaxed max-w-2xl mb-8">
+            <div className="space-y-1.5 text-sky-100 text-base sm:text-lg leading-relaxed max-w-2xl mb-6 sm:mb-7">
               <p>Автоматизируем рутинные процессы в Битрикс24, 1С и внутренних системах компании.</p>
               <p>Проектируем заказную ИИ-автоматизацию любой сложности под ключ в вашем контуре.</p>
               <p className="font-semibold text-white">Опытная инженерная команда, быстрый запуск и гарантированная надежность решений.</p>

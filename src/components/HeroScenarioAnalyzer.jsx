@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Check, Sparkles, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2, Copy } from 'lucide-react';
+import { ArrowRight, Check, Sparkles, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2, Copy, HelpCircle } from 'lucide-react';
 import { applyB24Prefill } from '../utils/b24Bridge';
 import { ProcessOscilloscope, TopologyCircuit } from './AnalyzerVisualizer';
 
@@ -385,6 +385,12 @@ ${wishSection}${scenariosText}`.trim();
           }`}
       >
         <div className="min-h-0 overflow-hidden pb-1">
+          {/* Вопрос-подводка перед кнопкой подбора */}
+          <div className="flex items-center gap-1.5 text-xs sm:text-sm text-sky-100/90 font-medium mb-3 select-none">
+            <HelpCircle className="w-3.5 h-3.5 text-sky-200/80 shrink-0" />
+            <span>Не знаете, что и как можно автоматизировать?</span>
+          </div>
+
           <button
             onClick={handleOpen}
             className="inline-flex items-center justify-center gap-3 bg-white text-slate-900 hover:bg-sky-50 font-bold px-5 sm:px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 hover:shadow-xl hover:shadow-sky-950/30 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
