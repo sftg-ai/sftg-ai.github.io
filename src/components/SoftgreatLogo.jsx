@@ -28,3 +28,4 @@ export default function SoftgreatLogo({ className = "h-7", theme = "dark" }) {
     </div>
   );
 }
+
