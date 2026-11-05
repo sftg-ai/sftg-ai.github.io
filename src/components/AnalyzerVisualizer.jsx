@@ -145,64 +145,23 @@ export function TopologyCircuit({ step = 0, totalSteps = 12 }) {
             const Icon = node.icon;
             const isCurrent = node.id === currentNodeIndex;
             const isCompleted = node.active && !isCurrent;
-            const incomingFull =
-              node.id === 0
-                ? true
-                : [seg0Progress, seg1Progress, seg2Progress][node.id - 1] >= 100;
-            const outgoingActive =
-              node.id === 3
-                ? false
-                : [seg0Progress, seg1Progress, seg2Progress][node.id] > 0;
 
             return (
               <React.Fragment key={node.id}>
-                {/* Кубик-узел с точными контактными портами на гранях */}
-                <div className="relative shrink-0 flex items-center justify-center">
-                  {/* Левый порт-коннектор (вход в грань) */}
-                  {node.id > 0 && (
-                    <span
-                      className={`absolute -left-[2px] top-1/2 -translate-y-1/2 w-[3px] h-2 rounded-l-xs z-20 transition-colors duration-300 ${
-                        incomingFull ? 'bg-sky-500 shadow-sm shadow-sky-500/50' : 'bg-slate-300'
-                      }`}
-                    />
-                  )}
-
-                  {/* Правый порт-коннектор (выход из грани) */}
-                  {node.id < 3 && (
-                    <span
-                      className={`absolute -right-[2px] top-1/2 -translate-y-1/2 w-[3px] h-2 rounded-r-xs z-20 transition-colors duration-300 ${
-                        outgoingActive ? 'bg-sky-500 shadow-sm shadow-sky-500/50' : 'bg-slate-300'
-                      }`}
-                    />
-                  )}
-
-                  {/* Тело кубика с внутренней шиной коннектора */}
-                  <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden transition-all duration-300 ${
-                      isCurrent
-                        ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/40 scale-105 animate-pulse ring-2 ring-sky-400/50'
-                        : isCompleted
-                          ? 'bg-sky-600 text-white shadow-sm shadow-sky-600/20 scale-100'
-                          : 'bg-white border border-slate-200 text-slate-400 scale-95'
-                    }`}
-                  >
-                    {/* Внутренняя шина сквозного коннектора (видна внутри кубика) */}
-                    <div
-                      className={`absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] transition-all duration-300 pointer-events-none ${
-                        isCurrent
-                          ? 'bg-sky-200/90 shadow-[0_0_8px_rgba(56,189,248,0.9)]'
-                          : isCompleted
-                            ? 'bg-sky-300/50'
-                            : 'bg-slate-200/60'
-                      }`}
-                    />
-
-                    {/* Иконка поверх внутренней шины */}
-                    <Icon className="w-4 h-4 relative z-10" />
-                  </div>
+                {/* Кубик-узел: чистый, линия внутрь не заходит */}
+                <div
+                  className={`w-9 h-9 rounded-xl shrink-0 flex items-center justify-center transition-all duration-300 select-none relative z-10 ${
+                    isCurrent
+                      ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/40 scale-105 animate-pulse ring-2 ring-sky-400/50'
+                      : isCompleted
+                        ? 'bg-sky-600 text-white shadow-sm shadow-sky-600/20 scale-100'
+                        : 'bg-white border border-slate-200 text-slate-400 scale-95'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
                 </div>
 
-                {/* Сегмент шины между кубиками (встык от грани к грани) */}
+                {/* Сегмент шины между кубиками (встык: начинается от правой грани, упирается в левую) */}
                 {idx < nodes.length - 1 && (
                   <div className="flex-1 h-[2px] bg-slate-200 relative overflow-hidden">
                     <div
