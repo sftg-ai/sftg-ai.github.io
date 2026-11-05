@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Search, MessageSquare, PhoneCall, CheckCircle2, ShieldCheck, ExternalLink, Send, Loader2 } from 'lucide-react';
+import { Search, MessageSquare, PhoneCall, CheckCircle2, ExternalLink, Send, Loader2 } from 'lucide-react';
 
 export default function LeadForm() {
   const containerRef = useRef(null);
@@ -70,27 +70,25 @@ export default function LeadForm() {
 
   return (
     <section id="lead-form" className="py-20 md:py-28 px-4 sm:px-6 max-w-7xl mx-auto border-t border-slate-200/80 relative z-10 text-left">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
         
-        {/* Слева: 6 колонок - Описание предпроектного разбора */}
-        <div className="lg:col-span-6 flex flex-col justify-between">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-4">
-              <CheckCircle2 className="w-3.5 h-3.5 text-sky-600" />
-              <span>Бесплатный аудит и подбор решений</span>
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
-              Оставьте сайт вашей компании - подготовим варианты автоматизации до звонка
-            </h2>
-
-            <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed mb-6">
-              Вам не нужно заранее писать техническое задание. Мы сами изучим ваш сайт и специфику бизнеса, подготовим 3 - 4 конкретных сценария автоматизации именно для вашей компании и пришлем короткий список перед созвоном.
-            </p>
+        {/* Слева: 6 колонок - Описание предпроектного разбора (прижато кверху) */}
+        <div className="lg:col-span-6 flex flex-col items-start">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-4">
+            <CheckCircle2 className="w-3.5 h-3.5 text-sky-600" />
+            <span>Бесплатный аудит и подбор решений</span>
           </div>
 
-          {/* 3 прозрачных шага */}
-          <div className="space-y-4">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
+            Оставьте сайт вашей компании - подготовим варианты автоматизации до звонка
+          </h2>
+
+          <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed mb-6">
+            Вам не нужно заранее писать техническое задание. Мы сами изучим ваш сайт и специфику бизнеса, подготовим 3 - 4 конкретных сценария автоматизации именно для вашей компании и пришлем короткий список перед созвоном.
+          </p>
+
+          {/* 3 прозрачных шага сразу под текстом без разрывов */}
+          <div className="space-y-3.5 w-full">
             {steps.map((step, idx) => {
               const Icon = step.icon;
               return (
@@ -119,17 +117,9 @@ export default function LeadForm() {
 
         {/* Справа: 6 колонок - Официальная CRM-форма Битрикс24 */}
         <div className="lg:col-span-6 flex flex-col">
-          <div className="p-6 sm:p-8 md:p-9 rounded-3xl bg-white border border-slate-200 shadow-xl relative h-full flex flex-col justify-between overflow-hidden">
-            
-            {/* Заголовок карточки формы */}
-            <div className="mb-4">
-              <h3 className="text-xl font-bold text-slate-900 mb-1">
-                Заявка на аудит и подбор решений
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-500">
-                Заполните форму, и мы вернемся с готовыми сценариями для вашей компании
-              </p>
-            </div>
+          <p className="text-xs sm:text-sm text-slate-500 mb-2">
+            Заполните форму, и мы вернемся с готовыми сценариями для вашей компании
+          </p>
 
             {/* Контейнер для нативного виджета Битрикс24 */}
             <div className="relative min-h-[460px] flex-1 flex flex-col justify-center">
@@ -179,25 +169,6 @@ export default function LeadForm() {
                 </div>
               )}
             </div>
-
-            {/* Подпись соответствия Закону 99-З и прямая ссылка */}
-            <div className="pt-4 mt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Закон Республики Беларусь № 99-З</span>
-              </div>
-              <a
-                href="https://b24-xxbdwe.b24site.online/crm_form_gg1ic/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[11px] text-sky-600 hover:text-sky-700 font-medium transition-colors"
-              >
-                <span>Открыть на отдельной странице</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
-
-          </div>
         </div>
 
       </div>
