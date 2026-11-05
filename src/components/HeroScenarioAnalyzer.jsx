@@ -190,7 +190,7 @@ ${scenariosText}`;
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center justify-center gap-2 bg-white text-slate-900 hover:bg-sky-50 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
         >
-          <span>Экспресс-подбор автоматизации по сайту или названию компании</span>
+          <span>Подобрать сценарии для своего бизнеса прямо сейчас</span>
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-sky-600" />
         </button>
       </div>
@@ -211,14 +211,14 @@ ${scenariosText}`;
               <div>
                 <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 uppercase tracking-wider mb-1">
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Экспресс-подбор автоматизации</span>
+                  <span>Мгновенный расчет на экране</span>
                 </div>
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                  {status === 'done' ? 'Рекомендованные сценарии' : 'Укажите сайт и текущие системы'}
+                  {status === 'done' ? 'Рекомендованные сценарии' : 'Подбор сценариев под ваши процессы'}
                 </h3>
                 {status !== 'done' && (
                   <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1 leading-relaxed">
-                    Укажите сайт, название компании и текущие системы, чтобы подобрать практические сценарии под ваш стек.
+                    Укажите сайт и используемые системы — сформируем готовые решения за 10 секунд прямо на экране без ожидания звонков.
                   </p>
                 )}
               </div>
@@ -306,7 +306,7 @@ ${scenariosText}`;
                 type="submit"
                 className="w-full mt-2 py-3 px-5 rounded-xl text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Провести экспресс-анализ и подобрать решения</span>
+                <span>Подобрать сценарии прямо сейчас</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
