@@ -74,7 +74,7 @@ export default function HeroScenarioAnalyzer() {
       .join('\n\n');
 
     const header = [
-      `Автоматический подбор кейсов автоматизации - SoftGreat AI`,
+      `Автоматизированный подбор кейсов - SoftGreat AI`,
       `Компания: ${company}`,
       industry ? `Отрасль: ${industry}` : null,
       sysNames.length > 0 ? `Текущие системы: ${sysNames.join(', ')}` : null,
@@ -437,7 +437,7 @@ ${wishSection}${scenariosText}`.trim();
               <div>
                 <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 uppercase tracking-wider mb-1">
                   <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                  <span>Автоматический подбор кейсов автоматизации</span>
+                  <span>Автоматизированный подбор кейсов</span>
                   <button
                     type="button"
                     onClick={handleCopyDirectLink}
