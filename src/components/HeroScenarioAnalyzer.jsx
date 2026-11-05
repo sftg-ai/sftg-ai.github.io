@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Check, Sparkles, Loader2, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowRight, Check, Sparkles, Loader2, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2 } from 'lucide-react';
 import { applyB24Prefill } from '../utils/b24Bridge';
 
 const ICON_MAP = {
@@ -40,8 +40,58 @@ export default function HeroScenarioAnalyzer() {
   const [formattedComment, setFormattedComment] = useState('');
   const [insufficientNotice, setInsufficientNotice] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [copiedLink, setCopiedLink] = useState(false);
 
   const stepIntervalRef = useRef(null);
+
+  // Обработка прямой ссылки с хэшем (#audit, #express, #analyzer)
+  useEffect(() => {
+    const handleCheckHash = () => {
+      if (typeof window === 'undefined') return;
+      const hash = window.location.hash.toLowerCase();
+      if (hash === '#audit' || hash === '#express' || hash === '#analyzer') {
+        setIsOpen(true);
+        setTimeout(() => {
+          const el = document.getElementById('hero-analyzer');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 200);
+      }
+    };
+
+    handleCheckHash();
+    window.addEventListener('hashchange', handleCheckHash);
+    return () => window.removeEventListener('hashchange', handleCheckHash);
+  }, []);
+
+  const handleOpen = () => {
+    setIsOpen(true);
+    if (typeof window !== 'undefined' && window.history?.replaceState) {
+      window.history.replaceState(null, '', '#audit');
+    }
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    if (typeof window !== 'undefined' && window.location.hash === '#audit' && window.history?.replaceState) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  };
+
+  const handleCopyDirectLink = (e) => {
+    e?.stopPropagation();
+    if (typeof window === 'undefined') return;
+    const url = `${window.location.origin}/#audit`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+    }
+    if (window.history?.replaceState) {
+      window.history.replaceState(null, '', '#audit');
+    }
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2200);
+  };
 
   useEffect(() => {
     return () => {
@@ -241,7 +291,7 @@ ${wishSection}${scenariosText}`.trim();
   };
 
   return (
-    <div className="w-full max-w-xl text-left relative">
+    <div id="hero-analyzer" className="w-full max-w-xl text-left relative">
       {/* 1. Кнопка по умолчанию в Hero с мягким затуханием */}
       <div
         className={`transition-all duration-300 ease-out ${
@@ -251,7 +301,7 @@ ${wishSection}${scenariosText}`.trim();
         }`}
       >
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={handleOpen}
           className="inline-flex items-center justify-center gap-3 bg-white text-slate-900 hover:bg-sky-50 font-bold px-5 sm:px-6 py-3.5 rounded-xl shadow-lg shadow-sky-950/20 hover:shadow-xl hover:shadow-sky-950/30 transition-all active:scale-[0.98] text-sm sm:text-base group cursor-pointer"
         >
           {/* Пульсирующий индикатор в фирменном синем стиле */}
@@ -294,13 +344,33 @@ ${wishSection}${scenariosText}`.trim();
                     : 'Укажите сайт и текущие системы'}
                 </h3>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
-                title="Свернуть"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleCopyDirectLink}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-xs font-semibold transition-all cursor-pointer"
+                  title="Скопировать прямую ссылку на эту форму"
+                >
+                  {copiedLink ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-emerald-700">Скопировано!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Link2 className="w-3.5 h-3.5 text-sky-600" />
+                      <span className="hidden sm:inline">Ссылка</span>
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={handleClose}
+                  className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                  title="Свернуть"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {/* Состояние: Ввод данных */}
@@ -308,14 +378,14 @@ ${wishSection}${scenariosText}`.trim();
               <form onSubmit={handleRunAnalysis} className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Сайт компании или название *
+                    Сайт компании или сфера бизнеса *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="например: alfasb.by или СП ВИ-МЕНС"
+                    placeholder="например: alfasb.by или оптовая поставка оборудования"
                     value={companyInput}
-                    onInvalid={(e) => e.target.setCustomValidity('Пожалуйста, укажите сайт вашей компании или название')}
+                    onInvalid={(e) => e.target.setCustomValidity('Пожалуйста, укажите сайт вашей компании или сферу бизнеса')}
                     onInput={(e) => {
                       e.target.setCustomValidity('');
                       setCompanyInput(e.target.value);
