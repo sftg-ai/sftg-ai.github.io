@@ -66,12 +66,21 @@ function applyToDom(companyValue, commentValue) {
   const tryFill = () => {
     let filledCount = 0;
 
-    // 1. Поле сайта компании (input DEAL_UF_CRM_1793867671481)
+    // Защита: очищаем поле телефона/telegram, если туда случайно попало значение компании
+    const phoneInput =
+      document.querySelector('input[name*="1793867685248"]') ||
+      document.querySelector('input[placeholder*="+375"]') ||
+      document.querySelectorAll('.b24-form-wrapper input[type="text"]')[1];
+    if (phoneInput && companyValue && phoneInput.value === companyValue) {
+      setNativeInputValue(phoneInput, '');
+    }
+
+    // 1. Поле сайта компании (input DEAL_UF_CRM_1793867671481) — индекс 2 среди инпутов
     const companyInput =
       document.querySelector('input[name*="1793867671481"]') ||
       document.querySelector('input[name*="CRM_1793867671481"]') ||
       document.querySelector('.b24-form-wrapper input[placeholder*="kompaniya.by"]') ||
-      document.querySelectorAll('.b24-form-wrapper input[type="text"]')[1];
+      document.querySelectorAll('.b24-form-wrapper input[type="text"]')[2];
 
     if (companyInput && companyValue && companyInput.value !== companyValue) {
       setNativeInputValue(companyInput, companyValue);
@@ -109,24 +118,19 @@ function applyValues(data) {
   const companyValue = data.company || '';
   const commentValue = data.comment || '';
 
-  // 1. Через официальный API Битрикс24 формы (с точными ID полей)
+  // 1. Через официальный API Битрикс24 формы (строго по точным ID полей!)
   if (formInstance && typeof formInstance.setValues === 'function') {
     try {
       formInstance.setValues({
         // Точные ID полей формы #43
-        DEAL_UF_CRM_1793867671481: companyValue,
-        DEAL_UF_CRM_1793867737921: commentValue,
+        DEAL_UF_CRM_1793867671481: companyValue, // Только «Сайт компании или сфера бизнеса»
+        DEAL_UF_CRM_1793867737921: commentValue, // Только «Ваша задача или комментарий»
 
-        // Fallback-ключи на случай изменения структуры
+        // Безопасные текстовые алиасы (БЕЗ 'string', иначе Битрикс заполнит телефон!)
         company: companyValue,
         COMPANY_TITLE: companyValue,
-        company_title: companyValue,
         comment: commentValue,
         comments: commentValue,
-        COMMENTS: commentValue,
-        message: commentValue,
-        string: companyValue,
-        text: commentValue,
       });
 
       // Передаем скрытые свойства в инстанс формы (для трекинга источника заявки)

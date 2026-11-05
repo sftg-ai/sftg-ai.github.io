@@ -141,18 +141,16 @@ export default function HeroScenarioAnalyzer() {
       .map((sc, i) => `${i + 1}. ${sc.system}: ${sc.title}`)
       .join('\n');
 
-    const wishSection = userWish.trim()
-      ? `Дополнительная информация / пожелания: ${userWish.trim()}\n\n`
+    const wishText = userWish.trim();
+    const wishSection = wishText
+      ? `Пожелания и комментарий клиента: ${wishText}\n\n`
       : '';
 
     const comment = `[Экспресс-анализ SoftGreat AI]
 Сайт / сфера бизнеса: ${companyInput.trim() || 'Указана на сайте'}
 Используемые системы: ${sysNames.join(', ') || 'Не выбраны'}
 ${wishSection}Подобранные сценарии автоматизации:
-${scenariosText}
-
-Дополнительный комментарий:
-`;
+${scenariosText}`;
 
     // Передаем данные в форму Битрикс24
     applyB24Prefill({
