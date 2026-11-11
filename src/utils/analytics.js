@@ -162,7 +162,7 @@ function loadYandexMetrika(ymId, consent) {
 
   const injected = injectScriptOnce(
     'ym',
-    'https://mc.yandex.ru/metrika/tag.js',
+    `https://mc.yandex.ru/metrika/tag.js?id=${numericId}`,
     'script[src*="mc.yandex.ru/metrika/tag.js"]'
   );
 
@@ -170,10 +170,14 @@ function loadYandexMetrika(ymId, consent) {
     ymInjected = true;
     try {
       window.ym(numericId, 'init', {
-        clickmap: true,
-        trackLinks: true,
-        accurateTrackBounce: true,
+        ssr: true,
         webvisor: true,
+        clickmap: true,
+        ecommerce: 'dataLayer',
+        referrer: document.referrer || '',
+        url: window.location.href,
+        accurateTrackBounce: true,
+        trackLinks: true,
       });
     } catch {
       // Ignore counter init errors in restricted environments
