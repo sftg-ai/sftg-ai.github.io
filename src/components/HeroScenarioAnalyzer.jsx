@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Check, Sparkles, X, RefreshCw, Layers, FileText, CheckCircle2, AlertCircle, Link2, Copy } from 'lucide-react';
 import { applyB24Prefill } from '../utils/b24Bridge';
+import { trackEvent } from '../utils/analytics';
 import { ProcessOscilloscope, TopologyCircuit } from './AnalyzerVisualizer';
 
 const ICON_MAP = {
@@ -263,12 +264,20 @@ export default function HeroScenarioAnalyzer() {
 
   const handleRunAnalysis = async (e) => {
     e.preventDefault();
+    const chosenMode = Math.random() > 0.5 ? 'oscilloscope' : 'topology';
     setStatus('analyzing');
     setIsAnalysisComplete(false);
-    setVisualMode(Math.random() > 0.5 ? 'oscilloscope' : 'topology');
+    setVisualMode(chosenMode);
     setAnalysisStep(0);
     setInsufficientNotice(null);
     setErrorMessage(null);
+
+    trackEvent('express_analysis_start', {
+      has_1c: Boolean(systems.oneC),
+      has_b24: Boolean(systems.bitrix24),
+      has_email: Boolean(systems.email),
+      has_wish: Boolean(userWish.trim()),
+    });
 
     // Очищаем предыдущую цепочку таймеров, если была
     if (stepIntervalRef.current) clearTimeout(stepIntervalRef.current);
@@ -346,6 +355,11 @@ export default function HeroScenarioAnalyzer() {
         setIsAnalysisComplete(true);
         await new Promise((resolve) => setTimeout(resolve, 600));
 
+        trackEvent('express_analysis_complete', {
+          scenarios_count: data.scenarios.length,
+          visual_mode: chosenMode,
+        });
+
         setStatus('done');
         return;
       }
@@ -393,6 +407,10 @@ export default function HeroScenarioAnalyzer() {
       comment,
       scenariosCount: scenarios.length,
       userWish: userWish.trim(),
+    });
+
+    trackEvent('express_analysis_to_form', {
+      scenarios_count: scenarios.length,
     });
 
     // На мобильных устройствах скроллим прямо к блоку формы Битрикс24 (b24-form-container),

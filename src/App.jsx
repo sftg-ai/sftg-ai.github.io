@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProcessExplorer from './components/ProcessExplorer';
@@ -7,14 +7,26 @@ import WorkStages from './components/WorkStages';
 import TrustMarquee from './components/TrustMarquee';
 import ClosedContour from './components/ClosedContour';
 import TeamAndExpertise from './components/TeamAndExpertise';
+import FaqSection from './components/FaqSection';
 import ContactsSection from './components/ContactsSection';
 import LeadForm from './components/LeadForm';
 import Footer from './components/Footer';
+import CookieConsent from './components/CookieConsent';
+import PrivacyPolicyModal from './components/PrivacyPolicyModal';
 import { useAnimatedFavicon } from './hooks/useAnimatedFavicon';
+import { initAnalytics } from './utils/analytics';
 
 export default function App() {
+  const [policyModalOpen, setPolicyModalOpen] = useState(false);
+  const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
+
   // Анимация фирменной звезды во вкладке браузера
   useAnimatedFavicon();
+
+  // Инициализация Consent Mode v2 и контейнера аналитики
+  useEffect(() => {
+    initAnalytics();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white text-slate-900 selection:bg-sky-500/20 selection:text-sky-900">
@@ -44,6 +56,9 @@ export default function App() {
         {/* Экран 6: Опыт инженерной команды, надежность и Закон № 99-З РБ */}
         <TeamAndExpertise />
 
+        {/* Частые вопросы руководителей (синхронизировано с FAQPage Schema.org) */}
+        <FaqSection />
+
         {/* Экран 7: Предпроектный разбор бизнеса до созвона (без 1С-селектов и процентов) */}
         <LeadForm />
 
@@ -52,7 +67,22 @@ export default function App() {
       </main>
 
       {/* 3. Интерактивный подвал с физическим Canvas-эффектом волн и реквизитами Беларуси */}
-      <Footer />
+      <Footer
+        onOpenPolicy={() => setPolicyModalOpen(true)}
+        onOpenCookieSettings={() => setCookieSettingsOpen(true)}
+      />
+
+      {/* Минималистичный Cookie Consent (Закон РБ № 99-З) и модалка Политики */}
+      <CookieConsent
+        isOpenOverride={cookieSettingsOpen}
+        onCloseOverride={() => setCookieSettingsOpen(false)}
+        onOpenPolicy={() => setPolicyModalOpen(true)}
+      />
+      <PrivacyPolicyModal
+        isOpen={policyModalOpen}
+        onClose={() => setPolicyModalOpen(false)}
+        onOpenCookieSettings={() => setCookieSettingsOpen(true)}
+      />
     </div>
   );
 }

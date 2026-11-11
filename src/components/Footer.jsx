@@ -1,8 +1,9 @@
 import React from 'react';
 import { ShieldCheck, Send, Phone, MapPin, Clock, MessageSquare, Award } from 'lucide-react';
 import SoftGreatLogo from './SoftGreatLogo';
+import { trackEvent } from '../utils/analytics';
 
-export default function Footer() {
+export default function Footer({ onOpenPolicy, onOpenCookieSettings }) {
   const tgLink = "https://t.me/yurasvidersky?text=Здравствуйте!%20Хочу%20заказать%20бесплатный%20аудит%20процессов";
   const waLink = "https://wa.me/375447481051";
 
@@ -72,6 +73,7 @@ export default function Footer() {
             {/* Телефон */}
             <a
               href="tel:+375291245555"
+              onClick={() => trackEvent('contact_click', { channel: 'phone', location: 'footer' })}
               className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-sky-600 transition-colors text-sm"
             >
               <Phone className="w-4 h-4 text-sky-600 shrink-0" />
@@ -83,6 +85,7 @@ export default function Footer() {
               href={tgLink}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEvent('contact_click', { channel: 'telegram', location: 'footer' })}
               className="inline-flex items-center gap-2 text-sky-600 hover:text-sky-700 font-bold transition-colors"
             >
               <Send className="w-3.5 h-3.5 shrink-0" />
@@ -94,6 +97,7 @@ export default function Footer() {
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEvent('contact_click', { channel: 'whatsapp', location: 'footer' })}
               className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-bold transition-colors"
             >
               <MessageSquare className="w-3.5 h-3.5 shrink-0" />
@@ -103,9 +107,9 @@ export default function Footer() {
 
         </div>
 
-        {/* Нижняя часть: статус ПВТ, копирайт и Закон 99-З */}
+        {/* Нижняя часть: статус ПВТ, копирайт, Закон 99-З и настройки cookie */}
         <div className="pt-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
+          <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3 sm:gap-5">
             <div className="flex items-center gap-2">
               <Award className="w-4 h-4 text-sky-600 shrink-0" />
               <span>ООО «Инновационный Софт» - резидент Парка высоких технологий Республики Беларусь.</span>
@@ -113,6 +117,23 @@ export default function Footer() {
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>Закон РБ № 99-З «О защите персональных данных».</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => onOpenPolicy?.()}
+                className="text-slate-600 hover:text-sky-600 underline underline-offset-2 transition-colors cursor-pointer"
+              >
+                Политика данных и cookie
+              </button>
+              <span className="text-slate-300">|</span>
+              <button
+                type="button"
+                onClick={() => onOpenCookieSettings?.()}
+                className="text-slate-600 hover:text-sky-600 underline underline-offset-2 transition-colors cursor-pointer"
+              >
+                Настройки cookie
+              </button>
             </div>
           </div>
           <div className="shrink-0 text-slate-600 font-medium">

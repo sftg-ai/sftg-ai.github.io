@@ -5,25 +5,25 @@ const PROCESSES = [
   {
     id: 'docs-requests',
     tab: 'Документы и заявки',
-    title: 'ИИ-агент разбирает документы и заявки - сотрудник решает только спорные расхождения',
-    subtitle: 'Обращения из почты, телефонии, сайта и чатов проверяются по правилам и записываются в Битрикс24 и 1С.',
-    badge: 'Счет на оплату',
-    cardTitle: 'Счет № 418 от ООО «БелСнабКомплект»',
+    title: 'ИИ-агент сверяет документы, оплаты и заявки между Битрикс24 и 1С',
+    subtitle: 'Счета, выписки в BYN и заявки из почты, телефона, сайта и чат-бота Telegram проверяются автоматически - руководитель и бухгалтер видят только расхождения.',
+    badge: 'Сверка оплат и счетов',
+    cardTitle: 'Сделка ЗК-2291 · ООО «БелСнабКомплект»',
     statusText: 'Сверка завершена',
     rows: [
-      { label: 'Тип документа', value: 'Счет на оплату' },
-      { label: 'Сделка в Битрикс24', value: 'ЗК-2291' },
-      { label: 'Сумма', value: '14 850,00 BYN' },
-      { label: 'Срок оплаты', value: '5 банковских дней' }
+      { label: 'Сверка систем', value: 'Битрикс24 и 1С:Бухгалтерия' },
+      { label: 'Статус в CRM', value: 'Сделка закрыта (ЗК-2291)' },
+      { label: 'Сумма по счету', value: '14 850,00 BYN' },
+      { label: 'Баланс в 1С', value: 'Расхождение: оплата не поступила' }
     ],
-    signalPlate: 'Расхождение с заказом: +240 BYN -> сотруднику в Битрикс24',
-    resultPlate: 'Остальные 47 счетов записаны в Битрикс24 и 1С'
+    signalPlate: 'Сделка ЗК-2291 закрыта в Битрикс24, но оплата 14 850 BYN в 1С не поступила -> контроль дебиторской задолженности руководителю',
+    resultPlate: 'Остальные 47 счетов и оплат в BYN сверены без расхождений в Битрикс24 и 1С'
   },
   {
     id: 'kp-sales',
     tab: 'КП и продажи',
     title: 'ИИ-агент принимает заявки со всех каналов и собирает КП за 1 минуту',
-    subtitle: 'Запросы из IP-телефонии, почты, веб-сайта, Telegram и чата Битрикс24 превращаются в готовый расчет.',
+    subtitle: 'Запросы из IP-телефонии, почты, веб-сайта, бизнес-чат-бота Telegram и встроенного чата Битрикс24 превращаются в готовый расчет.',
     badge: 'Коммерческое предложение',
     cardTitle: 'Запрос № 104 · ООО «ТехноПром»',
     statusText: 'Расчет готов',
@@ -57,7 +57,7 @@ const PROCESSES = [
     id: 'primary-docs',
     tab: 'Первичка в Битрикс24 и 1С',
     title: 'ИИ-агент распознает первичные документы и заносит их в Битрикс24 и 1С',
-    subtitle: 'Счета, ТТН и акты сверяются с договором и заказом, бухгалтер и менеджер видят только расхождения.',
+    subtitle: 'Счета, ТТН и акты сверяются с договором, заказом и балансом расчетов - бухгалтер и руководитель видят только расхождения.',
     badge: 'Накладная ТТН',
     cardTitle: 'ТТН № 0841922 от ООО «ПромРесурс»',
     statusText: 'Реквизиты сверены',
@@ -125,7 +125,6 @@ const PROCESSES = [
 
 export default function ProcessExplorer() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const currentProcess = PROCESSES[activeIndex];
 
   return (
     <section id="processes" className="py-20 md:py-28 bg-slate-50 border-b border-slate-200/80 relative">
@@ -158,14 +157,25 @@ export default function ProcessExplorer() {
               <span>Примеры</span>
             </div>
 
-            {/* Динамический H2 и подзаголовок */}
-            <div key={currentProcess.id + '-title'} className="space-y-3 transition-opacity duration-200">
-              <h2 className="text-2xl sm:text-3xl lg:text-[2rem] font-extrabold text-slate-900 tracking-tight leading-snug">
-                {currentProcess.title}
-              </h2>
-              <p className="text-base text-slate-600 leading-relaxed">
-                {currentProcess.subtitle}
-              </p>
+            {/* Динамический H2 и подзаголовок (все 7 вариантов присутствуют в DOM для индексации) */}
+            <div>
+              {PROCESSES.map((proc, idx) => {
+                const isActive = activeIndex === idx;
+                return (
+                  <div
+                    key={proc.id + '-title'}
+                    hidden={!isActive}
+                    className={isActive ? 'space-y-3 transition-opacity duration-200' : 'hidden'}
+                  >
+                    <h2 className="text-2xl sm:text-3xl lg:text-[2rem] font-extrabold text-slate-900 tracking-tight leading-snug">
+                      {proc.title}
+                    </h2>
+                    <p className="text-base text-slate-600 leading-relaxed">
+                      {proc.subtitle}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
 
             {/* 2 доверительных буллета */}
@@ -187,9 +197,11 @@ export default function ProcessExplorer() {
                 return (
                   <button
                     key={proc.id}
+                    id={`process-tab-${proc.id}`}
                     type="button"
                     role="tab"
                     aria-selected={isActive}
+                    aria-controls={`process-panel-${proc.id}`}
                     onClick={() => setActiveIndex(idx)}
                     className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm cursor-pointer text-left transition-colors duration-150 ${
                       isActive
@@ -205,86 +217,105 @@ export default function ProcessExplorer() {
 
           </div>
 
-          {/* Правая колонка: интерактивная карточка со ступенчатой анимацией */}
+          {/* Правая колонка: интерактивная карточка со ступенчатой анимацией (все 7 панелей в DOM) */}
           <div className="lg:col-span-7">
-            <div
-              key={currentProcess.id}
-              className="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden"
-            >
-              {/* 0 мс: Шапка карточки */}
-              <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between gap-4 bg-slate-50/60">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 shrink-0">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-                        {currentProcess.badge}
-                      </span>
-                    </div>
-                    <h3 className="text-sm sm:text-base font-bold text-slate-900 truncate mt-1">
-                      {currentProcess.cardTitle}
-                    </h3>
-                  </div>
-                </div>
-
-                {/* Пульсирующий индикатор статуса */}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-xs font-semibold shrink-0">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  <span>{currentProcess.statusText}</span>
-                </div>
-              </div>
-
-              {/* Тело карточки: строки параметров и плашки сигналов */}
-              <div className="p-5 sm:p-6 flex flex-col gap-4">
-                
-                {/* 4 строки параметров со ступенчатой задержкой (250мс, 500мс, 750мс, 1000мс) */}
-                <div className="divide-y divide-slate-100">
-                  {currentProcess.rows.map((row, rIdx) => {
-                    const delayMs = (rIdx + 1) * 250;
-                    return (
-                      <div
-                        key={rIdx}
-                        className="py-3 flex items-center justify-between gap-4 text-xs sm:text-sm animate-process-row"
-                        style={{ animationDelay: `${delayMs}ms` }}
-                      >
-                        <span className="text-slate-500 font-normal shrink-0">{row.label}</span>
-                        <div className="flex-1 border-b border-dotted border-slate-200 mx-2 hidden sm:block opacity-60" />
-                        <span className="text-slate-900 font-semibold text-right">{row.value}</span>
+            {PROCESSES.map((proc, idx) => {
+              const isActive = activeIndex === idx;
+              return (
+                <div
+                  key={proc.id}
+                  id={`process-panel-${proc.id}`}
+                  role="tabpanel"
+                  aria-labelledby={`process-tab-${proc.id}`}
+                  hidden={!isActive}
+                  className={
+                    isActive
+                      ? 'bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden'
+                      : 'hidden'
+                  }
+                >
+                  {/* 0 мс: Шапка карточки */}
+                  <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between gap-4 bg-slate-50/60">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 shrink-0">
+                        <FileText className="w-5 h-5" />
                       </div>
-                    );
-                  })}
-                </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                            {proc.badge}
+                          </span>
+                        </div>
+                        <h3 className="text-sm sm:text-base font-bold text-slate-900 truncate mt-1">
+                          {proc.cardTitle}
+                        </h3>
+                      </div>
+                    </div>
 
-                {/* 1300 мс: Темная плашка-сигнал отклонения */}
-                <div
-                  className="bg-slate-900 text-white p-4 rounded-xl flex items-start gap-3 shadow-md shadow-slate-950/5 animate-process-row"
-                  style={{ animationDelay: '1300ms' }}
-                >
-                  <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-                  <div className="text-xs sm:text-sm leading-relaxed text-slate-100 font-medium">
-                    {currentProcess.signalPlate}
+                    {/* Пульсирующий индикатор статуса */}
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-xs font-semibold shrink-0">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                      </span>
+                      <span>{proc.statusText}</span>
+                    </div>
                   </div>
-                </div>
 
-                {/* 1600 мс: Светло-голубая плашка итога автоматической обработки */}
-                <div
-                  className="bg-sky-50 text-sky-950 border border-sky-200 p-4 rounded-xl flex items-start gap-3 animate-process-row"
-                  style={{ animationDelay: '1600ms' }}
-                >
-                  <CheckCircle2 className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
-                  <div className="text-xs sm:text-sm leading-relaxed font-semibold text-sky-950">
-                    {currentProcess.resultPlate}
+                  {/* Тело карточки: строки параметров и плашки сигналов */}
+                  <div className="p-5 sm:p-6 flex flex-col gap-4">
+                    
+                    {/* 4 строки параметров со ступенчатой задержкой (250мс, 500мс, 750мс, 1000мс) */}
+                    <div className="divide-y divide-slate-100">
+                      {proc.rows.map((row, rIdx) => {
+                        const delayMs = (rIdx + 1) * 250;
+                        return (
+                          <div
+                            key={rIdx}
+                            className={`py-3 flex items-center justify-between gap-4 text-xs sm:text-sm ${
+                              isActive ? 'animate-process-row' : ''
+                            }`}
+                            style={isActive ? { animationDelay: `${delayMs}ms` } : undefined}
+                          >
+                            <span className="text-slate-500 font-normal shrink-0">{row.label}</span>
+                            <div className="flex-1 border-b border-dotted border-slate-200 mx-2 hidden sm:block opacity-60" />
+                            <span className="text-slate-900 font-semibold text-right">{row.value}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* 1300 мс: Темная плашка-сигнал отклонения */}
+                    <div
+                      className={`bg-slate-900 text-white p-4 rounded-xl flex items-start gap-3 shadow-md shadow-slate-950/5 ${
+                        isActive ? 'animate-process-row' : ''
+                      }`}
+                      style={isActive ? { animationDelay: '1300ms' } : undefined}
+                    >
+                      <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                      <div className="text-xs sm:text-sm leading-relaxed text-slate-100 font-medium">
+                        {proc.signalPlate}
+                      </div>
+                    </div>
+
+                    {/* 1600 мс: Светло-голубая плашка итога автоматической обработки */}
+                    <div
+                      className={`bg-sky-50 text-sky-950 border border-sky-200 p-4 rounded-xl flex items-start gap-3 ${
+                        isActive ? 'animate-process-row' : ''
+                      }`}
+                      style={isActive ? { animationDelay: '1600ms' } : undefined}
+                    >
+                      <CheckCircle2 className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
+                      <div className="text-xs sm:text-sm leading-relaxed font-semibold text-sky-950">
+                        {proc.resultPlate}
+                      </div>
+                    </div>
+
                   </div>
+
                 </div>
-
-              </div>
-
-            </div>
+              );
+            })}
           </div>
 
         </div>

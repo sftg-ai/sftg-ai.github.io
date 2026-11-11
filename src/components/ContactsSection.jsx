@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Clock, Phone, Send, MessageSquare } from 'lucide-react';
+import { trackEvent } from '../utils/analytics';
 
 /**
  * Лаконичный строгий блок контактов:
@@ -68,6 +69,7 @@ export default function ContactsSection() {
             {/* Телефон */}
             <a
               href="tel:+375291245555"
+              onClick={() => trackEvent('contact_click', { channel: 'phone', location: 'contacts' })}
               className="inline-flex items-center gap-2 font-bold text-slate-900 hover:text-sky-600 transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-sky-600 shrink-0" />
@@ -80,6 +82,7 @@ export default function ContactsSection() {
                 href={tgLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent('contact_click', { channel: 'telegram', location: 'contacts' })}
                 className="inline-flex items-center gap-1.5 font-semibold text-sky-600 hover:text-sky-700 transition-colors"
               >
                 <Send className="w-3.5 h-3.5 shrink-0" />
@@ -92,6 +95,7 @@ export default function ContactsSection() {
                 href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent('contact_click', { channel: 'whatsapp', location: 'contacts' })}
                 className="inline-flex items-center gap-1.5 font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
               >
                 <MessageSquare className="w-3.5 h-3.5 shrink-0" />

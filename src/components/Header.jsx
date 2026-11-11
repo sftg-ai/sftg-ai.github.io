@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowRight, Phone, Send } from 'lucide-react';
 import SoftGreatLogo from './SoftGreatLogo';
+import { trackEvent } from '../utils/analytics';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -60,6 +61,7 @@ export default function Header() {
             <div className="hidden sm:flex items-center gap-3 text-xs font-medium text-slate-700 pr-2 border-r border-slate-200 whitespace-nowrap">
               <a 
                 href="tel:+375291245555" 
+                onClick={() => trackEvent('contact_click', { channel: 'phone', location: 'header' })}
                 className="inline-flex items-center gap-1.5 hover:text-sky-600 transition-colors whitespace-nowrap"
                 title="Отдел внедрения Минск"
               >
@@ -70,6 +72,7 @@ export default function Header() {
                 href={tgLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent('contact_click', { channel: 'telegram', location: 'header' })}
                 className="inline-flex items-center gap-1 text-sky-600 hover:text-sky-700 font-semibold whitespace-nowrap"
               >
                 <Send className="w-3.5 h-3.5 shrink-0" />
@@ -113,6 +116,7 @@ export default function Header() {
             <div className="flex flex-col gap-3 pt-2">
               <a 
                 href="tel:+375291245555" 
+                onClick={() => trackEvent('contact_click', { channel: 'phone', location: 'header_mobile' })}
                 className="inline-flex items-center gap-2 text-sm font-bold text-slate-900"
               >
                 <Phone className="w-4 h-4 text-sky-600" />
@@ -122,6 +126,7 @@ export default function Header() {
                 href={tgLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent('contact_click', { channel: 'telegram', location: 'header_mobile' })}
                 className="inline-flex items-center gap-2 text-sm font-bold text-sky-600"
               >
                 <Send className="w-4 h-4" />

@@ -34,8 +34,8 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       number: '01',
       department: 'Продажи и КП',
       badge: 'Продажи и КП',
-      title: 'Бот-продавец: подбор по каталогу, консультации и оформление заказа',
-      description: 'Работает как опытный менеджер 24/7 в Telegram, чате на сайте и мессенджерах. Консультирует по ассортименту простым языком, находит товары в каталоге под задачу клиента, уточняет наличие, оформляет заказ или собирает КП и передает готовую сделку в Битрикс24 и 1С.',
+      title: 'Бизнес-чат-бот для продаж: подбор по каталогу, консультации и заказ',
+      description: 'Работает как опытный менеджер 24/7 в Telegram, встроенном чате Битрикс24 и на сайте. Консультирует по ассортименту простым языком, находит товары в каталоге под задачу клиента, уточняет наличие, собирает КП и передает готовую сделку в Битрикс24 и 1С.',
       flow: {
         input: 'Чат в Telegram или на сайте',
         action: 'Диалог, каталог и сборка заказа',
@@ -79,13 +79,13 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       number: '01',
       department: 'Бухгалтерия и закупки',
       badge: 'Бухгалтерия и закупки',
-      title: 'Ввод первички, ТТН и сверка счетов с договором',
-      description: 'Распознает сканы и PDF счетов, накладных и актов аренды, сопоставляет заводские артикулы поставщиков с номенклатурой в 1С и проверяет цены по договору. Бухгалтер видит только расхождения.',
+      title: 'Сверка 1С и Битрикс24, ввод первички и контроль дебиторской задолженности',
+      description: 'Распознает сканы и PDF счетов, накладных ТТН и актов, заносит в 1С и автоматически сверяет расчеты с Битрикс24. Если сделка в CRM закрыта, а оплата в 1С не поступила - система сразу показывает расхождение, плюсы и минусы по балансам и дебиторскую задолженность.',
       flow: {
-        input: 'Скан счета / ТТН / Акт',
-        action: 'Распознавание строк и номенклатуры',
-        integration: 'Сверка цен с договором в 1С',
-        output: 'Проводка в Битрикс24 и 1С'
+        input: 'Скан счета / ТТН / Выписка 1С',
+        action: 'Распознавание и сверка оплат',
+        integration: 'Контроль сделок Битрикс24 и 1С',
+        output: 'Проводка и сигнал о расхождениях'
       }
     },
     {
@@ -167,13 +167,13 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
       number: '01',
       department: 'Руководство и HR',
       badge: 'Руководство и HR',
-      title: 'Утренние сводки директору и контроль просрочек',
-      description: 'Каждое утро руководитель получает в мессенджер наглядную картину бизнеса: выручка и оплаты, статус каждого заказа в производстве и продажах, кто идет в графике, а на каком участке возникла задержка с указанием причины.',
+      title: 'Управленческие отчеты директору, сводки и контроль просрочек',
+      description: 'Каждое утро руководитель получает в Telegram или на рабочий дашборд управленческий отчет: выручка и оплаты в BYN, дебиторская задолженность, статусы сделок и заказов, а также точные причины отклонений и задержек.',
       flow: {
-        input: 'Данные Б24, 1С и цеха',
-        action: 'Анализ плана и отклонений',
+        input: 'Данные Битрикс24, 1С и отделов',
+        action: 'Сверка плана, оплат и просрочек',
         integration: 'Сбор показателей из всех баз компании',
-        output: 'Утренняя сводка директору'
+        output: 'Управленческий отчет директору'
       }
     },
     {
@@ -206,7 +206,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
     }
   ];
 
-  const filteredCases = casesData.filter((c) => c.department === activeCategory);
+  const isCustomTab = activeCategory === 'Индивидуальная разработка';
 
   return (
     <section id="cases" className="py-20 md:py-28 bg-white border-b border-slate-200/80 relative">
@@ -224,20 +224,22 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
               Как это работает: сценарии по отделам и процессам
             </h2>
             <p className="text-slate-600 text-base leading-relaxed mb-2">
-              Конкретные участки работы, где рутинные действия заменяются программными ассистентами с прямой передачей данных в Битрикс24, 1С и учетные базы компании.
+              Внедряем бизнес-чат-боты, управленческие отчеты для руководителя, автоматическую сверку 1С и Битрикс24 и контроль дебиторской задолженности без ручного переноса данных.
             </p>
             <p className="text-slate-600 text-sm leading-relaxed mb-6">
-              Также реализуем индивидуальную разработку ИИ-ассистентов под нестандартные процессы, закрытые регламенты и оборудование вашего бизнеса.
+              Также реализуем индивидуальную разработку ИИ-ассистентов под нестандартные процессы, закрытые регламенты и учетные системы вашего бизнеса.
             </p>
             
             {/* Фильтр по отделам под текстом */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label="Категории сценариев автоматизации">
               {categories.map((cat) => {
                 const isActive = activeCategory === cat;
                 return (
                   <button
                     key={cat}
                     type="button"
+                    role="tab"
+                    aria-selected={isActive}
                     onClick={() => setActiveCategory(cat)}
                     className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 cursor-pointer ${
                       isActive
@@ -265,9 +267,16 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
           </div>
         </div>
 
-        {/* Условный рендеринг: либо блок «Индивидуальная разработка», либо стандартная сетка карточек */}
-        {activeCategory === 'Индивидуальная разработка' ? (
-          <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm text-left">
+        {/* Блок «Индивидуальная разработка» всегда присутствует в DOM (скрывается через hidden) */}
+        <div
+          role="tabpanel"
+          hidden={!isCustomTab}
+          className={
+            isCustomTab
+              ? 'bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm text-left'
+              : 'hidden'
+          }
+        >
             <div className="max-w-3xl mb-8">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-sky-800 w-fit mb-3">
                 <Workflow className="w-3.5 h-3.5 text-sky-600" />
@@ -428,7 +437,7 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                   <div className="p-3.5 rounded-xl bg-white/90 border border-emerald-200/70 shadow-xs flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                     <div className="text-xs text-slate-700 leading-snug">
-                      <strong className="text-slate-900 block mb-0.5">1С, склад и ERP:</strong> Занесение номенклатуры, формирование ТТН, счетов и актов со сверкой цен по договору
+                      <strong className="text-slate-900 block mb-0.5">1С, склад и учетные системы:</strong> Занесение номенклатуры, формирование ТТН, счетов и актов со сверкой оплат, балансов и цен по договору
                     </div>
                   </div>
                   <div className="p-3.5 rounded-xl bg-white/90 border border-emerald-200/70 shadow-xs flex items-start gap-2.5">
@@ -459,14 +468,25 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>
-          </div>
-        ) : (
-          /* Сетка карточек конкретных сценариев */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCases.map((item) => (
+        </div>
+
+        {/* Сетка карточек конкретных сценариев (все категории присутствуют в DOM для индексации) */}
+        <div
+          role="tabpanel"
+          hidden={isCustomTab}
+          className={isCustomTab ? 'hidden' : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'}
+        >
+          {casesData.map((item) => {
+            const isCardVisible = item.department === activeCategory;
+            return (
               <div
                 key={item.id}
-                className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-sky-300 transition-all flex flex-col justify-between"
+                hidden={!isCardVisible}
+                className={
+                  isCardVisible
+                    ? 'bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-sky-300 transition-all flex flex-col justify-between'
+                    : 'hidden'
+                }
               >
                 <div>
                   {/* Бейдж отдела */}
@@ -544,9 +564,9 @@ export default function RealCases({ activeCase, setActiveCase } = {}) {
                   )}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            );
+          })}
+        </div>
 
       </div>
     </section>

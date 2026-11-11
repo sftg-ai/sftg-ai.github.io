@@ -8,6 +8,8 @@
  * - DEAL_UF_CRM_1793867737921: Ваша задача или комментарий (необязательно, textarea)
  */
 
+import { trackEvent } from './analytics';
+
 let formInstance = null;
 let pendingPrefill = null;
 const listeners = new Set();
@@ -29,6 +31,11 @@ if (typeof window !== 'undefined') {
     if (pendingPrefill) {
       applyValues(pendingPrefill);
     }
+  });
+  window.addEventListener('b24:form:send:success', () => {
+    trackEvent('lead_form_submit', {
+      source: pendingPrefill ? 'express_analysis' : 'direct_form',
+    });
   });
 }
 

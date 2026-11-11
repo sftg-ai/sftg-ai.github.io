@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Search, MessageSquare, PhoneCall, CheckCircle2, ExternalLink, Send, Loader2, Sparkles, Copy, Check } from 'lucide-react';
 import { onB24PrefillApplied, getPendingPrefill, applyB24Prefill } from '../utils/b24Bridge';
+import { trackEvent } from '../utils/analytics';
 
 export default function LeadForm() {
   const containerRef = useRef(null);
@@ -217,6 +218,7 @@ export default function LeadForm() {
                       href="https://t.me/yurasvidersky"
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => trackEvent('contact_click', { channel: 'telegram', location: 'lead_form' })}
                       className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
                     >
                       <Send className="w-3.5 h-3.5" />
