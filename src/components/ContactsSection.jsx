@@ -67,11 +67,11 @@ export default function ContactsSection() {
             
             {/* Телефон */}
             <a
-              href="tel:+375296663734"
+              href="tel:+375291245555"
               className="inline-flex items-center gap-2 font-bold text-slate-900 hover:text-sky-600 transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-              <span>+375 (29) 666-37-34</span>
+              <span>+375 (29) 124-5555</span>
             </a>
 
             {/* Мессенджеры в одну строчку */}

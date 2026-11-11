@@ -71,11 +71,11 @@ export default function Footer() {
 
             {/* Телефон */}
             <a
-              href="tel:+375296663734"
+              href="tel:+375291245555"
               className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-sky-600 transition-colors text-sm"
             >
               <Phone className="w-4 h-4 text-sky-600 shrink-0" />
-              <span>+375 (29) 666-37-34</span>
+              <span>+375 (29) 124-5555</span>
             </a>
 
             {/* Telegram (Юрию) */}

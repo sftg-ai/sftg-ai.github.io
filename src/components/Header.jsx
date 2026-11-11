@@ -59,12 +59,12 @@ export default function Header() {
             {/* Телефон и Telegram */}
             <div className="hidden sm:flex items-center gap-3 text-xs font-medium text-slate-700 pr-2 border-r border-slate-200 whitespace-nowrap">
               <a 
-                href="tel:+375296663734" 
+                href="tel:+375291245555" 
                 className="inline-flex items-center gap-1.5 hover:text-sky-600 transition-colors whitespace-nowrap"
                 title="Отдел внедрения Минск"
               >
                 <Phone className="w-3.5 h-3.5 text-sky-600 shrink-0" />
-                <span className="font-semibold text-slate-900 whitespace-nowrap">+375 (29) 666-37-34</span>
+                <span className="font-semibold text-slate-900 whitespace-nowrap">+375 (29) 124-5555</span>
               </a>
               <a 
                 href={tgLink}
@@ -112,11 +112,11 @@ export default function Header() {
             ))}
             <div className="flex flex-col gap-3 pt-2">
               <a 
-                href="tel:+375296663734" 
+                href="tel:+375291245555" 
                 className="inline-flex items-center gap-2 text-sm font-bold text-slate-900"
               >
                 <Phone className="w-4 h-4 text-sky-600" />
-                <span>+375 (29) 666-37-34</span>
+                <span>+375 (29) 124-5555</span>
               </a>
               <a 
                 href={tgLink}
