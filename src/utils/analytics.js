@@ -456,6 +456,7 @@ export function trackEvent(eventName, params = {}) {
   if (dataLayer) {
     dataLayer.push({
       event: cleanEventName,
+      sftg_track: true,
       ...sanitizedParams,
     });
   }

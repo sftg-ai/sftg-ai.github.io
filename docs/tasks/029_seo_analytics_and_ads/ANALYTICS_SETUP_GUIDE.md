@@ -49,27 +49,27 @@
 
 ### Шаг 2. Создайте переменные уровня данных (Data Layer Variables)
 В разделе **Variables -> User-Defined Variables -> New -> Data Layer Variable** создайте переменные (Version 2):
+- `dlv - sftg_track` -> Data Layer Variable Name: `sftg_track` *(универсальный маркер всех бизнес-событий сайта)*
 - `dlv - source` -> Data Layer Variable Name: `source`
 - `dlv - channel` -> Data Layer Variable Name: `channel`
 - `dlv - location` -> Data Layer Variable Name: `location`
 - `dlv - scenarios_count` -> Data Layer Variable Name: `scenarios_count`
 - `dlv - visual_mode` -> Data Layer Variable Name: `visual_mode`
 
-### Шаг 3. Создайте триггеры Custom Event
-В разделе **Triggers -> New -> Custom Event** создайте 5 основных триггеров (поле **Event name** должно совпадать символ в символ):
-1. `CE - express_analysis_start` -> Event name: `express_analysis_start`
-2. `CE - express_analysis_complete` -> Event name: `express_analysis_complete`
-3. `CE - express_analysis_to_form` -> Event name: `express_analysis_to_form`
-4. `CE - lead_form_submit` -> Event name: `lead_form_submit`
-5. `CE - contact_click` -> Event name: `contact_click`
+Также убедитесь, что в **Variables -> Built-In Variables -> Configure** включена галочка **`Event`**.
 
-Дополнительно для отложенных тегов можно создать триггер обновления согласия:
-6. `CE - cookie_consent_updated` -> Event name: `cookie_consent_updated`
+### Шаг 3. Единый универсальный триггер (вместо 5 отдельных)
+В разделе **Triggers -> New -> Custom Event** создайте **1 общий триггер** `CE - All SoftGreat Events`:
+- **Event name:** `.*` (и включите галочку **Use regex matching**)
+- **This trigger fires on:** **Some Custom Events**
+- Условие: `dlv - sftg_track` **equals** `true`
+
+Теперь любое событие, отправленное через `trackEvent(...)` в коде сайта, автоматически перехватывается этим единственным триггером.
 
 ### Шаг 4. Привяжите встроенные проверки согласия (Built-in Consent Checks)
-В настройках каждого тега раскройте **Advanced Settings -> Consent Settings**:
-- Для тегов **GA4** и **Яндекс.Метрики**: выберите **Require additional consent for tag to fire** -> добавьте `analytics_storage`.
-- Для тегов **Google Ads** и **Meta Pixel**: выберите **Require additional consent for tag to fire** -> добавьте `ad_storage`, `ad_user_data`, `ad_personalization`.
+В настройках тегов раскройте **Advanced Settings -> Consent Settings**:
+- Для тегов **GA4**: выберите **Require additional consent for tag to fire** -> добавьте `analytics_storage`.
+- Для тегов **Google Ads** и **Meta Pixel** (если добавляете через GTM): добавьте `ad_storage`, `ad_user_data`, `ad_personalization`.
 
 ---
 
@@ -77,21 +77,21 @@
 
 ### Шаг 1. Базовый тег GA4 в GTM
 1. Создайте тег типа **Google Tag**.
-2. В поле **Tag ID** вставьте ваш идентификатор `G-...`.
+2. В поле **Tag ID** вставьте `G-9W0R6VLBVT`.
 3. Триггер: **Initialization - All Pages**.
 
-### Шаг 2. Теги событий GA4 в GTM
-Создайте теги типа **Google Analytics: GA4 Event** с привязкой к созданному Google Tag:
-1. **Главная конверсия заявки (`generate_lead`)**:
-   - Event Name: `generate_lead` (рекомендуемое стандартное имя GA4) или `lead_form_submit`.
-   - Event Parameters: `source` = `{{dlv - source}}`.
-   - Trigger: `CE - lead_form_submit`.
-2. **Клик по контактам (`contact_click`)**:
-   - Event Name: `contact_click`.
-   - Event Parameters: `channel` = `{{dlv - channel}}`, `location` = `{{dlv - location}}`.
-   - Trigger: `CE - contact_click`.
-3. **События экспресс-анализа** (`express_analysis_start`, `express_analysis_complete`, `express_analysis_to_form`):
-   - Создайте одноимённые теги GA4 Event и привяжите к триггерам `CE - express_analysis_*`.
+### Шаг 2. Единый тег событий GA4 в GTM (1 тег на все события)
+Создайте **1 тег** типа **Google Analytics: GA4 Event**:
+- **Measurement ID:** `G-9W0R6VLBVT`
+- **Event Name:** `{{Event}}` *(встроенная переменная — подставит точное имя: `lead_form_submit`, `contact_click`, `express_analysis_start` и т.д.)*
+- **Event Parameters** (добавьте строки):
+  - `source` = `{{dlv - source}}`
+  - `channel` = `{{dlv - channel}}`
+  - `location` = `{{dlv - location}}`
+  - `scenarios_count` = `{{dlv - scenarios_count}}`
+  - `visual_mode` = `{{dlv - visual_mode}}`
+- **Trigger:** `CE - All SoftGreat Events`
+- После сохранения нажмите **Submit -> Publish**.
 
 ### Шаг 3. Конверсии (Key Events) и связь с Google Ads
 1. В интерфейсе **GA4 -> Admin -> Data display -> Events** дождитесь появления события `generate_lead` (или добавьте его вручную через **Create event** / **Key events**).
