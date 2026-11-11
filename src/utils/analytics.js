@@ -361,26 +361,29 @@ export function initAnalytics() {
     isInitialized = true;
     ensureDataLayer();
 
-    // Базовое состояние Consent Mode v2: всё аналитическое и рекламное по умолчанию denied
-    if (analyticsConfig.requireCookieConsent) {
-      gtag('consent', 'default', {
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        analytics_storage: 'denied',
-        functionality_storage: 'granted',
-        security_storage: 'granted',
-        wait_for_update: 500,
-      });
+    // Базовое состояние Consent Mode v2 (пропускаем default, если он уже выставлен в <head>)
+    if (!window.__sftgConsentDefaultInitialized) {
+      if (analyticsConfig.requireCookieConsent) {
+        gtag('consent', 'default', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'denied',
+          functionality_storage: 'granted',
+          security_storage: 'granted',
+          wait_for_update: 500,
+        });
 
-      if (savedConsent) {
-        gtag('consent', 'update', buildConsentFlags(savedConsent));
+        if (savedConsent) {
+          gtag('consent', 'update', buildConsentFlags(savedConsent));
+        }
+      } else {
+        gtag('consent', 'default', {
+          ...buildConsentFlags(effectiveConsent),
+          wait_for_update: 500,
+        });
       }
-    } else {
-      gtag('consent', 'default', {
-        ...buildConsentFlags(effectiveConsent),
-        wait_for_update: 500,
-      });
+      window.__sftgConsentDefaultInitialized = true;
     }
   }
 

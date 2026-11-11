@@ -3,6 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google Tag Manager & Consent Mode v2 (Закон РБ № 99-З) -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      (function () {
+        var analyticsGranted = false;
+        var marketingGranted = false;
+        try {
+          var raw = window.localStorage.getItem('sftg_cookie_consent_v1');
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            analyticsGranted = Boolean(parsed && parsed.analytics);
+            marketingGranted = Boolean(parsed && parsed.marketing);
+          }
+        } catch (e) {}
+        gtag('consent', 'default', {
+          ad_storage: marketingGranted ? 'granted' : 'denied',
+          ad_user_data: marketingGranted ? 'granted' : 'denied',
+          ad_personalization: marketingGranted ? 'granted' : 'denied',
+          analytics_storage: analyticsGranted ? 'granted' : 'denied',
+          functionality_storage: 'granted',
+          security_storage: 'granted',
+          wait_for_update: 500
+        });
+        window.__sftgConsentDefaultInitialized = true;
+      })();
+      gtag('js', new Date());
+      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TGH2T9G6"></script>
+    <!-- End Google Tag Manager -->
     <title>SoftGreat AI - ИИ-автоматизация бизнес-процессов в Минске и Беларуси | Битрикс24 и 1С</title>
     <meta name="description" content="ИИ-автоматизация бизнеса в Минске и Беларуси: Битрикс24 и 1С, бизнес-чат-боты, сверка расчетов и отчеты для руководителя. Резидент ПВТ. Подбор сценариев до звонка." />
     <meta name="keywords" content="ИИ-автоматизация бизнеса Минск, автоматизация бизнес-процессов Беларусь, интеграция Битрикс24 и 1С, бизнес чат-боты Telegram, контроль дебиторской задолженности, управленческие отчеты для руководителя, автоматизация документооборота, SoftGreat AI" />
